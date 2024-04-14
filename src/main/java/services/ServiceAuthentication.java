@@ -23,17 +23,13 @@ public class ServiceAuthentication {
         if (email.isEmpty() || password.isEmpty()) {
             throw new IllegalArgumentException("Tous les champs obligatoires doivent être remplis.");
         }
-
         if (!isValidEmail(email)) {
             throw new IllegalArgumentException("Adresse email invalide.");
         }
-
         Utilisateur utilisateur = findUserByEmail(email);
-
         if (utilisateur != null && verifyPassword(password, utilisateur.getMdp())) {
             return utilisateur;
         }
-
         return null;
     }
 
