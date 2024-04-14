@@ -1,15 +1,16 @@
 package entities;
 
 public class Utilisateur {
-    private int id,age;
+    private int id;
     private String nom,prenom,email,tel,mdp,genre,ville;
+    private boolean active;
+    private int role_id;
 
     public Utilisateur() {
     }
 
-    public Utilisateur(int id, int age, String nom, String prenom, String email, String tel, String mdp, String genre, String ville) {
+    public Utilisateur(int id, String nom, String prenom, String email, String tel, String mdp, String genre, String ville, boolean active, int role_id) {
         this.id = id;
-        this.age = age;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
@@ -17,6 +18,8 @@ public class Utilisateur {
         this.mdp = mdp;
         this.genre = genre;
         this.ville = ville;
+        this.active = active;
+        this.role_id = role_id;
     }
 
     public int getId() {
@@ -25,14 +28,6 @@ public class Utilisateur {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
     }
 
     public String getNom() {
@@ -91,11 +86,18 @@ public class Utilisateur {
         this.ville = ville;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
         return "Utilisateur{" +
                 "id=" + id +
-                ", age=" + age +
                 ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
                 ", email='" + email + '\'' +
@@ -103,6 +105,15 @@ public class Utilisateur {
                 ", mdp='" + mdp + '\'' +
                 ", genre='" + genre + '\'' +
                 ", ville='" + ville + '\'' +
+                ", active=" + active +
                 '}';
+    }
+
+    public int getRole_id() {
+        return role_id;
+    }
+
+    public void setRole_id(int role_id) {
+        this.role_id = role_id;
     }
 }

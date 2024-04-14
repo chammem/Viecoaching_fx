@@ -1,30 +1,52 @@
 package tests;
 
 import javafx.application.Application;
-
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-
     @Override
-    public void start(Stage stage) {
-        String javaVersion = System.getProperty("java.version");
-        String javafxVersion = System.getProperty("javafx.version");
-        // Création d'un label avec le texte "Hello World"
-        Label l = new Label("Hello, JavaFX" + javafxVersion + ", running on Java " + javaVersion + ".");
-        // Création d'une scène avec la disposition de pile (stack pane) comme racine et de dimensions 300x200
-        Scene scene = new Scene(new StackPane(l), 640, 480);
-        // Configuration de la scène du stage (fenêtre principale) avec la scène créée
+    public void start(Stage stage) throws Exception {
+        Parent root;
+        root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
+        Scene scene = new Scene(root);
         stage.setScene(scene);
-        // Affichage de la fenêtre principale
+        stage.setTitle("Login");
         stage.show();
     }
 
     public static void main(String[] args) {
-        // Lancement de l'application JavaFX
-        launch();
+        launch(args);
     }
+
+  /*public static void main(String[] args) {
+      ServiceUtilisateur serviceUtilisateur = new ServiceUtilisateur();
+
+      try {
+          // Récupérer l'utilisateur avec l'ID 15 de la base de
+          Utilisateur utilisateurAModifier = serviceUtilisateur.trouverParId(15);
+
+          // Vérifier si l'utilisateur existe
+          if (utilisateurAModifier != null) {
+              // Afficher l'utilisateur avant la modification
+              System.out.println("Utilisateur avant la modification : ");
+              System.out.println(utilisateurAModifier);
+
+              utilisateurAModifier.setEmail("javasinda@hotmail.fr");
+
+              // Appeler la méthode de modification dans le service utilisateur
+              serviceUtilisateur.modifier(utilisateurAModifier);
+
+              // Afficher l'utilisateur après la modification
+              System.out.println("Utilisateur après la modification : ");
+              System.out.println(utilisateurAModifier);
+          } else {
+              System.out.println("L'utilisateur avec l'ID 15 n'existe pas.");
+          }
+      } catch (SQLException e) {
+          System.out.println("Erreur : " + e.getMessage());
+      }
+}*/
 }
