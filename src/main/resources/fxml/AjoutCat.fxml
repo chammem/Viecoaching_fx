@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CategorieController">
+
+    <children>
+        <AnchorPane fx:id="image" layoutX="-9.0" layoutY="14.0" prefHeight="623.0" prefWidth="844.0" styleClass="form_container" stylesheets="/Css/StyleR.css">
+            <children>
+                <VBox layoutX="213.0" layoutY="104.0" prefHeight="379.0" prefWidth="438.0" spacing="5.0" AnchorPane.leftAnchor="213.0" AnchorPane.topAnchor="104.0">
+                    <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nom de la catégorie" />
+                        <TextField fx:id="tnom" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Type de catégorie" />
+                        <TextField fx:id="tType" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" />
+                        <TextArea fx:id="tDescription" prefHeight="200.0" prefWidth="200.0" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sélectionner une ressource" />
+                        <ChoiceBox fx:id="tressource" prefWidth="200.0" />
+                        <AnchorPane layoutX="165.0" layoutY="445.0" prefHeight="82.0" prefWidth="374.0" style="-fx-background-color: #ffffff; -fx-border-color: #D3D3D3; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 5, 5);">
+                            <children>
+                                <Button fx:id="insertView" layoutX="3.0" layoutY="77.0" mnemonicParsing="false" onAction="#selectImage" prefHeight="25.0" prefWidth="120.0" text="Insérer">
+                                    <font>
+                                        <Font name="Arial Rounded MT Bold" size="14.0" />
+                                    </font>
+                                </Button>
+                                <ImageView fx:id="timage" fitHeight="70.0" fitWidth="100.0" layoutX="13.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" />
+                            </children>
+                        </AnchorPane>
+                    </children>
+                </VBox>
+                <Label alignment="CENTER" layoutX="266.0" layoutY="29.0" prefHeight="35.0" prefWidth="332.0" styleClass="title" text="Liste des ressources" />
+                <ButtonBar layoutX="-20.0" layoutY="550.0" prefHeight="40.0" prefWidth="686.0">
+                    <buttons>
+                        <Button fx:id="btnEnregistrer" mnemonicParsing="false" onAction="#AjouterCategorie" prefHeight="35.0" prefWidth="199.0" text="Ajouter" />
+                        <Button layoutX="351.0" layoutY="336.0" mnemonicParsing="false" onAction="#Afficher" prefHeight="26.0" prefWidth="167.0" text="Afficher" />
+                    </buttons>
+                </ButtonBar>
+            </children>
+        </AnchorPane>
+    </children>
+
+</AnchorPane>
