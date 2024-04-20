@@ -1,6 +1,7 @@
 package controllers;
 
 import entities.Categorie;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -17,71 +19,76 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import services.ServiceCategorie;
+import services.ServiceRessource;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class AfficheCatController implements Initializable {
 
+
     @FXML
     private GridPane gridPane;
-    private ServiceCategorie service;
+
+    private  ServiceCategorie service ;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        service = new ServiceCategorie();
+        service=new ServiceCategorie();
         loadResources();
     }
 
     private void loadResources() {
         try {
-            int row = 1; // Commence à partir de la deuxième ligne (index 1)
+            int row = 1; // Commence à partir de la première ligne (index 0)
             for (Categorie categorie : service.afficher()) {
                 // Titre
-                Label titleLabel = new Label(categorie.getNom_categorie());
-                gridPane.add(titleLabel, 0, row);
+                Label typeLabel = new Label(categorie.getRessource_id().getType_r()); // Utiliser le nom du type de groupe
+                gridPane.add(typeLabel, 0, row);
 
-                // Type (Exemple d'utilisation d'une Label pour le type, à ajuster selon vos besoins)
-                Label typeLabel = new Label(String.valueOf(categorie.getRessource_id()));
-                gridPane.add(typeLabel, 1, row);
+                Label titleLabel = new Label(categorie.getNom_categorie());
+                gridPane.add(titleLabel, 1, row);
+
+                Label descriptionLabel = new Label(categorie.getDescription());
+                gridPane.add(descriptionLabel, 2, row);
 
                 // Image (Si besoin d'afficher une image, configurez-la dans ImageView)
-                ImageView imageView = new ImageView();
-                // Assurez-vous de configurer l'image dans l'ImageView
-                gridPane.add(imageView, 2, row);
+                ImageView imageView = new ImageView(new Image(categorie.getImage()));
+                imageView.setFitWidth(100);
+                imageView.setFitHeight(100);
+                gridPane.add(imageView, 4, row);
 
-                // Description
-                Label descriptionLabel = new Label(categorie.getDescription());
-                gridPane.add(descriptionLabel, 3, row);
-
-                // Actions (Supprimer et Mettre à jour)
+                //Actions (Supprimer et Mettre à jour)
+                // Ajoutez les boutons de suppression et de mise à jour si nécessaire
                 Button deleteButton = new Button("Delete");
-                deleteButton.setOnAction(event -> deleteResource(categorie));
-                gridPane.add(deleteButton, 4, row);
+                deleteButton.setOnAction(event -> deleteCategory(categorie));
+                gridPane.add(deleteButton, 5, row);
 
                 Button updateButton = new Button("Update");
-                updateButton.setOnAction(event -> updateResource(categorie));
-                gridPane.add(updateButton, 5, row);
-
+                updateButton.setOnAction(event -> updateCategory(categorie));
+                gridPane.add(updateButton, 6, row);
                 row++; // Passer à la ligne suivante
             }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
-    private void deleteResource(Categorie categorie) {
+
+    private void deleteCategory(Categorie categorie) {
         try {
             service.supprimer(categorie.getId());
-            refreshGridPane(); // Rafraîchir le contenu du GridPane après la suppression
+            loadResources(); // Rafraîchir la liste des catégories après la suppression
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private void updateResource(Categorie categorie) {
+    private void updateCategory(Categorie categorie) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/modifierCat.fxml"));
             Parent modif = loader.load();
@@ -94,17 +101,13 @@ public class AfficheCatController implements Initializable {
             updateStage.setTitle("Modifier Catégorie");
             updateStage.showAndWait();
 
-            refreshGridPane(); // Rafraîchir le contenu du GridPane après la mise à jour
+            loadResources(); // Rafraîchir la liste des catégories après la mise à jour
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
     private void refreshGridPane() {
         gridPane.getChildren().clear(); // Effacer le contenu actuel du GridPane
         loadResources(); // Recharger les ressources et mettre à jour le GridPane
     }
-
-
-
 }

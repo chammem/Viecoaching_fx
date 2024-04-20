@@ -7,11 +7,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import services.ServiceCategorie;
 import services.ServiceRessource;
 
@@ -62,7 +64,6 @@ public class CategorieController implements Initializable {
         String nomCategorie = tnom.getText();
         String description = tDescription.getText();
         String imageUrl = (timage.getImage() != null) ? timage.getImage().getUrl() : null;
-
         String ressourceNom = tressource.getValue();
 
         // Vérifiez que tous les champs nécessaires sont remplis
@@ -85,12 +86,27 @@ public class CategorieController implements Initializable {
             Categorie categorie = new Categorie(nomCategorie, description, imageUrl, ressource);
             serviceCategorie.ajouter(categorie);
 
-            // Afficher une boîte de dialogue d'information pour indiquer que la ressource a été ajoutée avec succès
+            // Afficher une boîte de dialogue d'information pour indiquer que la catégorie a été ajoutée avec succès
             showAlert("Catégorie ajoutée avec succès !");
+
+            // Charger la vue afficheCategorie.fxml après l'ajout réussi
+            loadAfficheCategorieView();
+
         } catch (SQLException e) {
             // En cas d'erreur lors de l'ajout de la catégorie, afficher l'erreur dans la console
             System.out.println("Erreur lors de l'ajout de la catégorie : " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    // Fonction utilitaire pour charger la vue afficheCategorie.fxml
+    private void loadAfficheCategorieView() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/afficheCategorie.fxml"));
+            Stage stage = (Stage) tnom.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de afficheCategorie.fxml : " + e.getMessage());
         }
     }
     private void showAlert(String message) {
@@ -151,15 +167,8 @@ public class CategorieController implements Initializable {
             tressource.getItems().add(ressource.getType_r()); // Ajoutez le nom de la ressource à la liste
         }
     }
-    @FXML
-    void Afficher(ActionEvent event) {
-        try {
-            Parent root= FXMLLoader.load(getClass().getResource("/fxml/afficheCategorie.fxml"));
-            tnom.getScene().setRoot(root);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+
 
 
     }
-}
+

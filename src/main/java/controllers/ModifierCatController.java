@@ -4,18 +4,23 @@ import entities.Categorie;
 import entities.Ressources;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import services.ServiceCategorie;
 import services.ServiceRessource;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -74,18 +79,8 @@ public class ModifierCatController implements Initializable {
         tnom.setText(categorie.getNom_categorie());
         tressource.setValue(categorie.getRessource_id().getTitre_r());
         tDescription.setText(categorie.getDescription());
+        timage.setImage(new Image(categorie.getImage()));
 
-        try {
-            // Charger et afficher l'image de la catégorie (s'il y en a une)
-            if (categorie.getImage() != null && !categorie.getImage().isEmpty()) {
-                Image image = new Image(new FileInputStream(categorie.getImage()));
-                timage.setImage(image);
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("Image file not found: " + e.getMessage());
-            // Charger une image par défaut si l'image spécifiée n'est pas trouvée
-            timage.setImage(new Image("file:path/to/placeholder/image.png"));
-        }
     }
 
 
@@ -122,16 +117,32 @@ public class ModifierCatController implements Initializable {
             categorie.setNom_categorie(nomCategorie);
             categorie.setDescription(description);
             categorie.setRessource_id(ressource);
+            categorie.setImage(timage.getImage().getUrl());
 
             // Appeler le service pour effectuer la modification
             serviceCategorie.modifier(categorie);
 
             // Afficher une boîte de dialogue d'information pour indiquer la réussite de la modification
             showAlert("Catégorie modifiée avec succès!");
+
+            // Charger la vue afficheCategorie.fxml après la modification réussie
+            loadAfficheCategorieView();
+
         } catch (SQLException e) {
             // En cas d'erreur lors de la modification, afficher l'erreur
             showAlert("Erreur lors de la modification de la catégorie : " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    // Fonction utilitaire pour charger la vue afficheCategorie.fxml
+    private void loadAfficheCategorieView() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/afficheCategorie.fxml"));
+            Stage stage = (Stage) tnom.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de afficheCategorie.fxml : " + e.getMessage());
         }
     }
 

@@ -2,42 +2,21 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="547.0" prefWidth="1067.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficheResController">
-    <VBox alignment="CENTER" prefHeight="454.0" prefWidth="1067.0" spacing="10">
-        <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Liste des ressources" />
-
-        <!-- Utilisation de ScrollPane pour permettre le défilement si nécessaire -->
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficheResController">
+    <VBox alignment="CENTER" layoutX="6.0" layoutY="65.0" prefHeight="328.0" prefWidth="1500.0">
+        <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="List Ressources" />
         <ScrollPane fitToHeight="true" fitToWidth="true">
             <content>
                 <!-- GridPane pour afficher les ressources -->
                 <GridPane fx:id="gridPane" hgap="10" prefWidth="751.0" vgap="10">
-                    <!-- En-têtes de colonnes -->
-                    <Label prefHeight="18.0" prefWidth="171.0" text="Titre" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                    <Label prefHeight="18.0" prefWidth="100.0" text="Type" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                    <Label prefHeight="18.0" prefWidth="191.0" text="Image" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                    <Label prefHeight="18.0" prefWidth="117.0" text="Description" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-                    <Label prefHeight="20.0" prefWidth="409.0" text="Action" GridPane.columnIndex="4" GridPane.rowIndex="0" />
-               <columnConstraints>
-                  <ColumnConstraints />
-                  <ColumnConstraints />
-                  <ColumnConstraints />
-                  <ColumnConstraints />
-                  <ColumnConstraints />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints />
-               </rowConstraints>
-
-                    <!-- Contenu des ressources -->
-                    <!-- Utilisez JavaFX pour remplir dynamiquement le contenu des ressources ici -->
                 </GridPane>
             </content>
         </ScrollPane>
     </VBox>
+   <TextField fx:id="tText" layoutX="428.0" layoutY="14.0" promptText="Recherche" />
 </AnchorPane>

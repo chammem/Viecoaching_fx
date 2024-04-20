@@ -5,6 +5,16 @@ import java.util.List;
 
 public class Ressources {
     private int id;
+    private int rating;
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
     private String type_r ;
     private  String titre_r ;
     private  String url ;
@@ -104,4 +114,6 @@ public class Ressources {
     public void setDescription(String description) {
         this.description = description;
     }
+
+
 }

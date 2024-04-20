@@ -1,122 +1,127 @@
 package controllers;
 
 import entities.Ressources;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
-import services.ServiceRessource;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.ResourceBundle;
-
-import entities.Ressources;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import services.ServiceRessource;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AfficheResController implements Initializable {
 
     @FXML
     private GridPane gridPane;
 
+    @FXML
+    private TextField tText;
+
     private ServiceRessource service;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         service = new ServiceRessource();
-
         loadResources();
+
+        // Add listener to the TextField for search functionality
+        tText.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                filterResources(newValue);
+            } catch (SQLException e) {
+                e.printStackTrace(); // Handle the exception gracefully
+            }
+        });
     }
 
     private void loadResources() {
         try {
-            int row = 1; // Commencer à partir de la deuxième ligne (index 1)
-            for (Ressources resource : service.afficher()) {
-                // Titre
-                gridPane.add(new Button(resource.getTitre_r()), 0, row);
-
-                // Type
-                gridPane.add(new Button(resource.getType_r()), 1, row);
-
-                // Image (Utiliser ImageView si nécessaire)
-                gridPane.add(new Button("View Image"), 2, row);
-
-                // Description
-                gridPane.add(new Button(resource.getDescription()), 3, row);
-
-                // Action (Supprimer et Mettre à jour)
-                Button deleteButton = new Button("Delete");
-                deleteButton.setOnAction(event -> deleteResource(resource));
-                gridPane.add(deleteButton, 4, row);
-
-                Button updateButton = new Button("Update");
-                updateButton.setOnAction(event -> updateResource(resource));
-                gridPane.add(updateButton, 5, row);
-
-                row++; // Passer à la ligne suivante
-            }
+            ObservableList<Ressources> resources = FXCollections.observableArrayList(service.afficher());
+            gridPane.getChildren().clear(); // Clear existing items in GridPane
+            AtomicInteger row = new AtomicInteger(1); // Start from the second row (index 1)
+            resources.forEach(ressource -> addResourceToGrid(ressource, row.getAndIncrement()));
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Handle the exception gracefully
         }
     }
 
-    private void deleteResource(Ressources resource) {
+    private void addResourceToGrid(Ressources ressources, int row) {
+        // Titre
+        Label typeLabel = new Label(ressources.getType_r());
+        gridPane.add(typeLabel, 0, row);
+
+        Label titleLabel = new Label(ressources.getTitre_r());
+        gridPane.add(titleLabel, 1, row);
+
+        Label descriptionLabel = new Label(ressources.getDescription());
+        gridPane.add(descriptionLabel, 2, row);
+
+        // Image (Si besoin d'afficher une image, configurez-la dans ImageView)
+        ImageView imageView = new ImageView(new Image(ressources.getUrl()));
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
+        gridPane.add(imageView, 4, row);
+
+        //Actions (Supprimer et Mettre à jour)
+        Button deleteButton = new Button("Delete");
+        deleteButton.setOnAction(event -> deleteResource(ressources));
+        gridPane.add(deleteButton, 5, row);
+
+        Button updateButton = new Button("Update");
+        updateButton.setOnAction(event -> updateResource(ressources));
+        gridPane.add(updateButton, 6, row);
+    }
+
+    private void deleteResource(Ressources ressources) {
         try {
-            service.supprimer(resource.getId());
-            refreshGridPane(); // Rafraîchir le contenu du GridPane après la suppression
+            service.supprimer(ressources.getId());
+            Platform.runLater(this::loadResources); // Refresh the resource list after deletion
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Handle the exception gracefully
         }
     }
 
-    private void updateResource(Ressources resource) {
+    private void updateResource(Ressources ressources) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/modifierRes.fxml"));
             Parent modif = loader.load();
 
             ModifierResController controller = loader.getController();
-            controller.initData(resource); // Passer la ressource sélectionnée au contrôleur ModifierResController
+            controller.initData(ressources); // Pass selected resource to ModifierResController
 
             Stage updateStage = new Stage();
             updateStage.setScene(new Scene(modif));
-            updateStage.setTitle("Update Resource");
+            updateStage.setTitle("Modifier res");
             updateStage.showAndWait();
 
-            refreshGridPane(); // Rafraîchir le contenu du GridPane après la mise à jour
+            Platform.runLater(this::loadResources); // Refresh the resource list after update
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Handle the exception gracefully
         }
     }
 
-    private void refreshGridPane() {
-        gridPane.getChildren().clear(); // Effacer le contenu actuel du GridPane
-        loadResources(); // Recharger les ressources et mettre à jour le GridPane
+    private void filterResources(String searchText) throws SQLException {
+        ObservableList<Ressources> resources = FXCollections.observableArrayList(service.afficher());
+        gridPane.getChildren().clear(); // Clear existing items in GridPane
+        AtomicInteger row = new AtomicInteger(1); // Start from the second row (index 1)
+
+        resources.stream()
+                .filter(ressource -> ressource.getTitre_r().toLowerCase().contains(searchText.toLowerCase()))
+                .forEach(ressource -> addResourceToGrid(ressource, row.getAndIncrement()));
     }
 }

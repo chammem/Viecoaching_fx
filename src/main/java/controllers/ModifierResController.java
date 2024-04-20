@@ -3,18 +3,23 @@ package controllers;
 import entities.Ressources;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import services.ServiceRessource;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -48,34 +53,62 @@ public class ModifierResController implements Initializable {
         tTitre.setText(ressource.getTitre_r());
         tType.setText(ressource.getType_r());
         tDescription.setText(ressource.getDescription());
-
-        try {
-            // Charger et afficher l'image de la ressource (s'il y en a une)
-            if (ressource.getUrl() != null && !ressource.getUrl().isEmpty()) {
-                Image image = new Image(new FileInputStream(ressource.getUrl()));
-                timage.setImage(image);
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("Image file not found: " + e.getMessage());
-            // Charger une image par défaut si l'image spécifiée n'est pas trouvée
-            timage.setImage(new Image("file:path/to/placeholder/image.png"));
-        }
+        timage.setImage(new Image(ressource.getUrl()));
     }
 
     @FXML
     void ModifierRessource(ActionEvent event) {
-        // Mettre à jour les propriétés de la ressource avec les valeurs des champs
-        ressource.setTitre_r(tTitre.getText());
-        ressource.setType_r(tType.getText());
-        ressource.setDescription(tDescription.getText());
+        // Vérifier si une catégorie est sélectionnée
+        if (ressource == null) {
+            showAlert("Veuillez sélectionner une catégorie à modifier.");
+            return;
+        }
 
-        // Appeler le service pour effectuer la modification
+        // Récupérer les nouvelles valeurs des champs
+        String typeText = tType.getText();
+        String tTitreText = tTitre.getText();
+        String description = tDescription.getText();
+
+        // Vérifier que les champs nécessaires ne sont pas vides
+        if (typeText.isEmpty() || description.isEmpty() || tTitreText.isEmpty()) {
+            showAlert("Veuillez remplir tous les champs.");
+            return;
+        }
+
         try {
+
+
+
+            // Mettre à jour les propriétés de la catégorie avec les nouvelles valeurs
+            ressource.setTitre_r(tTitreText);
+            ressource.setDescription(description);
+            ressource.setType_r(typeText);
+            ressource.setUrl(timage.getImage().getUrl());
+
+            // Appeler le service pour effectuer la modification
             serviceRessource.modifier(ressource);
-            showAlert("Ressource modifiée avec succès !");
+
+            // Afficher une boîte de dialogue d'information pour indiquer la réussite de la modification
+            showAlert("Catégorie modifiée avec succès!");
+
+            // Charger la vue afficheCategorie.fxml après la modification réussie
+            loadAfficheCategorieView();
+
         } catch (SQLException e) {
-            showAlert("Erreur lors de la modification de la ressource : " + e.getMessage());
+            // En cas d'erreur lors de la modification, afficher l'erreur
+            showAlert("Erreur lors de la modification de la catégorie : " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    // Fonction utilitaire pour charger la vue afficheCategorie.fxml
+    private void loadAfficheCategorieView() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/afficheRessource.fxml"));
+            Stage stage = (Stage) tTitre.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de afficheCategorie.fxml : " + e.getMessage());
         }
     }
 

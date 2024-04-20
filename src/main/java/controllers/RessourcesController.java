@@ -6,12 +6,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import services.ServiceRessource;
 
 import java.io.File;
@@ -72,14 +74,30 @@ public class RessourcesController implements Initializable {
 
         if (isValid) {
             try {
+                ServiceRessource serviceRessource = new ServiceRessource();
                 Ressources ressource = new Ressources(titre, type, imageUrl, description);
                 serviceRessource.ajouter(ressource);
                 showAlert("Ressource ajoutée avec succès !");
-                clearFields();
+
+                // Charger la vue afficheRessource.fxml après l'ajout réussi
+                loadAfficheRessourceView();
+
+                clearFields(); // Effacer les champs après l'ajout réussi
             } catch (SQLException e) {
                 showAlert("Erreur lors de l'ajout de la ressource : " + e.getMessage());
                 e.printStackTrace();
             }
+        }
+    }
+
+    // Fonction utilitaire pour charger la vue afficheRessource.fxml
+    private void loadAfficheRessourceView() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/afficheRessource.fxml"));
+            Stage stage = (Stage) tTitre.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de afficheRessource.fxml : " + e.getMessage());
         }
     }
 
@@ -118,15 +136,5 @@ public class RessourcesController implements Initializable {
     public ImageView getImageView() {
         return timage;
     }
-    @FXML
-    void Afficher(ActionEvent event) {
-        try {
-            Parent root= FXMLLoader.load(getClass().getResource("/fxml/afficheRessource.fxml"));
-            tTitre.getScene().setRoot(root);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
 
-
-    }
 }
