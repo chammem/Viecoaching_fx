@@ -1,26 +1,27 @@
 package tests;
 
 import javafx.application.Application;
-
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class Main extends Application {
 
     @Override
-    public void start(Stage stage) {
-        String javaVersion = System.getProperty("java.version");
-        String javafxVersion = System.getProperty("javafx.version");
-        // Création d'un label avec le texte "Hello World"
-        Label l = new Label("Hello, JavaFX" + javafxVersion + ", running on Java " + javaVersion + ".");
-        // Création d'une scène avec la disposition de pile (stack pane) comme racine et de dimensions 300x200
-        Scene scene = new Scene(new StackPane(l), 640, 480);
-        // Configuration de la scène du stage (fenêtre principale) avec la scène créée
-        stage.setScene(scene);
+    public void start(Stage primaryStage) throws IOException {
+        // Chargement du fichier FXML
+        Parent root = FXMLLoader.load(getClass().getResource("/Affichegr.fxml"));
+        // Création de la scène
+        Scene scene = new Scene(root, 600, 400);
+        // Configuration de la scène du stage avec la scène créée
+        primaryStage.setScene(scene);
+        // Définition du titre de la fenêtre principale
+        primaryStage.setTitle("Gestion des groupes");
         // Affichage de la fenêtre principale
-        stage.show();
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
