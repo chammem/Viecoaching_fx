@@ -11,10 +11,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import services.ServiceAuthentication;
+import utils.MyDatabase;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
@@ -34,6 +36,8 @@ public class LoginController implements Initializable {
     @FXML
     private ImageView lockView;
     private ServiceAuthentication authService;
+    private Connection connection;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         authService = new ServiceAuthentication();
@@ -62,15 +66,34 @@ public class LoginController implements Initializable {
         String password = enterPasswordField.getText();
 
         try {
+            MyDatabase myDatabase = MyDatabase.getInstance();
+            Connection connection = myDatabase.getConnection();
             Utilisateur utilisateur = authService.login(email, password);
 
             if (utilisateur != null) {
+                // Afficher un message de connexion réussie
                 showAlert(Alert.AlertType.CONFIRMATION, "Connexion réussie", "Bienvenue " + utilisateur.getNom() + " " + utilisateur.getPrenom());
+
+                // Charger la page utilisateur
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/utilisateur.fxml"));
+                Parent root = loader.load();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.show();
+
+                // Fermer la fenêtre de connexion
+                Stage stageConnexion = (Stage) enterPasswordField.getScene().getWindow();
+                stageConnexion.close();
             } else {
                 showAlert(Alert.AlertType.ERROR, "Erreur de connexion", "Adresse email ou mot de passe incorrect");
             }
         } catch (IllegalArgumentException e) {
             showAlert(Alert.AlertType.WARNING, "Erreur de validation", e.getMessage());
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de chargement de la page", "Impossible de charger la page utilisateur.");
+            e.printStackTrace();
+        } finally {
+            // Ne pas fermer la connexion ici, car nous voulons la maintenir ouverte pour récupérer des données
         }
     }
     public void navigateToRegistreView() {

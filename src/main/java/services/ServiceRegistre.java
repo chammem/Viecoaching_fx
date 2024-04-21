@@ -1,8 +1,6 @@
 package services;
 import utils.PasswordHasher;
 import controllers.RegistreController;
-import javafx.scene.control.Alert;
-import javafx.scene.image.ImageView;
 import utils.MyDatabase;
 import java.sql.*;
 import java.sql.Connection;

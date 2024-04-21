@@ -7,19 +7,21 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    @Override
-    public void start(Stage stage) throws Exception {
-        Parent root;
-        root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"));
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("Login");
-        stage.show();
-    }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+        @Override
+        public void start(Stage stage) throws Exception {
+            Parent root;
+            root = FXMLLoader.load(getClass().getResource("/fxml/utilisateur.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Login");
+            stage.show();
+        }
+
+        public static void main(String[] args) {
+            launch(args);
+        }
+
 
   /*public static void main(String[] args) {
       ServiceUtilisateur serviceUtilisateur = new ServiceUtilisateur();
