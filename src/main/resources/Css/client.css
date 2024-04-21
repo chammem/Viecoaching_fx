@@ -1,0 +1,21 @@
+/* Styles pour la carte de ressource */
+.resource-card {
+    -fx-background-color: #f9f9f9; /* Couleur de fond */
+    -fx-padding: 15px; /* Espacement intérieur */
+    -fx-border-radius: 5px; /* Coins arrondis */
+    -fx-border-width: 1px; /* Épaisseur de la bordure */
+    -fx-border-color: #ddd; /* Couleur de la bordure */
+    -fx-effect: dropshadow(3px 3px 5px rgba(0, 0, 0, 0.1)); /* Ombre portée */
+}
+
+/* Styles pour le titre de la carte */
+.card-title {
+    -fx-font-weight: bold; /* Police en gras */
+    -fx-font-size: 18px; /* Taille de police */
+    -fx-text-fill: #333; /* Couleur du texte */
+}
+
+/* Styles pour le conteneur VBox principal */
+.content-vbox {
+    -fx-spacing: 20px; /* Espacement entre les éléments enfants */
+}

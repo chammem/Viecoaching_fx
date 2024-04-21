@@ -6,83 +6,94 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import services.ServiceCategorie;
 import services.ServiceRessource;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AfficheCatController implements Initializable {
-
 
     @FXML
     private GridPane gridPane;
 
-    private  ServiceCategorie service ;
+    @FXML
+    private TextField tText;
+
+    @FXML
+    private PieChart pieChart;
+
+    private ServiceCategorie serviceCategorie;
+    private ServiceRessource serviceRessource;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        service=new ServiceCategorie();
-        loadResources();
+        serviceCategorie = new ServiceCategorie();
+        serviceRessource = new ServiceRessource();
+        loadCategories();
+        displayCategoryStatistics();
+        tText.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                filterCategories(newValue);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
-    private void loadResources() {
+    private void loadCategories() {
         try {
-            int row = 1; // Commence à partir de la première ligne (index 0)
-            for (Categorie categorie : service.afficher()) {
-                // Titre
-                Label typeLabel = new Label(categorie.getRessource_id().getType_r()); // Utiliser le nom du type de groupe
-                gridPane.add(typeLabel, 0, row);
-
-                Label titleLabel = new Label(categorie.getNom_categorie());
-                gridPane.add(titleLabel, 1, row);
-
-                Label descriptionLabel = new Label(categorie.getDescription());
-                gridPane.add(descriptionLabel, 2, row);
-
-                // Image (Si besoin d'afficher une image, configurez-la dans ImageView)
-                ImageView imageView = new ImageView(new Image(categorie.getImage()));
-                imageView.setFitWidth(100);
-                imageView.setFitHeight(100);
-                gridPane.add(imageView, 4, row);
-
-                //Actions (Supprimer et Mettre à jour)
-                // Ajoutez les boutons de suppression et de mise à jour si nécessaire
-                Button deleteButton = new Button("Delete");
-                deleteButton.setOnAction(event -> deleteCategory(categorie));
-                gridPane.add(deleteButton, 5, row);
-
-                Button updateButton = new Button("Update");
-                updateButton.setOnAction(event -> updateCategory(categorie));
-                gridPane.add(updateButton, 6, row);
-                row++; // Passer à la ligne suivante
-            }
-
+            ObservableList<Categorie> categories = FXCollections.observableArrayList(serviceCategorie.afficher());
+            gridPane.getChildren().clear();
+            AtomicInteger row = new AtomicInteger(1);
+            categories.forEach(categorie -> addCategoryToGrid(categorie, row.getAndIncrement()));
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
+    private void addCategoryToGrid(Categorie categorie, int row) {
+        // Ajouter les détails de la catégorie dans les colonnes du GridPane
+        Label nameLabel = new Label(categorie.getNom_categorie());
+        gridPane.add(nameLabel, 0, row);
+
+        Label titleLabel = new Label(categorie.getRessource_id().getType_r());
+        gridPane.add(titleLabel, 1, row);
+
+        Label descriptionLabel = new Label(categorie.getDescription());
+        gridPane.add(descriptionLabel, 2, row);
+
+        // Afficher une image si besoin
+        ImageView imageView = new ImageView(new Image(categorie.getImage()));
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
+        gridPane.add(imageView, 3, row);
+
+        // Boutons d'action (Supprimer et Mettre à jour)
+        Button deleteButton = new Button("Supprimer");
+        deleteButton.setOnAction(event -> deleteCategory(categorie));
+        gridPane.add(deleteButton, 4, row);
+
+        Button updateButton = new Button("Mettre à jour");
+        updateButton.setOnAction(event -> updateCategory(categorie));
+        gridPane.add(updateButton, 5, row);
+    }
 
     private void deleteCategory(Categorie categorie) {
         try {
-            service.supprimer(categorie.getId());
-            loadResources(); // Rafraîchir la liste des catégories après la suppression
+            serviceCategorie.supprimer(categorie.getId());
+            loadCategories();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -91,23 +102,44 @@ public class AfficheCatController implements Initializable {
     private void updateCategory(Categorie categorie) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/modifierCat.fxml"));
-            Parent modif = loader.load();
+            Stage updateStage = new Stage();
+            updateStage.setScene(new Scene(loader.load()));
 
             ModifierCatController controller = loader.getController();
-            controller.initData(categorie); // Passer la catégorie sélectionnée au contrôleur ModifierCatController
+            controller.initData(categorie);
 
-            Stage updateStage = new Stage();
-            updateStage.setScene(new Scene(modif));
             updateStage.setTitle("Modifier Catégorie");
             updateStage.showAndWait();
 
-            loadResources(); // Rafraîchir la liste des catégories après la mise à jour
-        } catch (IOException e) {
+            loadCategories();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    private void refreshGridPane() {
-        gridPane.getChildren().clear(); // Effacer le contenu actuel du GridPane
-        loadResources(); // Recharger les ressources et mettre à jour le GridPane
+
+    private void displayCategoryStatistics() {
+        try {
+            ObservableList<String> categoryTypes = FXCollections.observableArrayList(serviceCategorie.getCategoryTypes());
+            ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+
+            for (String categoryType : categoryTypes) {
+                int count = serviceCategorie.getCountByCategoryType(categoryType);
+                pieChartData.add(new PieChart.Data(categoryType, count));
+            }
+
+            pieChart.setData(pieChartData);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void filterCategories(String searchText) throws SQLException {
+        ObservableList<Categorie> categories = FXCollections.observableArrayList(serviceCategorie.afficher());
+        gridPane.getChildren().clear();
+        AtomicInteger row = new AtomicInteger(1);
+
+        categories.stream()
+                .filter(categorie -> categorie.getNom_categorie().toLowerCase().contains(searchText.toLowerCase()))
+                .forEach(categorie -> addCategoryToGrid(categorie, row.getAndIncrement()));
     }
 }

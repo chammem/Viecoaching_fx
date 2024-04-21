@@ -7,8 +7,8 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficheResController">
-    <VBox alignment="CENTER" layoutX="6.0" layoutY="65.0" prefHeight="328.0" prefWidth="1500.0">
+<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficheResController">
+    <VBox alignment="CENTER" layoutX="6.0" layoutY="94.0" prefHeight="500.0" prefWidth="1500.0">
         <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="List Ressources" />
         <ScrollPane fitToHeight="true" fitToWidth="true">
             <content>

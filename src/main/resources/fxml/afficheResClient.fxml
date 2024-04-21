@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.Rating?>
 
 <AnchorPane prefHeight="297.0" prefWidth="802.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficheResClientController">
-   <Label fx:id="msg" layoutX="74.0" layoutY="98.0" text="Label" />
-   <Rating fx:id="rating" layoutX="14.0" layoutY="49.0" />
+
+   <VBox alignment="CENTER" layoutX="6.0" layoutY="94.0" prefHeight="500.0" prefWidth="1500.0">
+      <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="List Ressources" />
+      <ScrollPane fitToHeight="true" fitToWidth="true">
+         <content>
+            <!-- VBox to display resource cards -->
+            <VBox fx:id="contentVBox" spacing="10">
+            </VBox>
+         </content>
+      </ScrollPane>
+   </VBox>
+
+
 </AnchorPane>
