@@ -6,23 +6,23 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CategorieController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #EDEEE1;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CategorieController">
 
     <children>
         <AnchorPane fx:id="image" layoutX="-9.0" layoutY="14.0" prefHeight="623.0" prefWidth="844.0" styleClass="form_container" stylesheets="/Css/StyleR.css">
             <children>
-                <VBox layoutX="213.0" layoutY="104.0" prefHeight="379.0" prefWidth="438.0" spacing="5.0" AnchorPane.leftAnchor="213.0" AnchorPane.topAnchor="104.0">
+                <VBox layoutX="213.0" layoutY="104.0" prefHeight="379.0" prefWidth="438.0" spacing="5.0" AnchorPane.leftAnchor="213.0" style="-fx-background-color: #D9DBBD;" AnchorPane.topAnchor="104.0">
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nom de la catégorie" />
                         <TextField fx:id="tnom" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Type de catégorie" />
-                        <TextField fx:id="tType" />
+
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" />
                         <TextArea fx:id="tDescription" prefHeight="200.0" prefWidth="200.0" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sélectionner une ressource" />
@@ -45,6 +45,7 @@
                         <Button fx:id="btnEnregistrer" mnemonicParsing="false" onAction="#AjouterCategorie" prefHeight="35.0" prefWidth="199.0" text="Ajouter" />
                     </buttons>
                 </ButtonBar>
+
             </children>
         </AnchorPane>
     </children>

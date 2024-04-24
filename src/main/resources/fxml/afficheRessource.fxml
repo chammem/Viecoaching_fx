@@ -1,22 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficheResController">
-    <VBox alignment="CENTER" layoutX="6.0" layoutY="94.0" prefHeight="500.0" prefWidth="1500.0">
-        <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="List Ressources" />
-        <ScrollPane fitToHeight="true" fitToWidth="true">
+<AnchorPane prefHeight="604.0" prefWidth="1154.0" style="-fx-background-color: #EDEEE1;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficheResController">
+    <VBox alignment="CENTER" layoutX="272.0" layoutY="2.0" prefHeight="600.0" prefWidth="864.0" style="-fx-background-color: #EDEEE1;">
+        <Label contentDisplay="TOP" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="List Ressources" textFill="#a5b79b">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font></Label>
+        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="458.0" prefWidth="875.0">
             <content>
                 <!-- GridPane pour afficher les ressources -->
-                <GridPane fx:id="gridPane" hgap="10" prefWidth="751.0" vgap="10">
+                <GridPane fx:id="gridPane" hgap="10" prefHeight="433.0" prefWidth="862.0" vgap="10">
                 </GridPane>
             </content>
         </ScrollPane>
+      <Button fx:id="AjoutR" mnemonicParsing="false" onAction="#AjoutR" prefHeight="39.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Ajouter Ressource" />
     </VBox>
-   <TextField fx:id="tText" layoutX="428.0" layoutY="14.0" promptText="Recherche" />
+   <TextField fx:id="tText" layoutX="275.0" layoutY="14.0" prefHeight="26.0" prefWidth="295.0" promptText="Recherche" style="-fx-background-color: #BED6B1;">
+      <font>
+         <Font name="System Italic" size="15.0" />
+      </font>
+   </TextField>
+   <VBox prefHeight="600.0" prefWidth="262.0" style="-fx-background-color: F3F5DC;">
+      <children>
+         <ImageView fitHeight="273.0" fitWidth="260.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../../../../../../Downloads/426197672_379463364719872_8698905274837661634_n.png" />
+            </image>
+         </ImageView>
+
+         <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Statistiques" />
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1.0" />
+         <Button mnemonicParsing="false" prefHeight="42.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Groupes" />
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" />
+         <Button fx:id="NavBarRes" mnemonicParsing="false" onAction="#NavBarRes" prefHeight="39.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Ressources" />
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" />
+         <Button fx:id="NavBarCat" mnemonicParsing="false" onAction="#NavBarCat" prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Categorie" />
+      </children>
+   </VBox>
 </AnchorPane>

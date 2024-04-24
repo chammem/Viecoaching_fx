@@ -3,9 +3,11 @@ package controllers;
 import entities.Categorie;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
@@ -18,6 +20,7 @@ import javafx.stage.Stage;
 import services.ServiceCategorie;
 import services.ServiceRessource;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
@@ -50,6 +53,32 @@ public class AfficheCatController implements Initializable {
                 e.printStackTrace();
             }
         });
+        Label typeLabel = new Label("Nom Catégorie");
+        typeLabel.setStyle("-fx-font-weight: bold;"); // Appliquer le style en gras
+        gridPane.add(typeLabel, 0, 0);
+
+        Label titleLabel = new Label("Ressource");
+        titleLabel.setStyle("-fx-font-weight: bold;");
+        gridPane.add(titleLabel, 1, 0);
+
+        Label descriptionLabel = new Label("Description");
+        descriptionLabel.setStyle("-fx-font-weight: bold;");
+        gridPane.add(descriptionLabel, 2, 0);
+
+
+
+        Label imageLabel = new Label("Image");
+        imageLabel.setStyle("-fx-font-weight: bold;");
+        gridPane.add(imageLabel, 3, 0);
+
+        Label actionLabel = new Label("Supprimer");
+        actionLabel.setStyle("-fx-font-weight: bold;");
+        gridPane.add(actionLabel, 4, 0);
+
+        Label updateLabel = new Label("Modifier");
+        updateLabel.setStyle("-fx-font-weight: bold;");
+        gridPane.add(updateLabel, 5, 0);
+
     }
 
     private void loadCategories() {
@@ -141,5 +170,36 @@ public class AfficheCatController implements Initializable {
         categories.stream()
                 .filter(categorie -> categorie.getNom_categorie().toLowerCase().contains(searchText.toLowerCase()))
                 .forEach(categorie -> addCategoryToGrid(categorie, row.getAndIncrement()));
+    }
+    @FXML
+    void NavBarCat(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/afficheCategorie.fxml"));
+            Stage stage = (Stage)tText.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de afficheRessource.fxml : " + e.getMessage());
+        }
+    }
+
+    @FXML
+    void NavBarRes(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/afficheRessource.fxml"));
+            Stage stage = (Stage) tText.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de afficheRessource.fxml : " + e.getMessage());
+        }
+    }
+    @FXML
+    void AjoutCat(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/AjoutCat.fxml"));
+            Stage stage = (Stage) tText.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de afficheRessource.fxml : " + e.getMessage());
+        }
     }
 }

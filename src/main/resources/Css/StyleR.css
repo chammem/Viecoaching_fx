@@ -1,6 +1,6 @@
 .title{
     -fx-font-size: 2em;
-    -fx-text-fill: #ff4709;
+    -fx-text-fill: #bed6b1;
     -fx-font-weight: bold;
 }
 .form_container{
@@ -24,7 +24,7 @@
     -fx-effect: dropshadow(three-pass-box,#AAAAAA,3,0,0,3);
 }
 .form_container Button{
-    -fx-background-color: linear-gradient(to right, #c95c05, #ff4709);
+    -fx-background-color: linear-gradient(to right, #bed6b1, #a5b79b);
     -fx-effect: dropshadow(three-pass-box,#AAAAAA,3,0,0,3);
     -fx-pref-width: 100;
     -fx-font-size: 1.5em;

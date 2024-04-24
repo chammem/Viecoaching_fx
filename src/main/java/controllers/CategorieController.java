@@ -52,27 +52,26 @@ public class CategorieController implements Initializable {
     @FXML
     private ChoiceBox<String> tressource;
     private String nomFichierurlSelectionne; // Déclaration de la variable pour stocker le nom du fichier sélectionné
-    private ServiceCategorie service ;
+    private ServiceCategorie serviceCategorie ;
 
-    @FXML
-    void AfficheCategorie(ActionEvent event) {
 
-    }
+
+
 
     @FXML
     void AjouterCategorie(ActionEvent event) {
-        String nomCategorie = tnom.getText();
-        String description = tDescription.getText();
+        String nomCategorie = tnom.getText().trim();
+        String description = tDescription.getText().trim();
         String imageUrl = (timage.getImage() != null) ? timage.getImage().getUrl() : null;
         String ressourceNom = tressource.getValue();
 
         // Vérifiez que tous les champs nécessaires sont remplis
-        if (nomCategorie.isEmpty() || description.isEmpty() || imageUrl == null || ressourceNom.isEmpty()) {
-            showAlert("Veuillez remplir tous les champs.");
+        if (!isValidTextField(nomCategorie, "Nom de catégorie") ||
+                !isValidTextField(description, "Description") ||
+                !isValidImageView(timage, "Image") ||
+                !isValidChoiceBox(tressource, "Ressource")) {
             return;
         }
-
-        ServiceCategorie serviceCategorie = new ServiceCategorie();
 
         try {
             ServiceRessource serviceRessources = new ServiceRessource();
@@ -97,6 +96,30 @@ public class CategorieController implements Initializable {
             System.out.println("Erreur lors de l'ajout de la catégorie : " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private boolean isValidTextField(String value, String fieldName) {
+        if (value.isEmpty()) {
+            showAlert("Veuillez saisir un(e) " + fieldName + ".");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isValidImageView(ImageView imageView, String fieldName) {
+        if (imageView.getImage() == null) {
+            showAlert("Veuillez sélectionner une " + fieldName + ".");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isValidChoiceBox(ChoiceBox<String> choiceBox, String fieldName) {
+        if (choiceBox.getValue() == null || choiceBox.getValue().isEmpty()) {
+            showAlert("Veuillez sélectionner une " + fieldName + ".");
+            return false;
+        }
+        return true;
     }
 
     // Fonction utilitaire pour charger la vue afficheCategorie.fxml
@@ -151,6 +174,7 @@ public class CategorieController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        serviceCategorie= new ServiceCategorie();
 
         // Initialisez votre ChoiceBox tressource avec des options
         ServiceRessource serviceRessources = new ServiceRessource();

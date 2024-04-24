@@ -11,11 +11,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ModifierResController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #EDEEE1;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ModifierResController">
     <children>
         <AnchorPane fx:id="image" layoutX="-9.0" layoutY="14.0" prefHeight="623.0" prefWidth="844.0" styleClass="form_container" stylesheets="/Css/StyleR.css">
             <children>
-                <VBox layoutX="212.0" layoutY="118.0" prefHeight="300.0" prefWidth="438.0" spacing="5.0" AnchorPane.leftAnchor="212.0" AnchorPane.topAnchor="118.0">
+                <VBox layoutX="212.0" layoutY="118.0" prefHeight="300.0" prefWidth="438.0" spacing="5.0" style="-fx-background-color: #D9DBBD;" AnchorPane.leftAnchor="212.0" AnchorPane.topAnchor="118.0">
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Titre de Ressource" />
                         <TextField fx:id="tTitre" />

@@ -93,18 +93,19 @@ public class ModifierCatController implements Initializable {
         }
 
         // Récupérer les nouvelles valeurs des champs
-        String nomCategorie = tnom.getText();
-        String description = tDescription.getText();
-        String ressourceNom = tressource.getValue(); // Utiliser getValue() pour obtenir la valeur sélectionnée dans la ChoiceBox
+        String nomCategorie = tnom.getText().trim();
+        String description = tDescription.getText().trim();
+        String ressourceNom = tressource.getValue();
 
-        // Vérifier que les champs nécessaires ne sont pas vides
-        if (nomCategorie.isEmpty() || description.isEmpty() || ressourceNom.isEmpty()) {
-            showAlert("Veuillez remplir tous les champs.");
+        // Vérifier chaque champ individuellement
+        if (!isValidTextField(nomCategorie, "Nom de catégorie") ||
+                !isValidTextField(description, "Description") ||
+                !isValidChoiceBox(tressource, "Ressource")) {
             return;
         }
 
         try {
-            // Récupérer la ressource associée au nom spécifié
+            // Vérifier si la ressource spécifiée existe
             ServiceRessource serviceRessource = new ServiceRessource();
             Ressources ressource = serviceRessource.getRessourceByNom(ressourceNom);
 
@@ -133,6 +134,22 @@ public class ModifierCatController implements Initializable {
             showAlert("Erreur lors de la modification de la catégorie : " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private boolean isValidTextField(String value, String fieldName) {
+        if (value.isEmpty()) {
+            showAlert("Veuillez saisir un(e) " + fieldName + ".");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isValidChoiceBox(ChoiceBox<String> choiceBox, String fieldName) {
+        if (choiceBox.getValue() == null || choiceBox.getValue().isEmpty()) {
+            showAlert("Veuillez sélectionner une " + fieldName + ".");
+            return false;
+        }
+        return true;
     }
 
     // Fonction utilitaire pour charger la vue afficheCategorie.fxml

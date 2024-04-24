@@ -5,6 +5,7 @@ public class Categorie {
     private  int id ;
     private String nom_categorie ;
     private  String description ;
+
     private  String image ;
     private Ressources ressource_id;
 

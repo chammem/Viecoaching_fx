@@ -4,6 +4,7 @@ import entities.Ressources;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -31,12 +32,19 @@ public class AfficheResController implements Initializable {
 
     @FXML
     private TextField tText;
+    @FXML
+    private Button NavBarCat;
+
+    @FXML
+    private Button NavBarRes;
+
 
     private ServiceRessource service;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         service = new ServiceRessource();
+
         loadResources();
 
         // Add listener to the TextField for search functionality
@@ -47,6 +55,36 @@ public class AfficheResController implements Initializable {
                 e.printStackTrace(); // Handle the exception gracefully
             }
         });
+
+
+        Label typeLabel = new Label("Titre Ressource");
+        typeLabel.setStyle("-fx-font-weight: bold;"); // Appliquer le style en gras
+        gridPane.add(typeLabel, 0, 0);
+
+        Label titleLabel = new Label("Type");
+        titleLabel.setStyle("-fx-font-weight: bold;");
+        gridPane.add(titleLabel, 1, 0);
+
+        Label descriptionLabel = new Label("Description");
+        descriptionLabel.setStyle("-fx-font-weight: bold;");
+        gridPane.add(descriptionLabel, 2, 0);
+
+
+
+        Label imageLabel = new Label("Image");
+        imageLabel.setStyle("-fx-font-weight: bold;");
+        gridPane.add(imageLabel, 3, 0);
+
+        Label actionLabel = new Label("Supprimer");
+        actionLabel.setStyle("-fx-font-weight: bold;");
+        gridPane.add(actionLabel, 5, 0);
+
+        Label updateLabel = new Label("Modifier");
+        updateLabel.setStyle("-fx-font-weight: bold;");
+        gridPane.add(updateLabel, 6, 0);
+
+
+
     }
 
     private void loadResources() {
@@ -124,4 +162,37 @@ public class AfficheResController implements Initializable {
                 .filter(ressource -> ressource.getTitre_r().toLowerCase().contains(searchText.toLowerCase()))
                 .forEach(ressource -> addResourceToGrid(ressource, row.getAndIncrement()));
     }
+
+    @FXML
+    void NavBarCat(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/afficheCategorie.fxml"));
+            Stage stage = (Stage)tText.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de afficheRessource.fxml : " + e.getMessage());
+        }
+    }
+
+    @FXML
+    void NavBarRes(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/afficheRessource.fxml"));
+            Stage stage = (Stage) tText.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de afficheRessource.fxml : " + e.getMessage());
+        }
+    }
+    @FXML
+    void AjoutR(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/ressource.fxml"));
+            Stage stage = (Stage) tText.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de afficheRessource.fxml : " + e.getMessage());
+        }
+    }
+
 }

@@ -58,28 +58,24 @@ public class ModifierResController implements Initializable {
 
     @FXML
     void ModifierRessource(ActionEvent event) {
-        // Vérifier si une catégorie est sélectionnée
+        // Vérifier si une ressource est sélectionnée
         if (ressource == null) {
-            showAlert("Veuillez sélectionner une catégorie à modifier.");
+            showAlert("Veuillez sélectionner une ressource à modifier.");
             return;
         }
 
         // Récupérer les nouvelles valeurs des champs
-        String typeText = tType.getText();
-        String tTitreText = tTitre.getText();
-        String description = tDescription.getText();
+        String typeText = tType.getText().trim();
+        String tTitreText = tTitre.getText().trim();
+        String description = tDescription.getText().trim();
 
-        // Vérifier que les champs nécessaires ne sont pas vides
-        if (typeText.isEmpty() || description.isEmpty() || tTitreText.isEmpty()) {
-            showAlert("Veuillez remplir tous les champs.");
-            return;
+        // Vérifier chaque champ individuellement
+        if (typeText.isEmpty() || !isValidTitre(tTitreText) || !isValidDescription(description) || !isValidtype(typeText)) {
+            return; // Sortie si l'un des champs est invalide
         }
 
         try {
-
-
-
-            // Mettre à jour les propriétés de la catégorie avec les nouvelles valeurs
+            // Mettre à jour les propriétés de la ressource avec les nouvelles valeurs
             ressource.setTitre_r(tTitreText);
             ressource.setDescription(description);
             ressource.setType_r(typeText);
@@ -89,16 +85,42 @@ public class ModifierResController implements Initializable {
             serviceRessource.modifier(ressource);
 
             // Afficher une boîte de dialogue d'information pour indiquer la réussite de la modification
-            showAlert("Catégorie modifiée avec succès!");
+            showAlert("Ressource modifiée avec succès!");
 
             // Charger la vue afficheCategorie.fxml après la modification réussie
             loadAfficheCategorieView();
 
         } catch (SQLException e) {
             // En cas d'erreur lors de la modification, afficher l'erreur
-            showAlert("Erreur lors de la modification de la catégorie : " + e.getMessage());
+            showAlert("Erreur lors de la modification de la ressource : " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private boolean isValidTitre(String titre) {
+        if (titre.isEmpty()) {
+            showAlert("Veuillez saisir un titre.");
+            return false;
+        }
+        // Ajoutez d'autres conditions de validation au besoin
+        return true;
+    }
+
+    private boolean isValidDescription(String description) {
+        if (description.isEmpty()) {
+            showAlert("Veuillez saisir une description.");
+            return false;
+        }
+        // Ajoutez d'autres conditions de validation au besoin
+        return true;
+    }
+    private boolean isValidtype(String type) {
+        if (type.isEmpty()) {
+            showAlert("Veuillez saisir Type.");
+            return false;
+        }
+        // Ajoutez d'autres conditions de validation au besoin
+        return true;
     }
 
     // Fonction utilitaire pour charger la vue afficheCategorie.fxml

@@ -75,11 +75,12 @@ public class ServiceCategorie implements IService<Categorie> {
                 String nom = rs.getString("nom_categorie");
                 String description = rs.getString("description");
                 String image = rs.getString("image");
-                int ressource_id = rs.getInt("ressource_id");
+                int ressourceId = rs.getInt("ressource_id"); // Récupérer l'identifiant de la ressource
 
-                Ressources ressource = new Ressources();
-                ressource.setId(ressource_id);
+                // Récupérer la ressource associée à partir de l'identifiant
+                Ressources ressource = getRessourceById(ressourceId);
 
+                // Créer une instance de Categorie avec la ressource associée
                 Categorie categorie = new Categorie(id, nom, description, image, ressource);
                 categories.add(categorie);
             }
@@ -87,19 +88,28 @@ public class ServiceCategorie implements IService<Categorie> {
 
         return categories;
     }
+    private Ressources getRessourceById(int ressourceId) throws SQLException {
+        Ressources ressource = null;
+        String req = "SELECT * FROM ressources WHERE id = ?";
 
-    public int getCount() throws SQLException {
-        String query = "SELECT COUNT(*) AS count FROM categorie";
+        try (PreparedStatement ps = connection.prepareStatement(req)) {
+            ps.setInt(1, ressourceId);
+            ResultSet rs = ps.executeQuery();
 
-        try (PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
-                return rs.getInt("count");
+                int id = rs.getInt("id");
+                String titre = rs.getString("titre_r");
+                String description = rs.getString("description");
+                String type = rs.getString("type_r");
+                String url = rs.getString("url");
+
+                ressource = new Ressources(id, titre, description, type, url);
             }
         }
 
-        return 0;
+        return ressource;
     }
+
 
     public List<String> getCategoryTypes() throws SQLException {
         List<String> categoryTypes = new ArrayList<>();

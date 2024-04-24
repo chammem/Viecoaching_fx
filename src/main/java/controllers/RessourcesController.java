@@ -50,29 +50,13 @@ public class RessourcesController implements Initializable {
         String description = tDescription.getText();
         String imageUrl = (timage.getImage() != null) ? timage.getImage().getUrl() : null;
 
-        boolean isValid = true;
-
-        if (titre.isEmpty()) {
-            showAlert("Veuillez saisir un titre.");
-            isValid = false;
+        if (!isValidTextField(titre, "Nom de ressource") ||
+                !isValidTextField(type, "Type de Ressource") ||
+                !isValidImageView(timage, "Image") ||
+                !isValidTextField(description, "Description  "))
+        {
+            return;
         }
-
-        if (type.isEmpty()) {
-            showAlert("Veuillez saisir un type.");
-            isValid = false;
-        }
-
-        if (description.isEmpty()) {
-            showAlert("Veuillez saisir une description.");
-            isValid = false;
-        }
-
-        if (imageUrl == null) {
-            showAlert("Veuillez sélectionner une image.");
-            isValid = false;
-        }
-
-        if (isValid) {
             try {
                 ServiceRessource serviceRessource = new ServiceRessource();
                 Ressources ressource = new Ressources(titre, type, imageUrl, description);
@@ -88,8 +72,22 @@ public class RessourcesController implements Initializable {
                 e.printStackTrace();
             }
         }
+
+    private boolean isValidTextField(String value, String fieldName) {
+        if (value.isEmpty()) {
+            showAlert("Veuillez saisir un(e) " + fieldName + ".");
+            return false;
+        }
+        return true;
     }
 
+    private boolean isValidImageView(ImageView imageView, String fieldName) {
+        if (imageView.getImage() == null) {
+            showAlert("Veuillez sélectionner une " + fieldName + ".");
+            return false;
+        }
+        return true;
+    }
     // Fonction utilitaire pour charger la vue afficheRessource.fxml
     private void loadAfficheRessourceView() {
         try {
