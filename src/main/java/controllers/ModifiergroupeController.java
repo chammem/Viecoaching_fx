@@ -6,13 +6,17 @@ import entities.Utilisateur;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import services.ServiceGroupe;
 import services.ServiceTypegroupe;
 import services.ServiceUtilisateur;
+import java.time.LocalDate;
+import javafx.scene.layout.GridPane;
 
 import java.io.File;
 import java.net.URL;
@@ -47,6 +51,7 @@ public class ModifiergroupeController implements Initializable {
     private Groupe groupe;
     private ServiceUtilisateur serviceUtilisateur;
     private ServiceGroupe serviceGroupe;
+    private Scene scene;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -81,6 +86,7 @@ public class ModifiergroupeController implements Initializable {
                     } else {
                         UtilisateurListItem utilisateurListItem = new UtilisateurListItem(utilisateur);
                         setGraphic(utilisateurListItem);
+
                     }
                 }
             });
@@ -96,38 +102,66 @@ public class ModifiergroupeController implements Initializable {
         descriptionField.setText(groupe.getDescription());
         imageView.setImage(new Image(groupe.getImage()));
     }
-
+    public void setScene(Scene scene) {
+        this.scene = scene;
+    }
     @FXML
     void modifierGroupe() throws SQLException {
-        // Validate that the 'nom' field is not empty
+        // Validation du champ nom
         String nom = nomField.getText();
         if (nom == null || nom.trim().isEmpty()) {
             showAlert("Le nom du groupe ne peut pas être vide !");
             return;
         }
 
-        // Mise à jour des informations du groupe
-        groupe.setNom(nom);
-        groupe.setDescription(descriptionField.getText());
-        groupe.setImage(imageView.getImage().getUrl());
-
-        // Récupération de l'utilisateur sélectionné
-        ObservableList<Utilisateur> utilisateursSelectionnes = utilisateursListView.getSelectionModel().getSelectedItems();
-
-        if (utilisateursSelectionnes != null) {
-            // Mise à jour de la liste des utilisateurs dans le groupe
-            groupe.getUtilisateurs().clear();
-            groupe.getUtilisateurs().addAll(utilisateursSelectionnes);
-        } else {
-            System.out.println("Aucun utilisateur sélectionné !");
+        // Validation du champ type de groupe
+        String type = typeGroupeField.getValue();
+        if (type == null || type.isEmpty()) {
+            showAlert("Veuillez sélectionner un type de groupe.");
             return;
         }
 
+        // Validation du champ date de création
+        LocalDate dateCreation = dateCreationField.getValue();
+        if (dateCreation == null) {
+            showAlert("Veuillez sélectionner une date de création.");
+            return;
+        }
+
+        // Validation du champ description
+        String description = descriptionField.getText();
+        if (description == null || description.trim().isEmpty()) {
+            showAlert("La description du groupe ne peut pas être vide !");
+            return;
+        }
+
+        // Validation de la sélection d'au moins un utilisateur
+        ObservableList<Utilisateur> utilisateursSelectionnes = utilisateursListView.getSelectionModel().getSelectedItems();
+        if (utilisateursSelectionnes == null || utilisateursSelectionnes.isEmpty()) {
+            showAlert("Veuillez sélectionner au moins un utilisateur.");
+            return;
+        }
+
+        // Mise à jour des informations du groupe
+        groupe.setNom(nom);
+        groupe.setDescription(description);
+        groupe.setImage(imageView.getImage().getUrl());
+
+        // Récupération de la date de création et mise à jour du groupe
+        groupe.setDatecreation(java.sql.Date.valueOf(dateCreation));
+
+        // Mise à jour de la liste des utilisateurs dans le groupe
+        groupe.getUtilisateurs().clear();
+        groupe.getUtilisateurs().addAll(utilisateursSelectionnes);
+
         // Appel du service pour modifier le groupe
         serviceGroupe.modifier(groupe);
+        showAlert("Le groupe a été modifié avec succès.");
 
+        // Fermeture de la scène actuelle
+        Stage stage = (Stage) btnModifier.getScene().getWindow();
+        stage.close();
         // Affichage d'une notification de succès
-        showAlert("Groupe modifié avec succès !");
     }
 
     @FXML

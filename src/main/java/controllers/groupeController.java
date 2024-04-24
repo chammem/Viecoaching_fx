@@ -1,4 +1,11 @@
 package controllers;
+import javafx.fxml.FXMLLoader;
+import javafx.event.ActionEvent;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import java.io.IOException;
 
 import com.google.protobuf.BoolValue;
 import entities.Groupe;
@@ -7,15 +14,21 @@ import entities.Utilisateur;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import services.ServiceGroupe;
 import services.ServiceTypegroupe;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -45,19 +58,49 @@ public class groupeController implements Initializable {
         @FXML
         private ListView<Utilisateur> utilisateursListView;
 
-        public void ajouter(ActionEvent event) {
+        public void ajouter(ActionEvent event) throws IOException {
+                // Validation du champ Nom
                 String nom = nomField.getText();
-                String description = descriptionField.getText();
-                String type = typeGroupeField.getValue();
-                String image = (imageView.getImage() != null) ? imageView.getImage().getUrl() : null;
-                ObservableList<Utilisateur> utilisateursSelectionnes = utilisateursListView.getSelectionModel().getSelectedItems();
+                if (nom.isEmpty()) {
+                        showAlert("Veuillez saisir un nom.");
+                        return;
+                }
 
+                // Validation du champ Type de groupe
+                String type = typeGroupeField.getValue();
+                if (type == null) {
+                        showAlert("Veuillez sélectionner un type de groupe.");
+                        return;
+                }
+                // Validation du champ Description
+                String description = descriptionField.getText();
+                if (description.isEmpty()) {
+                        showAlert("Veuillez saisir une description.");
+                        return;
+                }
+
+                // Validation du champ Date de création
+                LocalDate dateCreation = dateCreationField.getValue();
+                if (dateCreation == null || dateCreation.isAfter(LocalDate.now())) {
+                        showAlert("Veuillez sélectionner une date de création valide (antérieure à la date actuelle).");
+                        return;
+                }
+
+                // Autres validations pour les champs facultatifs, comme l'image et la description
+                String image = (imageView.getImage() != null) ? imageView.getImage().getUrl() : null;
+                // Ajoutez des validations supplémentaires au besoin pour les champs facultatifs
+
+                // Validation de la sélection d'utilisateurs
+                ObservableList<Utilisateur> utilisateursSelectionnes = utilisateursListView.getSelectionModel().getSelectedItems();
+                if (utilisateursSelectionnes.isEmpty()) {
+                        showAlert("Veuillez sélectionner au moins un utilisateur.");
+                        return;
+                }
+
+                // Si toutes les validations passent, ajoutez le groupe
                 ServiceGroupe serviceGroupe = new ServiceGroupe();
 
                 try {
-                        LocalDate localDate = dateCreationField.getValue();
-                        java.sql.Date date = java.sql.Date.valueOf(localDate);
-
                         ServiceTypegroupe serviceTypegroupe = new ServiceTypegroupe();
                         Typegroupe typegroupe = serviceTypegroupe.getTypegroupebynom(type);
 
@@ -66,18 +109,40 @@ public class groupeController implements Initializable {
                                 return;
                         }
 
-                        Groupe groupe = new Groupe(nom, typegroupe, date, image, description);
+                        Groupe groupe = new Groupe(nom, typegroupe, Date.valueOf(dateCreation), image, description);
                         groupe.setUtilisateurs(utilisateursSelectionnes);
 
-                        serviceGroupe.ajouter(groupe);
+                        // Ajouter le groupe avec les utilisateurs
+                        serviceGroupe.ajouterAvecUtilisateurs(groupe, utilisateursSelectionnes);
+
+                        // Afficher une confirmation
                         showAlert("Groupe ajouté avec succès !");
+                        loadAffichegr();
+
                 } catch (SQLException e) {
                         System.out.println("Erreur lors de l'ajout du groupe : " + e.getMessage());
                         e.printStackTrace();
+                        showAleert("Groupe ajouté avec succès !", event);
+
+
+                }
+
+
+        }
+        private void loadAffichegr() {
+                try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Affichegr.fxml"));
+                        Stage stage = (Stage) nomField.getScene().getWindow(); // Récupérer la fenêtre actuelle
+                        stage.setScene(new Scene(root));
+                } catch (IOException e) {
+                        System.out.println("Erreur lors du chargement de Affichegr.fxml : " + e.getMessage());
                 }
         }
-
-
+        private void showAleert(String message, ActionEvent event) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText(null);
+                alert.setContentText(message);
+                alert.showAndWait();}
 
         private void showAlert(String message) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);

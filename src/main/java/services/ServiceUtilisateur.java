@@ -48,6 +48,12 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
     }
 
     @Override
+    public void ajouterAvecUtilisateurs(Utilisateur utilisateur, List<Utilisateur> utilisateursSelectionnes) throws SQLException {
+
+    }
+
+
+    @Override
     public void supprimer(int id) throws SQLException {
         String req = "DELETE FROM utilisateur WHERE id=?";
         PreparedStatement preparedStatement = connection.prepareStatement(req);

@@ -1,0 +1,112 @@
+/* styles.css */
+
+/* Style pour l'arrière-plan */
+.anchor-pane {
+    -fx-background-color: #f2f2f2; /* Couleur gris clair */
+}
+
+/* Style pour les labels */
+.label {
+    -fx-font-size: 14px; /* Taille de police */
+    -fx-text-fill: #333; /* Couleur de texte */
+}
+
+/* Style pour les champs de texte */
+.text-field {
+    -fx-font-size: 14px; /* Taille de police */
+    -fx-background-color: white; /* Couleur de fond */
+}
+
+/* Style pour les boutons */
+.button {
+    -fx-font-size: 14px; /* Taille de police */
+    -fx-background-color: #4CAF50; /* Couleur de fond verte */
+    -fx-text-fill: white; /* Couleur de texte blanche */
+}
+
+/* Style pour les listes déroulantes */
+.choice-box {
+    -fx-font-size: 14px; /* Taille de police */
+    -fx-background-color: white; /* Couleur de fond */
+}
+
+/* Style pour les date pickers */
+.date-picker {
+    -fx-font-size: 14px; /* Taille de police */
+}
+
+/* Style pour les listes */
+.list-view {
+    -fx-font-size: 14px; /* Taille de police */
+    -fx-background-color: white; /* Couleur de fond */
+}
+
+/* Style pour les images */
+.image-view {
+    -fx-border-color: #ccc; /* Couleur de la bordure */
+    -fx-border-width: 1px; /* Largeur de la bordure */
+}
+
+/* Style pour les alertes */
+.alert {
+    -fx-font-size: 14px; /* Taille de police */
+}
+/* styles.css */
+
+/* Style pour l'arrière-plan */
+.anchor-pane {
+    -fx-background-color: #f2f2f2; /* Couleur gris clair */
+    -fx-align-items: center; /* Centrage vertical */
+    -fx-justify-content: center; /* Centrage horizontal */
+}
+/* Ajout de styles pour la pagination */
+.pagination-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Ajout de styles pour les badges */
+.bootstrap-badge {
+    display: inline-block;
+    padding: .25em .4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25rem;
+    color: #fff;
+    background-color: #007bff;
+}
+#ajouterButton {
+    -fx-background-color: #4CAF50; /* Couleur de fond */
+    -fx-text-fill: white; /* Couleur du texte */
+    -fx-font-weight: bold; /* Poids de la police */
+    -fx-padding: 10 20; /* Espacement interne */
+    -fx-border-radius: 5; /* Rayon des coins */
+    -fx-font-size: 14px; /* Taille de la police */
+}
+
+#ajouterButton:hover {
+    -fx-background-color: #45a049; /* Couleur de fond au survol */
+}
+
+/* Style pour les boutons */
+.button {
+    -fx-font-size: 16px; /* Taille de police */
+    -fx-background-color: #4CAF50; /* Couleur de fond verte */
+    -fx-text-fill: white; /* Couleur de texte blanche */
+    -fx-padding: 10px 20px; /* Rembourrage (top/bottom, left/right) */
+    -fx-border-radius: 5px; /* Rayon des coins */
+    -fx-margin-top: 20px; /* Marge supérieure */
+}
+#ajouterButton {
+    -fx-background-color: #4CAF50; /* Vert */
+    -fx-text-fill: white; /* Texte en blanc */
+    -fx-font-size: 14px; /* Taille de police */
+    -fx-font-weight: bold; /* Texte en gras */
+}
+.column-title {
+    -fx-font-weight: bold;
+}

@@ -1,14 +1,20 @@
 package services;
 
-import entities.Groupe;
-import entities.Typegroupe;
-import entities.Utilisateur;
+        import entities.Groupe;
+        import entities.Typegroupe;
+        import entities.Utilisateur;
+import services.IService;
 import utils.MyDatabase;
-import java.sql.Date;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+        import javax.mail.*;
+        import javax.mail.internet.InternetAddress;
+        import javax.mail.internet.MimeMessage;
+        import java.sql.Date;
+
+        import java.sql.*;
+        import java.util.ArrayList;
+        import java.util.List;
+        import java.util.Properties;
 
 public class ServiceGroupe implements IService<Groupe> {
     Connection connection;
@@ -19,7 +25,7 @@ public class ServiceGroupe implements IService<Groupe> {
 
 
     @Override
-    public void ajouter(Groupe groupe) throws SQLException {
+    public void ajouterAvecUtilisateurs(Groupe groupe, List<Utilisateur> utilisateursSelectionnes) throws SQLException {
         String reqGroupe = "INSERT INTO groupe (nom, typegroupe_id, datecreation, image, description) VALUES (?, ?, ?, ?, ?)";
         String reqGroupeUtilisateur = "INSERT INTO groupe_utilisateur (groupe_id, utilisateur_id) VALUES (?, ?)";
 
@@ -54,12 +60,49 @@ public class ServiceGroupe implements IService<Groupe> {
                 preparedStatementGroupeUtilisateur.setInt(2, utilisateur.getId());
                 preparedStatementGroupeUtilisateur.executeUpdate(); // Exécuter pour chaque utilisateur
             }
+            for (Utilisateur utilisateur : utilisateursSelectionnes) {
+                sendEmail(utilisateur.getEmail(), "Nouveau groupe ajouté", "Vous avez été ajouté au groupe : " + groupe.getNom());
+            }
 
             System.out.println("Groupe ajouté avec succès.");
         } catch (SQLException e) {
             throw new SQLException("Erreur lors de l'ajout du groupe : " + e.getMessage(), e);
         }
     }
+    public static void sendEmail(String recipientEmail, String subject, String content) {
+        final String username = "mariem.dghaies@gmail.com";
+        final String password = "nkxn otmj jasy tprd";
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(recipientEmail));
+            message.setSubject(subject);
+            message.setText(content);
+
+            Transport.send(message);
+
+            System.out.println("Email sent successfully!");
+
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public List<Utilisateur> afficherUtilisateurs() throws SQLException {
         List<Utilisateur> utilisateurs = new ArrayList<>();
@@ -239,6 +282,10 @@ public class ServiceGroupe implements IService<Groupe> {
     }
 
 
+    @Override
+    public void ajouter(Groupe groupe) throws SQLException {
+
+    }
 
     @Override
     public void supprimer(int id) throws SQLException {
@@ -250,7 +297,38 @@ public class ServiceGroupe implements IService<Groupe> {
     }
 
 
+    public int countGroupes() throws SQLException {
+        // Déclaration des variables
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        int count = 0;
 
+        try {
+            // Requête SQL pour compter le nombre de groupes
+            String query = "SELECT COUNT(*) FROM groupe";
+
+            // Préparation de la requête
+            statement = connection.prepareStatement(query);
+
+            // Exécution de la requête et récupération du résultat
+            resultSet = statement.executeQuery();
+
+            // Si des lignes sont retournées, récupérer le nombre de groupes
+            if (resultSet.next()) {
+                count = resultSet.getInt(1);
+            }
+        } finally {
+            // Fermeture des ressources
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+            // La connexion n'est pas fermée ici pour éviter de rompre la connexion pour les autres opérations dans la classe.
+        }
+
+        return count;
     }
 
-
+}

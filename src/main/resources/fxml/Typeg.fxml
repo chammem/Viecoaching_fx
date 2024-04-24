@@ -6,14 +6,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import java.net.URL?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controllers.TypegController"
-            prefHeight="400.0" prefWidth="600.0">
+            prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" >
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
     <GridPane hgap="10" layoutX="50" layoutY="50" vgap="10">
 
         <!-- Labels pour les titres -->
-        <Label text="Nom :" />
+        <Label text="Type De Groupe :" />
 
 
         <!-- Champs de saisie pour les informations du groupe -->

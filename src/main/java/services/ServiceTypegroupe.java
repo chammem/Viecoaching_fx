@@ -1,6 +1,7 @@
 package services;
 
 import entities.Typegroupe;
+import entities.Utilisateur;
 import utils.MyDatabase;
 
 import java.sql.*;
@@ -104,4 +105,11 @@ public class ServiceTypegroupe implements IService<Typegroupe> {
         preparedStatement.setInt(2, typegroupe.getId());
         preparedStatement.executeUpdate();
     }
+
+    @Override
+    public void ajouterAvecUtilisateurs(Typegroupe typegroupe, List<Utilisateur> utilisateursSelectionnes) throws SQLException {
+
+    }
+
+
 }
