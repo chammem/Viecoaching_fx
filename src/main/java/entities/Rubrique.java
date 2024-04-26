@@ -1,89 +1,100 @@
 package entities;
 
-import java.time.LocalDateTime;
+
+import java.util.Date;
 
 public class Rubrique {
         private int id;
-        private LocalDateTime dateCreation, datePublication;
+        private Date dateCréation, datePublication;
         private String titre, contenu;
-        private Etat etat;
-
-        public enum Etat {
-            ACTIF, INACTIF
-        }
+        private String etat;
+        private int auteur_id;
 
         public Rubrique() {
 
         }
 
-        public Rubrique(int id, LocalDateTime dateCreation, LocalDateTime datePublication, String titre, String contenu, Etat etat) {
-            this.id = id;
-            this.dateCreation = dateCreation;
-            this.datePublication = datePublication;
-            this.titre = titre;
-            this.contenu = contenu;
-            this.etat = etat;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public LocalDateTime getDateCreation() {
-            return dateCreation;
-        }
-
-        public void setDateCreation(LocalDateTime dateCreation) {
-            this.dateCreation = dateCreation;
-        }
-
-        public LocalDateTime getDatePublication() {
-            return datePublication;
-        }
-
-        public void setDatePublication(LocalDateTime datePublication) {
-            this.datePublication = datePublication;
-        }
-
-        public String getTitre() {
-            return titre;
-        }
-
-        public void setTitre(String titre) {
-            this.titre = titre;
-        }
-
-        public String getContenu() {
-            return contenu;
-        }
-
-        public void setContenu(String contenu) {
-            this.contenu = contenu;
-        }
-
-        public Etat getEtat() {
-            return etat;
-        }
-
-        public void setEtat(Etat etat) {
-            this.etat = etat;
-        }
-
-        @Override
-        public String toString() {
-            return "Rubrique{" +
-                    "id=" + id +
-                    ", dateCreation=" + dateCreation +
-                    ", datePublication=" + datePublication +
-                    ", titre='" + titre + '\'' +
-                    ", contenu='" + contenu + '\'' +
-                    ", etat=" + etat +
-                    '}';
-        }
+    public Rubrique(int id, Date dateCréation, Date datePublication, String titre, String contenu, String etat, int auteur_id) {
+        this.id = id;
+        this.dateCréation = dateCréation;
+        this.datePublication = datePublication;
+        this.titre = titre;
+        this.contenu = contenu;
+        this.etat = etat;
+        this.auteur_id = auteur_id;
     }
+
+    public Rubrique(int id, int auteurId, String title, String contenu, java.sql.Date dateCréation, java.sql.Date datePublication, String etat) {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Date getDateCréation() {
+        return dateCréation;
+    }
+
+    public void setDateCréation(Date dateCréation) {
+        this.dateCréation = dateCréation;
+    }
+
+    public Date getDatePublication() {
+        return datePublication;
+    }
+
+    public void setDatePublication(Date datePublication) {
+        this.datePublication = datePublication;
+    }
+
+    public String getTitre() {
+        return titre;
+    }
+
+    public void setTitre(String titre) {
+        this.titre = titre;
+    }
+
+    public String getContenu() {
+        return contenu;
+    }
+
+    public void setContenu(String contenu) {
+        this.contenu = contenu;
+    }
+
+    public String getEtat() {
+        return etat;
+    }
+
+    public void setEtat(String etat) {
+        this.etat = etat;
+    }
+
+    public int getAuteur_id() {
+        return auteur_id;
+    }
+
+    public void setAuteur_id(int auteur_id) {
+        this.auteur_id = auteur_id;
+    }
+
+    @Override
+    public String toString() {
+        return "Rubrique{" +
+                "id=" + id +
+                ", dateCréation=" + dateCréation +
+                ", datePublication=" + datePublication +
+                ", titre='" + titre + '\'' +
+                ", contenu='" + contenu + '\'' +
+                ", etat='" + etat + '\'' +
+                ", auteur_id=" + auteur_id +
+                '}';
+    }
+}
 
 

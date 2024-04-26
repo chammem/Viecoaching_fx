@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.RubriqueAdmin.ShowRubriqueAdminController">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <BorderPane fx:id="bp" layoutY="-10.0" prefHeight="512.0" prefWidth="201.0" AnchorPane.bottomAnchor="50.0" AnchorPane.topAnchor="50.0">
+               <top>
+                  <ImageView fitHeight="111.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                     <image>
+                        <Image url="@../../../../../images/logo.png" />
+                     </image>
+                  </ImageView>
+               </top>
+               <padding>
+                  <Insets top="30.0" />
+               </padding>
+               <center>
+                  <VBox prefHeight="196.0" prefWidth="148.0" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets top="30.0" />
+                     </BorderPane.margin>
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#AllBlogs" prefHeight="40.0" prefWidth="150.0" text="Tous les rubriques">
+                           <VBox.margin>
+                              <Insets left="25.0" />
+                           </VBox.margin>
+                           <graphic>
+                              <FontAwesomeIcon glyphName="USER" size="2em" />
+                           </graphic>
+                        </Button>
+                        <Button layoutX="35.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnAddBlog" prefHeight="40.0" prefWidth="150.0" text="Ajouter un rubrique">
+                           <VBox.margin>
+                              <Insets left="25.0" top="20.0" />
+                           </VBox.margin>
+                           <graphic>
+                              <FontAwesomeIcon glyphName="" text="" />
+                           </graphic>
+                        </Button>
+                        <Button layoutX="35.0" layoutY="50.0" mnemonicParsing="false" onAction="#btnDashboard" prefHeight="40.0" prefWidth="150.0" text="Supprimer/Modifier&#10; un rubrique" textAlignment="CENTER">
+                           <VBox.margin>
+                              <Insets left="25.0" top="20.0" />
+                           </VBox.margin>
+                           <graphic>
+                              <FontAwesomeIcon />
+                           </graphic>
+                        </Button>
+                     </children>
+                  </VBox>
+               </center>
+            </BorderPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

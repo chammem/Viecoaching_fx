@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="53.0" prefWidth="300.0" style="-fx-background-color: rgba(129,170,255,0.1); -fx-border-radius: 5em;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.RubriqueAdmin.MainItemController">
+   <children>
+
+      <Label fx:id="lblAppName" layoutX="66.0" layoutY="8.0" text="Contenu" textFill="BLACK">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblEmail" layoutX="66.0" layoutY="27.0" text="Date publication" textFill="BLACK">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnDelete" layoutX="228.0" layoutY="12.0" mnemonicParsing="false" onAction="#btnDelete" prefHeight="26.0" prefWidth="47.0" visible="false" />
+      <Label fx:id="lblidcomment" layoutX="213.0" layoutY="17.0" text="Label" visible="false" />
+   </children>
+</AnchorPane>
