@@ -3,6 +3,8 @@ package entities;
 public class Categorie {
 
     private  int id ;
+    private int count;
+
     private String nom_categorie ;
     private  String description ;
 
@@ -95,4 +97,11 @@ public class Categorie {
         this.image = image;
     }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 }

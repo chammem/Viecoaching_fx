@@ -1,6 +1,7 @@
 package controllers;
 
 import entities.Categorie;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,9 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -34,8 +33,7 @@ public class AfficheCatController implements Initializable {
     @FXML
     private TextField tText;
 
-    @FXML
-    private PieChart pieChart;
+
 
     private ServiceCategorie serviceCategorie;
     private ServiceRessource serviceRessource;
@@ -45,7 +43,7 @@ public class AfficheCatController implements Initializable {
         serviceCategorie = new ServiceCategorie();
         serviceRessource = new ServiceRessource();
         loadCategories();
-        displayCategoryStatistics();
+       // displayCategoryStatistics();
         tText.textProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 filterCategories(newValue);
@@ -103,11 +101,24 @@ public class AfficheCatController implements Initializable {
         Label descriptionLabel = new Label(categorie.getDescription());
         gridPane.add(descriptionLabel, 2, row);
 
-        // Afficher une image si besoin
-        ImageView imageView = new ImageView(new Image(categorie.getImage()));
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(100);
-        gridPane.add(imageView, 3, row);
+        String imageUrl = categorie.getImage(); // Obtenez l'URL de l'image à partir de l'objet Categorie
+
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            // Créer un objet Image à partir de l'URL
+            Image image = new Image("file:///C:/chemin/vers/le/dossier/images/" + imageUrl); // Remplacez le chemin par le chemin réel de votre dossier d'images
+
+            // Créer un objet ImageView pour afficher l'image
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(100); // Définir la largeur de l'ImageView
+            imageView.setFitHeight(100); // Définir la hauteur de l'ImageView
+
+            // Ajouter l'ImageView au GridPane à l'emplacement spécifié
+            gridPane.add(imageView, 3, row);
+        } else {
+            // Gérer le cas où l'URL de l'image est vide ou null
+            // Vous pouvez afficher un message ou une image par défaut
+            System.out.println("L'URL de l'image est vide ou null.");
+        }
 
         // Boutons d'action (Supprimer et Mettre à jour)
         Button deleteButton = new Button("Supprimer");
@@ -120,47 +131,44 @@ public class AfficheCatController implements Initializable {
     }
 
     private void deleteCategory(Categorie categorie) {
-        try {
-            serviceCategorie.supprimer(categorie.getId());
-            loadCategories();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText("Voulez-vous supprimer ce catégorie ?");
+
+        alert.showAndWait().ifPresent(result -> {
+            if (result == ButtonType.OK) {
+                try {
+                    // Supprime la ressource en utilisant le service
+                    serviceCategorie.supprimer(categorie.getId());
+
+                    // Actualise la liste des ressources après la suppression
+                    Platform.runLater(this::loadCategories);
+                } catch (SQLException e) {
+                    e.printStackTrace(); // Gérer l'exception de manière appropriée
+                }
+            }
+        });
+
     }
 
     private void updateCategory(Categorie categorie) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/modifierCat.fxml"));
-            Stage updateStage = new Stage();
-            updateStage.setScene(new Scene(loader.load()));
 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/modifierCat.fxml"));
+
+            Parent modif = loader.load();
             ModifierCatController controller = loader.getController();
             controller.initData(categorie);
+            Stage stage = (Stage) tText.getScene().getWindow();
+            stage.setScene(new Scene(modif));
+            Platform.runLater(this::loadCategories);
 
-            updateStage.setTitle("Modifier Catégorie");
-            updateStage.showAndWait();
-
-            loadCategories();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void displayCategoryStatistics() {
-        try {
-            ObservableList<String> categoryTypes = FXCollections.observableArrayList(serviceCategorie.getCategoryTypes());
-            ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-
-            for (String categoryType : categoryTypes) {
-                int count = serviceCategorie.getCountByCategoryType(categoryType);
-                pieChartData.add(new PieChart.Data(categoryType, count));
-            }
-
-            pieChart.setData(pieChartData);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void filterCategories(String searchText) throws SQLException {
         ObservableList<Categorie> categories = FXCollections.observableArrayList(serviceCategorie.afficher());
@@ -196,6 +204,16 @@ public class AfficheCatController implements Initializable {
     void AjoutCat(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/AjoutCat.fxml"));
+            Stage stage = (Stage) tText.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de afficheRessource.fxml : " + e.getMessage());
+        }
+    }
+    @FXML
+    void stats(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/sats.fxml"));
             Stage stage = (Stage) tText.getScene().getWindow(); // Récupérer la fenêtre actuelle
             stage.setScene(new Scene(root));
         } catch (IOException e) {

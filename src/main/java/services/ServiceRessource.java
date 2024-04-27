@@ -133,4 +133,27 @@ public class ServiceRessource implements IService<Ressources>{
     }
 
 
+    public void updateRating(int resourceId, int newRatingValue) throws SQLException {
+        // Prepare SQL update statement
+        String sql = "UPDATE ressources SET rating = ? WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            // Set parameters for the prepared statement
+            statement.setInt(1, newRatingValue); // Set the new rating value
+            statement.setInt(2, resourceId); // Set the resource ID
+
+            // Execute the update statement
+            int rowsUpdated = statement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("Rating updated successfully for resource with ID: " + resourceId);
+            } else {
+                System.out.println("Failed to update rating for resource with ID: " + resourceId);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error updating rating for resource with ID: " + resourceId);
+            throw e; // Rethrow the exception to handle at the caller level
+        }
+    }
+
 }

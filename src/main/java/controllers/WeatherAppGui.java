@@ -1,4 +1,5 @@
 package controllers;
+import javafx.fxml.Initializable;
 import org.json.simple.JSONObject;
 
 import javax.imageio.ImageIO;
@@ -9,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class WeatherAppGui extends JFrame {
     private JSONObject weatherData;
@@ -164,5 +167,7 @@ public class WeatherAppGui extends JFrame {
         System.out.println("Could not find resource");
         return null;
     }
+
+
 }
 

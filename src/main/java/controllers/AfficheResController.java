@@ -1,5 +1,6 @@
 package controllers;
 
+import entities.Categorie;
 import entities.Ressources;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -10,12 +11,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import services.ServiceRessource;
 
@@ -37,6 +37,8 @@ public class AfficheResController implements Initializable {
 
     @FXML
     private Button NavBarRes;
+    @FXML
+    private VBox contentVBox;
 
 
     private ServiceRessource service;
@@ -44,7 +46,6 @@ public class AfficheResController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         service = new ServiceRessource();
-
         loadResources();
 
         // Add listener to the TextField for search functionality
@@ -125,41 +126,58 @@ public class AfficheResController implements Initializable {
         gridPane.add(updateButton, 6, row);
     }
 
+
     private void deleteResource(Ressources ressources) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText("Voulez-vous supprimer cette ressource ?");
+
+        // Affiche une boîte de dialogue de confirmation avec des boutons Oui et Non
+        alert.showAndWait().ifPresent(result -> {
+            if (result == ButtonType.OK) {
+                try {
+                    // Supprime la ressource en utilisant le service
+                    service.supprimer(ressources.getId());
+
+                    // Actualise la liste des ressources après la suppression
+                    Platform.runLater(this::loadResources);
+                } catch (SQLException e) {
+                    e.printStackTrace(); // Gérer l'exception de manière appropriée
+                }
+            }
+        });
+    }
+    @FXML
+    void AjoutR(ActionEvent event) {
         try {
-            service.supprimer(ressources.getId());
-            Platform.runLater(this::loadResources); // Refresh the resource list after deletion
-        } catch (SQLException e) {
-            e.printStackTrace(); // Handle the exception gracefully
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/ressource.fxml"));
+            Stage stage = (Stage) tText.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de afficheRessource.fxml : " + e.getMessage());
         }
     }
-
     private void updateResource(Ressources ressources) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/modifierRes.fxml"));
             Parent modif = loader.load();
-
             ModifierResController controller = loader.getController();
-            controller.initData(ressources); // Pass selected resource to ModifierResController
-
-            Stage updateStage = new Stage();
-            updateStage.setScene(new Scene(modif));
-            updateStage.setTitle("Modifier res");
-            updateStage.showAndWait();
-
-            Platform.runLater(this::loadResources); // Refresh the resource list after update
+            controller.initData(ressources);
+            Stage stage = (Stage) tText.getScene().getWindow();
+            stage.setScene(new Scene(modif));
+            Platform.runLater(this::loadResources);
         } catch (IOException e) {
-            e.printStackTrace(); // Handle the exception gracefully
+            e.printStackTrace();
         }
     }
-
     private void filterResources(String searchText) throws SQLException {
         ObservableList<Ressources> resources = FXCollections.observableArrayList(service.afficher());
         gridPane.getChildren().clear(); // Clear existing items in GridPane
         AtomicInteger row = new AtomicInteger(1); // Start from the second row (index 1)
 
         resources.stream()
-                .filter(ressource -> ressource.getTitre_r().toLowerCase().contains(searchText.toLowerCase()))
+                .filter(ressource -> ressource.getType_r().toLowerCase().contains(searchText.toLowerCase()))
                 .forEach(ressource -> addResourceToGrid(ressource, row.getAndIncrement()));
     }
 
@@ -185,14 +203,20 @@ public class AfficheResController implements Initializable {
         }
     }
     @FXML
-    void AjoutR(ActionEvent event) {
+    void statsAction(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/ressource.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/sats.fxml"));
             Stage stage = (Stage) tText.getScene().getWindow(); // Récupérer la fenêtre actuelle
             stage.setScene(new Scene(root));
         } catch (IOException e) {
             System.out.println("Erreur lors du chargement de afficheRessource.fxml : " + e.getMessage());
         }
     }
+
+
+
+
+
+
 
 }

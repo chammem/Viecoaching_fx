@@ -34,13 +34,12 @@
    </TextField>
    <VBox prefHeight="600.0" prefWidth="262.0" style="-fx-background-color: F3F5DC;">
       <children>
-         <ImageView fitHeight="273.0" fitWidth="260.0" pickOnBounds="true" preserveRatio="true">
+         <ImageView fitHeight="262.0" fitWidth="388.0" pickOnBounds="true" preserveRatio="true">
             <image>
-               <Image url="@../../../../../../Downloads/426197672_379463364719872_8698905274837661634_n.png" />
+               <Image url="@../image/logo.png" />
             </image>
          </ImageView>
-
-         <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Statistiques" />
+         <Button mnemonicParsing="false" onAction="#statsAction" prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Statistiques" />
          <Text strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1.0" />
          <Button mnemonicParsing="false" prefHeight="42.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Groupes" />
          <Text strokeType="OUTSIDE" strokeWidth="0.0" />

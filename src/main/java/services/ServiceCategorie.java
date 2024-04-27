@@ -141,4 +141,29 @@ public class ServiceCategorie implements IService<Categorie> {
 
         return count;
     }
+    public int getTotalItemCount() throws SQLException {
+        int totalCount = 0;
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydatabase", "username", "password");
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT COUNT(*) FROM items_table");
+
+            if (resultSet.next()) {
+                totalCount = resultSet.getInt(1);
+            }
+        } finally {
+            // Fermer les ressources JDBC
+            if (resultSet != null) resultSet.close();
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
+        }
+
+        return totalCount;
+    }
+
+
 }
