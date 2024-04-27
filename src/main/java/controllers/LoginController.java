@@ -65,6 +65,7 @@ public class LoginController implements Initializable {
             Utilisateur utilisateur = authService.login(email, password);
 
             if (utilisateur != null) {
+
                 showAlert(Alert.AlertType.CONFIRMATION, "Connexion réussie", "Bienvenue " + utilisateur.getNom() + " " + utilisateur.getPrenom());
             } else {
                 showAlert(Alert.AlertType.ERROR, "Erreur de connexion", "Adresse email ou mot de passe incorrect");

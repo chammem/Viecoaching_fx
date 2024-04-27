@@ -35,19 +35,33 @@ public class AddRubriqueAdminController implements Initializable {
 
     @FXML
     private Label lbluser;
-    private TableColumn<Rubrique, String> État_Col;
+    /*private TableColumn<Rubrique, String> État_Col;*/
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        comboBox();
         lbldate.setText(LocalDate.now().toString());
 
-        ServiceUtilisateur u = new ServiceUtilisateur();
+        /*ServiceUtilisateur u = new ServiceUtilisateur();
         String Currentuser = null;
         try {
             Currentuser = u.trouverParId(Main.userid).toString();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }*/
+
+        ServiceUtilisateur u = new ServiceUtilisateur();
+        Utilisateur currentUser = null;
+        String Currentuser = null;
+        try {
+            currentUser = u.trouverParId(Main.userid);
+            if (currentUser != null) {
+                Currentuser = currentUser.toString();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+
 
         lbluser.setText(Currentuser);
     }
@@ -75,6 +89,7 @@ public class AddRubriqueAdminController implements Initializable {
         r.setDateCréation(Date.valueOf((LocalDate.now())));
         r.setDatePublication(Date.valueOf(LocalDate.now()));
         r.setTitre(title);
+        r.setEtat(txtEtat.getValue());
 
         ServiceRubrique service = new ServiceRubrique();
         service.ajouterRubrique(r);
@@ -86,9 +101,6 @@ public class AddRubriqueAdminController implements Initializable {
         String[] items = {"En attente", "Active", "Inactive"};
         txtEtat.getItems().addAll(items);
 
-        txtEtat.setOnAction(event -> {
-            String selectedEtat = txtEtat.getValue();
-        });
 }
     private void clearFields() {
         txtTitle.clear();

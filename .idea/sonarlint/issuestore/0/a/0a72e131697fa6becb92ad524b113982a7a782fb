@@ -1,0 +1,14 @@
+
+j
+java:S2095("OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(¿œ÷îùÿÿÿÿ
+j
+java:S2095G"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(¿œ÷îùÿÿÿÿ
+b
+java:S2095"GUse try-with-resources or close this "Statement" in a "finally" clause.(é°Áµþÿÿÿÿ
+b
+java:S20952"GUse try-with-resources or close this "Statement" in a "finally" clause.(é°Áµþÿÿÿÿ
+j
+java:S2095"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(¿œ÷îùÿÿÿÿ
+E	java:S106"+Replace this use of System.out by a logger.(²Ç¹×ÿÿÿÿÿ
+@	java:S106""+Replace this use of System.out by a logger.(Ç¾¥ñ
+E	java:S106+"+Replace this use of System.out by a logger.(¯×†÷üÿÿÿÿ

@@ -1,0 +1,109 @@
+/* Customize the application background */
+.root {
+    -fx-background-color: #FDFDFAff; /* --baby-powder */
+}
+
+/* Customize labels */
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #184882ff; /* --polynesian-blue */
+}
+
+/* Customize buttons */
+.button {
+    -fx-font-size: 14px;
+    -fx-text-fill: #FDFDFAff; /* --baby-powder */
+    -fx-background-color: #184882ff; /* --polynesian-blue */
+}
+
+/* Customize table view */
+.table-view {
+    -fx-background-color: #FDFDFAff; /* --baby-powder */
+}
+
+.table-view .column-header {
+    -fx-font-size: 14px;
+    -fx-text-fill: #184882ff; /* --polynesian-blue */
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #778AA6ff; /* --slate-gray */
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #184882ff; /* --polynesian-blue */
+    -fx-text-fill: #FDFDFAff; /* --baby-powder */
+}
+
+/* Customize combo box */
+.combo-box {
+    -fx-font-size: 14px;
+}
+
+/* Customize text fields */
+.text-field {
+    -fx-font-size: 14px;
+}
+
+/* Customize date picker */
+.date-picker {
+    -fx-font-size: 14px;
+}
+
+/* Customize list view */
+.list-view {
+    -fx-font-size: 14px;
+}
+
+/* Customize table cell text alignment */
+.table-cell {
+    -fx-alignment: CENTER;
+}
+
+/* Customize alert dialog */
+.dialog-pane .label {
+    -fx-font-size: 14px;
+}
+
+.dialog-pane .button {
+    -fx-font-size: 14px;
+}
+
+.dialog-pane .button-bar {
+    -fx-background-color: #FDFDFAff; /* --baby-powder */
+}
+
+/* Customize tooltips */
+.tooltip {
+    -fx-font-size: 14px;
+    -fx-background-color: #184882ff; /* --polynesian-blue */
+    -fx-text-fill: #FDFDFAff; /* --baby-powder */
+}
+
+/* Customize progress bar */
+.progress-bar .track {
+    -fx-background-color: #FDFDFAff; /* --baby-powder */
+}
+
+.progress-bar .bar {
+    -fx-background-color: #184882ff; /* --polynesian-blue */
+}
+
+/* Customize scroll bar */
+.scroll-bar {
+    -fx-background-color: #FDFDFAff; /* --baby-powder */
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #184882ff; /* --polynesian-blue */
+}
+
+/* Customize check box */
+.check-box {
+    -fx-font-size: 14px;
+}
+
+/* Customize radio button */
+.radio-button {
+    -fx-font-size: 14px;
+}

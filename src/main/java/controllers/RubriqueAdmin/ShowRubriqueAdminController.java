@@ -36,15 +36,15 @@ public class ShowRubriqueAdminController {
     }
 
     public void AllBlogs(ActionEvent actionEvent) {
-        loadPage("/fxml/Main");
+        loadPage("/fxml/RubriqueAdmin/ShowRubriqueCommentaire");
     }
 
     public void btnAddBlog(ActionEvent actionEvent) {
-        loadPage("/fxml/addRubrique");
+        loadPage("/fxml/RubriqueAdmin/addRubriqueAdmin");
     }
 
     public void btnDashboard(ActionEvent actionEvent) {
-        loadPage("/fxml/AdminDash");
+        loadPage("/fxml/RubriqueAdmin/ModifierSupprimerRubrique");
     }
 }
 

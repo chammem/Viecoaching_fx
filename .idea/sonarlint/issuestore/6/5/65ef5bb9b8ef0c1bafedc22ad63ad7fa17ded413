@@ -1,0 +1,25 @@
+
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(±Ö¼Èûÿÿÿÿ
+c	java:S100&"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¯¹³‰
+H
+java:S1172&"2Remove this unused method parameter "actionEvent".(¯¹³‰
+H
+java:S1172*"2Remove this unused method parameter "actionEvent".(Û™ãÂ
+H
+java:S1172."2Remove this unused method parameter "actionEvent".(¿áÃ€
+9
+java:S1128"Remove this duplicated import.(î•¯¼ıÿÿÿÿ
+9
+java:S1128"Remove this duplicated import.(ÃÚ¢„şÿÿÿÿ
+9
+java:S1128"Remove this duplicated import.(À‡ô³úÿÿÿÿ
+4
+java:S1128"Remove this duplicated import.(²ä¡È
+9
+java:S1128"Remove this duplicated import.(Îî¥üÿÿÿÿ
+9
+java:S1128"Remove this duplicated import.(ªº»Úıÿÿÿÿ
+4
+java:S1128"Remove this duplicated import.(…µÛ¶
+4
+java:S1128"Remove this duplicated import.(ƒ¥óš

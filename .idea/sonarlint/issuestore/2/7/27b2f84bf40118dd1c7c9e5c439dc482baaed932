@@ -1,0 +1,35 @@
+
+J
+java:S3740#"/Provide the parametrized type for this generic.(áü“·ûÿÿÿÿ
+J
+java:S3740k"/Provide the parametrized type for this generic.(áü“·ûÿÿÿÿ
+c
+java:S1192."HDefine a constant instead of duplicating this literal "contenu" 3 times.(šÕ‚Íøÿÿÿÿ
+f	java:S117*"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(±‹§µ
+k	java:S117:"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÈåÅ½şÿÿÿÿ
+k	java:S117["QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¹£ô¾ûÿÿÿÿ
+k	java:S117\"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ËüÙùÿÿÿÿ
+f	java:S117s"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(±‹§µ
+e
+java:S2095_"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(¬¯¬Ó
+e
+java:S2095"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(¾µŒˆ
+e
+java:S2095n"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(¬¯¬Ó
+e
+java:S2095M"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(¾µŒˆ
+b
+java:S2095&"GUse try-with-resources or close this "Statement" in a "finally" clause.(­çÄ¾ıÿÿÿÿ
+j
+java:S2095>"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(úò‰Òúÿÿÿÿ
+@	java:S106"+Replace this use of System.out by a logger.(æÍèú
+E	java:S106"+Replace this use of System.out by a logger.(ı™øøÿÿÿÿ
+E	java:S1067"+Replace this use of System.out by a logger.(ı™øøÿÿÿÿ
+@	java:S106A"+Replace this use of System.out by a logger.(Äö 
+P	java:S125C"<This block of commented-out lines of code should be removed.(âßÑ^
+E	java:S106U"+Replace this use of System.out by a logger.(¨¢şôüÿÿÿÿ
+E	java:S106W"+Replace this use of System.out by a logger.(ı™øøÿÿÿÿ
+E	java:S106f"+Replace this use of System.out by a logger.(ı™øøÿÿÿÿ
+F	java:S106"+Replace this use of System.out by a logger.(ı™øøÿÿÿÿ
+D
+java:S1128".Remove this unused import 'entities.Rubrique'.(Ã‹Üˆ

@@ -100,7 +100,7 @@ public class ShowRubriqueCommentaireController implements Initializable {
             for (int i = 0; i < nodes.length; i++) {
                 //stays in the loop
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(Main.class.getResource("fxml/mainitem.fxml"));
+                loader.setLocation(Main.class.getResource("/fxml/RubriqueAdmin/mainitem.fxml"));
                 nodes[i] = loader.load();
 
                 //add selected clicks

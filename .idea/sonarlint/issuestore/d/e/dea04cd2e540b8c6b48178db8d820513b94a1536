@@ -1,0 +1,42 @@
+
+`	java:S112_"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ
+k
+java:S1192Å"TDefine a constant instead of duplicating this literal "Please select Ã©tat" 7 times.(ÃâÏÁ
+~
+java:S1192Å"gDefine a constant instead of duplicating this literal "Please enter a title for the Rubrique." 7 times.(ÃâÏÁ
+c
+java:S1192Å"LDefine a constant instead of duplicating this literal "Empty Title" 7 times.(ÃâÏÁ
+]
+java:S1192"FDefine a constant instead of duplicating this literal "Error" 8 times.(µûø–
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(±Ö¼Èûÿÿÿÿ
+n	java:S116$"TRename this field "Titre_Col" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ä³–¹üÿÿÿÿ
+k	java:S116'"VRename this field "Contenu_Col" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.( é‘É
+q	java:S116*"\Rename this field "DateCrÃ©ation_Col" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(äÍ¿
+x	java:S116-"^Rename this field "DatePublication_Col" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¸¡€óşÿÿÿÿ
+h	java:S1160"TRename this field "Ã‰tat_Col" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(á±óF
+m	java:S1163"SRename this field "User_Col" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ä¶¾Šÿÿÿÿÿ
+u	java:S1166"[Rename this field "Commentaires_Col" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¢¢›şÿÿÿÿ
+m	java:S1169"XRename this field "Supprimer_col" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(³ÅÎ¤
+s
+java:S1450I"^Remove the "rubriqueService" field and declare it as a local variable in the relevant methods.(ü”ƒg
+|
+java:S1450J"aRemove the "utilisateurService" field and declare it as a local variable in the relevant methods.(Úš¥Ôşÿÿÿÿ
+h	java:S100W"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(´í‡Øüÿÿÿÿ
+m
+java:S3776W"RRefactor this method to reduce its Cognitive Complexity from 39 to the 15 allowed.(´í‡Øüÿÿÿÿ
+S
+java:S1854À"<Remove this useless assignment to local variable "auteurId".(‘Œä
+2
+java:S3626Ó"Remove this redundant jump.(ûÁİ…
+…
+java:S1130¼"nRemove the declaration of thrown exception 'java.sql.SQLException', as it cannot be thrown from method's body.(Ò¨Äõ
+D
+java:S1481À"-Remove this unused "auteurId" local variable.(‘Œä
+…
+java:S1130Û"nRemove the declaration of thrown exception 'java.sql.SQLException', as it cannot be thrown from method's body.(µÅ„ñ
+U
+java:S1128":Remove this unused import 'com.google.protobuf.BoolValue'.(ëÑ£üşÿÿÿÿ
+H
+java:S1068I"3Remove this unused "rubriqueService" private field.(ü”ƒg
+Q
+java:S1068J"6Remove this unused "utilisateurService" private field.(Úš¥Ôşÿÿÿÿ

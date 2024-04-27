@@ -50,8 +50,8 @@ public class ModifierSupprimerRubriqueController implements Initializable {
     @FXML
     private TableColumn<Rubrique, String> User_Col;
 
-    @FXML
-    private TableColumn<Rubrique, Void> Commentaires_Col;
+    /*@FXML
+    private TableColumn<Rubrique, Void> Commentaires_Col;*/
 
     @FXML
     private TableColumn<Rubrique, Void> Supprimer_col;

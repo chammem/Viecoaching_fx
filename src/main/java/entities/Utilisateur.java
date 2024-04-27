@@ -96,17 +96,7 @@ public class Utilisateur {
 
     @Override
     public String toString() {
-        return "Utilisateur{" +
-                "id=" + id +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", email='" + email + '\'' +
-                ", tel='" + tel + '\'' +
-                ", mdp='" + mdp + '\'' +
-                ", genre='" + genre + '\'' +
-                ", ville='" + ville + '\'' +
-                ", active=" + active +
-                '}';
+        return nom + ' ' + prenom ;
     }
 
     public int getRole_id() {
