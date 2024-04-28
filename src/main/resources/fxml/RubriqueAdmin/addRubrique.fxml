@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="779.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.RubriqueAdmin.AddRubrique">
+    <children>
+        <BorderPane prefHeight="550.0" prefWidth="779.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="270.0" prefWidth="832.0">
+                            <children>
+                                <Pane layoutX="-1.0" prefHeight="550.0" prefWidth="779.0" style="-fx-background-color: #ffffff; -fx-border-color: rgba(129,170,255,0.1); -fx-border-insets: 1 0 0 0;">
+                                    <children>
+                                        <Pane layoutX="60.0" layoutY="63.0" />
+                                        <HBox layoutX="460.0" layoutY="12.0" prefHeight="31.0" prefWidth="252.0">
+                                            <children>
+                                                <Label prefHeight="17.0" prefWidth="64.0" text="Publier le :" textFill="#090908" />
+                                                <Label fx:id="lbldate" prefHeight="13.0" prefWidth="121.0" text="date publication" textFill="BLACK" />
+                                            </children>
+                                        </HBox>
+                                        <VBox layoutX="77.0" layoutY="203.0" prefHeight="296.0" prefWidth="513.0">
+                                            <children>
+                                                <Label prefHeight="13.0" prefWidth="121.0" text="Contenu" textFill="#090908" wrapText="true" />
+                                                <TextArea fx:id="txtContenu" prefHeight="283.0" prefWidth="556.0" style="-fx-background-color: #282828; -fx-background-radius: 5; -fx-border-color: WHITE;" />
+                                            </children>
+                                        </VBox>
+
+                                        <VBox layoutX="113.0" layoutY="45.0">
+                                            <children>
+                                                <Label fx:id="lbluser" prefHeight="20.0" prefWidth="121.0" text="User" textFill="BLACK">
+                                                    <font>
+                                                        <Font name="System Bold" size="14.0" />
+                                                    </font>
+                                                </Label>
+                                                <Label prefHeight="13.0" prefWidth="121.0" text="Auteur" textFill="#090908" />
+                                            </children>
+                                        </VBox>
+                                        <VBox layoutX="143.0" layoutY="37.0" />
+                                        <Label fx:id="lblTitle" layoutX="195.0" layoutY="127.0" prefHeight="20.0" prefWidth="74.0" text="Title" textFill="BLACK">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="lblidrubrique" layoutX="430.0" layoutY="45.0" text="Label" visible="false" />
+                        <TextField fx:id="txtTitle" layoutX="269.0" layoutY="119.0" prefHeight="35.0" prefWidth="210.0" />
+                        <Button layoutX="622.0" layoutY="224.0" mnemonicParsing="false" onAction="#postRubrique"  prefHeight="39.0" prefWidth="137.0" style="-fx-background-color: #5585e3;" text="Post" textFill="WHITE" />
+                                    </children>
+                                </Pane>
+                            </children>
+                        </AnchorPane>
+                    
+         </center>
+        </BorderPane>
+    </children>
+</AnchorPane>

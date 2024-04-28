@@ -25,7 +25,7 @@ public class MainItemController implements Initializable {
     private Button btnDelete;
 
     @FXML
-    /*private Button btnEdit;*/
+    private Button btnEdit;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

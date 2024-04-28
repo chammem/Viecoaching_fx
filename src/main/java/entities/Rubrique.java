@@ -27,6 +27,9 @@ public class Rubrique {
     public Rubrique(int id, int auteurId, String title, String contenu, java.sql.Date dateCréation, java.sql.Date datePublication, String etat) {
     }
 
+    public Rubrique(int auteurId, String title, String contenu, java.sql.Date date, java.sql.Date date1, String published) {
+    }
+
     public int getId() {
         return id;
     }

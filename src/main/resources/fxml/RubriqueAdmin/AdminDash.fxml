@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="779.0" stylesheets="@../css/TableView.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.RubriqueAdmin.AdminDash">
+   <children>
+       <TableView fx:id="tbvRubrique" layoutY="245.0" onMouseClicked="#onSelected" prefHeight="305.0" prefWidth="779.0" stylesheets="@../css/TableView.css">
+           <columns>
+               <TableColumn fx:id="id_Col" prefWidth="44.0" text="id" />
+               <TableColumn fx:id="User_Col" prefWidth="206.0" text="User" />
+               <TableColumn fx:id="Title_Col" prefWidth="190.0" text="Title" />
+               <TableColumn fx:id="Date_Col" prefWidth="177.0" text="Date publication" />
+               <TableColumn fx:id="Action_Col" prefWidth="161.0" text="Action" />
+           </columns>
+       </TableView>  
+      <Label layoutX="70.0" layoutY="20.0" prefHeight="36.0" prefWidth="230.0" text="Welcome ADMIN" textFill="#2b7254">
+         <font>
+            <Font name="Arial Bold" size="28.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txttitle" layoutX="55.0" layoutY="84.0" prefHeight="26.0" prefWidth="256.0">
+         <font>
+            <Font size="16.0" />
+         </font></TextField>
+      <TextArea fx:id="txtcontenu" layoutX="365.0" layoutY="24.0" prefHeight="200.0" prefWidth="385.0" />
+      <Label layoutX="28.0" layoutY="192.0" text="Auteur" />
+      <Label fx:id="lblAuteur" layoutX="75.0" layoutY="187.0" prefHeight="26.0" prefWidth="160.0" text="Label" textFill="#3f805a" wrapText="true">
+         <font>
+            <Font name="System Bold Italic" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="36.0" layoutY="61.0" text="Title :" />
+      <Button layoutX="258.0" layoutY="124.0" mnemonicParsing="false" onAction="#btnAdd" prefHeight="26.0" prefWidth="92.0" text="Ajouter" textFill="#418d55" />
+      <Button layoutX="258.0" layoutY="161.0" mnemonicParsing="false" onAction="#btnmodifier" prefHeight="26.0" prefWidth="92.0" text="Modifier" />
+      <Label layoutX="28.0" layoutY="153.0" prefHeight="17.0" prefWidth="92.0" text="Date publication" />
+      <Label fx:id="lbldate" layoutX="128.0" layoutY="153.0" prefHeight="17.0" prefWidth="92.0" text="Date publication" />
+   </children>
+</AnchorPane>
