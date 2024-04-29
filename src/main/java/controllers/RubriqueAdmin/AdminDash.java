@@ -188,8 +188,12 @@ public class AdminDash implements Initializable {
         }
 
         // Create a new Rubrique object with the provided data
+        //Rubrique newRubrique = new Rubrique(auteurId, title, contenu, new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), "Published");
         Rubrique newRubrique = new Rubrique(auteurId, title, contenu, new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis()), "Published");
 
+// Initialize the dateCréation and dateModification properties with the current date and time
+        newRubrique.setDateCréation(new Date(System.currentTimeMillis()));
+        newRubrique.setDatePublication(new Date(System.currentTimeMillis()));
         // Call the RubriqueService method to add the new Rubrique to the database
         rubriqueService.ajouterRubrique(newRubrique);
 

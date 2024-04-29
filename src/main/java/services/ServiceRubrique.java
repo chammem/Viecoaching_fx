@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ import java.util.List;
 public class ServiceRubrique {
     public void ajouterRubrique(Rubrique c){
         try {
-            String requete="INSERT INTO Rubrique(auteur_id,titre,contenu,date_creation,date_publication,etat)Values(?,?,?,?,?,?)";
+            String requete="INSERT INTO Rubrique(auteur_id,titre,contenu,dateCréation,datePublication,etat)Values(?,?,?,?,?,?)";
             PreparedStatement pst= MyDatabase.getInstance().getConnection().prepareStatement(requete);
             pst.setInt(1, c.getAuteur_id());
             pst.setString(2, c.getTitre());
@@ -56,8 +57,8 @@ public class ServiceRubrique {
                 P.setTitre(rs.getString("titre"));
                 P.setContenu(rs.getString("contenu"));
                 P.setEtat(rs.getString("etat"));
-                P.setDateCréation(rs.getDate("date_creation"));
-                P.setDatePublication(rs.getDate("date_publication"));
+                P.setDateCréation(rs.getDate("dateCréation"));
+                P.setDatePublication(rs.getDate("datePublication"));
 
 
 
@@ -107,7 +108,7 @@ public class ServiceRubrique {
 
     public void modifierRubrique(Rubrique c){
         try {
-            String requete =  "UPDATE Rubrique SET auteur_id = ?, titre = ? , contenu =? ,date_creation = ?, date_publication = ?, etat = ? WHERE id=?";
+            String requete =  "UPDATE Rubrique SET auteur_id = ?, titre = ? , contenu =? ,dateCréation = ?, datePublication = ?, etat = ? WHERE id=?";
 
             PreparedStatement pst= MyDatabase.getInstance().getConnection().prepareStatement(requete);
             pst.setInt(7, c.getId());
@@ -133,7 +134,7 @@ public class ServiceRubrique {
             statement.setInt(1, RubriqueId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                Rubrique = new Rubrique(resultSet.getInt("id"), resultSet.getInt("auteur_id"), resultSet.getString("title"), resultSet.getString("contenu"),resultSet.getDate("date_creation"),resultSet.getDate("date_publication"),resultSet.getString("etat"));
+                Rubrique = new Rubrique(resultSet.getInt("id"), resultSet.getInt("auteur_id"), resultSet.getString("title"), resultSet.getString("contenu"),resultSet.getDate("dateCréation"),resultSet.getDate("datePublication"),resultSet.getString("etat"));
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());

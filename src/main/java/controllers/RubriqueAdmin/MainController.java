@@ -1,5 +1,11 @@
 package controllers.RubriqueAdmin;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javafx.scene.control.*;
 import tests.Main;
 import entities.Commentaire;
@@ -26,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+
 
 public class MainController implements Initializable {
 
@@ -144,7 +151,7 @@ public class MainController implements Initializable {
 
                     isSelected = new boolean[apps.size()];
                     final int h = i;
-                    controllers.RubriqueAdmin.MainItemController controller = loader.getController();
+                    MainItemController controller = loader.getController();
                     //customize items.
                     controller.setItemInfo(apps.get(i).getAuteur(), apps.get(i).getTitle(), apps.get(i).getId());
 
@@ -214,9 +221,9 @@ public class MainController implements Initializable {
                 );
 
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(Main.class.getResource("fxml/RubriqueAdmin/mainitem.fxml"));
+                loader.setLocation(Main.class.getResource("/fxml/RubriqueAdmin/mainitem.fxml"));
                 Node node = loader.load();
-                controllers.RubriqueAdmin.MainItemController controller = loader.getController();
+                MainItemController controller = loader.getController();
                 controller.setItemInfo(app.getAuteur(), app.getTitle(), app.getId());
 
 
@@ -230,6 +237,32 @@ public class MainController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
+    /*public void btnAddComment(ActionEvent actionEvent) {
+        String comment = tfSearch.getText().trim();
+
+        if (comment.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Empty Comment");
+            alert.setContentText("Please enter a comment.");
+            alert.showAndWait();
+            return;
+        }
+
+        if (!lblidrubrique.getText().matches("\\d+")) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid Rubrique ID");
+            alert.setContentText("Please select a rubrique first.");
+            alert.showAndWait();
+            return;
+        }
+
+
+    }*/
+
+
 
 
 
@@ -247,19 +280,60 @@ public class MainController implements Initializable {
             return;
         }
 
-        int rubriqueId = Integer.parseInt(lblidrubrique.getText()); // Get the Rubrique ID from the label
+        if (!lblidrubrique.getText().matches("\\d+")) {
+            // Display an error message if the Rubrique ID is invalid
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Invalid Rubrique ID");
+            alert.setContentText("Please select a rubrique first.");
+            alert.showAndWait();
+            return;
+        }
 
-        // Call the service method to add the comment
-        ServiceCommentaire commentaireService = new ServiceCommentaire();
-        Commentaire c = new Commentaire(rubriqueId, Main.userid, comment, Date.valueOf(LocalDate.now()));
-        commentaireService.ajouterCommentaire(c);
+        try {
+            // Make API call to Profanity Filter API
+            String apiKey = "wrrEHRZf+PUe2znFy2qN4g==CUx3p0aECPs71og7"; // Replace "YOUR_API_KEY" with your actual API key
+            String urlString = "https://api.api-ninjas.com/v1/profanityfilter?text=" + comment;
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestProperty("accept", "application/json");
+            connection.setRequestProperty("X-Api-Key", apiKey);
 
-        // Optionally, you can refresh the comment section to display the newly added comment
-        ShowCommentaires(rubriqueId);
+            // Get API response
+            InputStream responseStream = connection.getInputStream();
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(responseStream);
 
-        // Optionally, clear the comment field after successfully adding the comment
-        tfSearch.clear();
+            // Check if the comment contains profanity
+            boolean hasProfanity = root.path("has_profanity").asBoolean();
+            if (hasProfanity) {
+                // Display a warning message if the comment contains profanity
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Votre commentaire contient des termes vulgaires !");
+                alert.showAndWait();
+                return;
+            }
+
+            // If the comment is valid, proceed with adding it
+            int rubriqueId = Integer.parseInt(lblidrubrique.getText()); // Get the Rubrique ID from the label
+            ServiceCommentaire commentaireService = new ServiceCommentaire();
+            Commentaire c = new Commentaire(rubriqueId, Main.userid, comment, Date.valueOf(LocalDate.now()));
+            commentaireService.ajouterCommentaire(c);
+            ShowCommentaires(rubriqueId);
+            tfSearch.clear(); // Clear the comment field after successfully adding the comment
+
+        } catch (IOException e) {
+            // Handle IOException
+            e.printStackTrace();
+            // Display an error message
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("API Error");
+            alert.setContentText("An error occurred while processing the API request.");
+            alert.showAndWait();
+        }
     }
+
+
 
 
 }

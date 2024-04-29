@@ -1,12 +1,13 @@
 package services;
 
 import entities.Commentaire;
-import entities.Rubrique;
 import utils.MyDatabase;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static tests.Main.userid;
 
 public class ServiceCommentaire{
     Connection connection;
@@ -14,8 +15,9 @@ public class ServiceCommentaire{
         connection= MyDatabase.getInstance().getConnection();
     }
     public void ajouterCommentaire(Commentaire c){
+
         try {
-            String requete="INSERT INTO Commentaire(rubrique_id, auteur_id, contenu, date_creation)Values(?,?,?,?)";
+            String requete="INSERT INTO Commentaire(rubrique_id, auteur_id, contenu, dateCréation)Values(?,?,?,?)";
             PreparedStatement pst= MyDatabase.getInstance().getConnection().prepareStatement(requete);
             pst.setInt(1, c.getRubrique_id());
             pst.setInt(2, c.getAuteur_id());
@@ -72,7 +74,7 @@ public class ServiceCommentaire{
 
     public void modifierCommentaire(Commentaire c){
         try {
-            String requete =  "UPDATE Commentaire SET rubrique_id = ?, auteur_id = ? , contenu =? , date_creation = ? WHERE id=?";
+            String requete =  "UPDATE Commentaire SET rubrique_id = ?, auteur_id = ? , contenu =? , dateCréation = ? WHERE id=?";
 
             PreparedStatement pst= MyDatabase.getInstance().getConnection().prepareStatement(requete);
             pst.setInt(5, c.getId());
@@ -96,7 +98,7 @@ public class ServiceCommentaire{
             statement.setInt(1, CommentaireId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                Commentaire = new Commentaire(resultSet.getInt("id"), resultSet.getInt("rubrique_id"), resultSet.getInt("auteur_id"), resultSet.getString("contenu"),resultSet.getDate("date_creation"));
+                Commentaire = new Commentaire(resultSet.getInt("id"), resultSet.getInt("rubrique_id"), resultSet.getInt("auteur_id"), resultSet.getString("contenu"),resultSet.getDate("dateCréation"));
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -118,7 +120,7 @@ public class ServiceCommentaire{
                 P.setRubrique_id(rs.getInt("rubrique_id"));
                 P.setAuteur_id(rs.getInt("auteur_id"));
                 P.setContenu(rs.getString("contenu"));
-                P.setDateCréation(rs.getDate("date_creation"));
+                P.setDateCréation(rs.getDate("dateCréation"));
 
                 mylist.add(P);
 
@@ -129,6 +131,8 @@ public class ServiceCommentaire{
             System.out.println(ex.getMessage());
         }
         return mylist;}
+
+
 
 
 }
