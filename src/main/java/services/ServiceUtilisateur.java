@@ -13,13 +13,15 @@ import java.util.List;
 
 public class  ServiceUtilisateur implements IService<Utilisateur>{
     Connection connection;
+
+    public ServiceUtilisateur(Connection connection) {
+        this.connection = connection;
+    }
+
     private static final String IMAGE_DIRECTORY = "src/main/resources/photos";
 
     private UtilisateurController utilisateurController;
-    public ServiceUtilisateur(){
-        connection= MyDatabase.getInstance().getConnection();
 
-    }
     @Override
     public void ajouter(Utilisateur utilisateur) throws SQLException {
         if (!validateFields(utilisateur.getNom(), utilisateur.getPrenom(), utilisateur.getEmail(), utilisateur.getMdp(), utilisateur.getVille(), utilisateur.getTel(), utilisateur.getGenre())) {
@@ -60,18 +62,22 @@ public class  ServiceUtilisateur implements IService<Utilisateur>{
     }
 
     @Override
-    public void modifier(Utilisateur utilisateur) throws SQLException {
-        String req = "UPDATE utilisateur SET email=?, nom=?, prenom=?, ville=?, tel=?, genre=?, role_id=?, image=? WHERE id=?";
+    public void modifier(Utilisateur utilisateur , String email) throws SQLException {
+        System.out.println(utilisateur);
+        String req = "UPDATE utilisateur SET nom = ?, prenom = ?, email = ?, mdp = ?, ville = ?, tel = ?," +
+                " genre = ?, image = ?, role_id = ?, active = ? WHERE email = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(req)) {
-            preparedStatement.setString(1, utilisateur.getEmail());
-            preparedStatement.setString(2, utilisateur.getNom());
-            preparedStatement.setString(3, utilisateur.getPrenom());
-            preparedStatement.setString(4, utilisateur.getVille());
-            preparedStatement.setString(5, utilisateur.getTel());
-            preparedStatement.setString(6, utilisateur.getGenre());
-            preparedStatement.setInt(7, utilisateur.getRole_id());
+            preparedStatement.setString(1, utilisateur.getNom());
+            preparedStatement.setString(2, utilisateur.getPrenom());
+            preparedStatement.setString(3, utilisateur.getEmail());
+            preparedStatement.setString(4, utilisateur.getMdp());
+            preparedStatement.setString(5, utilisateur.getVille());
+            preparedStatement.setString(6, utilisateur.getTel());
+            preparedStatement.setString(7, utilisateur.getGenre());
             preparedStatement.setString(8, utilisateur.getImage());
-            preparedStatement.setInt(9, utilisateur.getId());
+            preparedStatement.setInt(9, utilisateur.getRole_id());
+            preparedStatement.setBoolean(10, utilisateur.isActive());
+            preparedStatement.setString(11, email);
 
             int rowsAffected = preparedStatement.executeUpdate();
 
@@ -128,28 +134,7 @@ public class  ServiceUtilisateur implements IService<Utilisateur>{
         return new Image(new File(imagePath).toURI().toString());
     }
 
-    public Utilisateur trouverParId(int id) throws SQLException {
-        String req = "SELECT * FROM utilisateur WHERE id=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(req);
-        preparedStatement.setInt(1, id);
-        ResultSet rs = preparedStatement.executeQuery();
 
-        if (rs.next()) {
-            Utilisateur utilisateur = new Utilisateur();
-            utilisateur.setId(rs.getInt("id"));
-            utilisateur.setNom(rs.getString("nom"));
-            utilisateur.setPrenom(rs.getString("prenom"));
-            utilisateur.setEmail(rs.getString("email"));
-            utilisateur.setTel(rs.getString("tel"));
-            utilisateur.setMdp(rs.getString("mdp"));
-            utilisateur.setGenre(rs.getString("genre"));
-            utilisateur.setVille(rs.getString("ville"));
-            utilisateur.setActive(true);
-            return utilisateur;
-        } else {
-            return null; // Aucun utilisateur trouvé avec cet ID
-        }
-    }
     private boolean validateFields(String nom, String prenom, String email, String mdp, String ville, String tel, String genre) throws IllegalArgumentException {
         boolean isValid = true;
 
@@ -177,7 +162,7 @@ public class  ServiceUtilisateur implements IService<Utilisateur>{
 
         return isValid;
     }
-    private boolean isValidEmail(String email) {
+    public boolean isValidEmail(String email) {
         return email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}");
     }
 

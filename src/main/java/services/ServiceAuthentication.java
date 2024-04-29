@@ -18,24 +18,31 @@ import java.util.regex.Pattern;
 
 
 public class ServiceAuthentication {
+    private final Connection con;
 
-    public Utilisateur login(String email, String password) throws IllegalArgumentException {
+    public ServiceAuthentication() {
+        this.con = MyDatabase.getInstance().getConnection();
+    }
+
+    public Utilisateur login(String email, String password) throws SQLException {
         if (email.isEmpty() || password.isEmpty()) {
             throw new IllegalArgumentException("Tous les champs obligatoires doivent être remplis.");
         }
         if (!isValidEmail(email)) {
             throw new IllegalArgumentException("Adresse email invalide.");
         }
+
         Utilisateur utilisateur = findUserByEmail(email);
         if (utilisateur != null && verifyPassword(password, utilisateur.getMdp())) {
             return utilisateur;
         }
-        return null;
+
+        return null; // Retourner null si l'utilisateur n'est pas trouvé ou le mot de passe est incorrect
     }
 
-    private Utilisateur findUserByEmail(String email) {
-        try (Connection con = MyDatabase.getInstance().getConnection();
-             PreparedStatement st = con.prepareStatement("SELECT * FROM utilisateur WHERE email=?")) {
+    private Utilisateur findUserByEmail(String email) throws SQLException {
+        String query = "SELECT * FROM utilisateur WHERE email=?";
+        try (PreparedStatement st = con.prepareStatement(query)) {
             st.setString(1, email);
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
@@ -45,11 +52,13 @@ public class ServiceAuthentication {
                     utilisateur.setPrenom(rs.getString("prenom"));
                     utilisateur.setEmail(rs.getString("email"));
                     utilisateur.setMdp(rs.getString("mdp"));
+                    utilisateur.setVille(rs.getString("ville"));
+                    utilisateur.setTel(rs.getString("tel"));
+                    utilisateur.setGenre(rs.getString("genre"));
+                    utilisateur.setImage(rs.getString("image"));
                     return utilisateur;
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return null;
     }

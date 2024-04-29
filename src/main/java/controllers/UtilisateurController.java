@@ -5,14 +5,20 @@ import entities.Utilisateur;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import services.ServiceUtilisateur;
+import utils.MyDatabase;
+import utils.SessionManager;
 
 import java.io.*;
 import java.net.URL;
@@ -22,6 +28,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.Optional;
@@ -68,6 +76,10 @@ public class UtilisateurController implements Initializable {
     @FXML
     public TableColumn<Utilisateur, String> imageColumn;
     @FXML
+    public Button décnxId;
+    @FXML
+    public Button profil;
+    @FXML
     private TableColumn<Utilisateur, String> emailColumn;
     @FXML
     public TableColumn<Utilisateur, String> nomColumn;
@@ -96,7 +108,9 @@ public class UtilisateurController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.serviceUtilisateur = new ServiceUtilisateur();
+        MyDatabase myDatabase = MyDatabase.getInstance();
+        Connection connection = myDatabase.getConnection();
+        this.serviceUtilisateur = new ServiceUtilisateur(connection);
         showUser();
         controleBtnRadio();
             //ajouter les roles
@@ -108,6 +122,8 @@ public class UtilisateurController implements Initializable {
         ajouterId.setOnAction(actionEvent -> handleAjouterUtilisateur());
         supprimerId.setOnAction(actionEvent -> handleSupprimerUtilisateur());
         ModifierId.setOnAction(actionEvent -> handleModifierUtilisateur());
+        décnxId.setOnAction(actionEvent -> handleDeconnexion());
+        profil.setOnAction(actionEvent -> navigateToRegistreView());
         tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 handleUserSelection();
@@ -179,13 +195,22 @@ public class UtilisateurController implements Initializable {
         });    }
     private void loadData() {
         try {
-            ServiceUtilisateur serviceUtilisateur = new ServiceUtilisateur();
+            MyDatabase myDatabase = MyDatabase.getInstance();
+            Connection connection = myDatabase.getConnection();
+
+            // Initialisez ServiceUtilisateur avec la connexion à la base de données
+            ServiceUtilisateur serviceUtilisateur = new ServiceUtilisateur(connection);
+
+            // Chargez les utilisateurs à partir du service
             ObservableList<Utilisateur> utilisateurs = FXCollections.observableList(serviceUtilisateur.afficher());
+
+            // Définissez les utilisateurs dans la tableView
             tableView.setItems(utilisateurs);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
     private void showUser() {
         try {
             ObservableList<Utilisateur> utilisateurs = FXCollections.observableList(serviceUtilisateur.afficher());
@@ -266,7 +291,9 @@ public class UtilisateurController implements Initializable {
             Utilisateur utilisateur = new Utilisateur(nom, prenom, email, mdp, ville, tel, genre, nomFichierImage, roleId);
 
             try {
-                ServiceUtilisateur serviceUtilisateur = new ServiceUtilisateur();
+                MyDatabase myDatabase = MyDatabase.getInstance();
+                Connection connection = myDatabase.getConnection();
+                ServiceUtilisateur serviceUtilisateur = new ServiceUtilisateur(connection);
                 serviceUtilisateur.ajouter(utilisateur);
 
                 showAlert(Alert.AlertType.CONFIRMATION, "Succès", "Utilisateur ajouté", "L'utilisateur a été ajouté avec succès.");
@@ -322,7 +349,9 @@ public class UtilisateurController implements Initializable {
             Optional<ButtonType> result = confirmationAlert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 try {
-                    ServiceUtilisateur serviceUtilisateur = new ServiceUtilisateur();
+                    MyDatabase myDatabase = MyDatabase.getInstance();
+                    Connection connection = myDatabase.getConnection();
+                    ServiceUtilisateur serviceUtilisateur = new ServiceUtilisateur(connection);
                     serviceUtilisateur.supprimer(utilisateurSelectionne.getId());
                     tableView.getItems().remove(utilisateurSelectionne);
                     showAlert(Alert.AlertType.INFORMATION, "Succès", "Utilisateur supprimé", "L'utilisateur a été supprimé avec succès.");
@@ -360,12 +389,14 @@ public class UtilisateurController implements Initializable {
     }
 
     // Cette méthode est appelée lorsque vous cliquez sur le bouton pour modifier l'utilisateur
-    @FXML
     private void handleModifierUtilisateur() {
         Utilisateur utilisateurSelectionne = tableView.getSelectionModel().getSelectedItem();
-
+        String emailfirst = utilisateurSelectionne.getEmail();
+        System.out.println(utilisateurSelectionne);
+        System.out.println("//////////////////////");
         if (utilisateurSelectionne != null) {
             // Récupérer les nouvelles valeurs des champs du formulaire
+            int idnom  = utilisateurSelectionne.getId();
             String newEmail = emailId.getText();
             String newNom = nomId.getText();
             String newPrenom = prenomId.getText();
@@ -375,20 +406,20 @@ public class UtilisateurController implements Initializable {
             String roleString = RoleId.getValue().toString();
             int roleId = mapRoleToInt(roleString);
 
-            // Vérifier si une nouvelle image est sélectionnée
-            String nomFichierImage = utilisateurSelectionne.getImage(); // Conservez le nom de fichier existant
-            InputStream imageStream = selectImage();
-            if (imageStream != null) {
-                // Générez un nom de fichier unique pour la nouvelle image
-                String nomFichierImageSansExtension = "profile_" + System.currentTimeMillis();
-                try {
-                    // Enregistrez la nouvelle image et récupérez son nom
-                    nomFichierImage = saveImage(nomFichierImageSansExtension, imageStream, "jpg"); // Modifiez le troisième paramètre en "png" si nécessaire
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de l'enregistrement de l'image", "Une erreur s'est produite lors de l'enregistrement de l'image.");
-                    return; // Arrêtez le processus si une erreur se produit lors de l'enregistrement de l'image
-                }
+            // Contrôles de saisie
+            if (newNom.length() < 5 || newPrenom.length() < 5 || newVille.length() < 5) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Champs nom, prénom et ville", "Les champs nom, prénom et ville doivent comporter au moins 5 caractères.");
+                return;
+            }
+
+            if (newNumero.length() < 8) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Numéro de téléphone", "Le numéro de téléphone doit comporter au moins 8 caractères.");
+                return;
+            }
+
+            if (!serviceUtilisateur.isValidEmail(newEmail)) {
+                showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Adresse email invalide", "Veuillez saisir une adresse email valide.");
+                return;
             }
 
             // Vérifier si les données ont été modifiées
@@ -398,10 +429,10 @@ public class UtilisateurController implements Initializable {
                     !utilisateurSelectionne.getVille().equals(newVille) ||
                     !utilisateurSelectionne.getTel().equals(newNumero) ||
                     !utilisateurSelectionne.getGenre().equals(genre) ||
-                    utilisateurSelectionne.getRole_id() != roleId ||
-                    !utilisateurSelectionne.getImage().equals(nomFichierImage)) {
+                    utilisateurSelectionne.getRole_id() != roleId) {
 
                 // Mettre à jour les données de l'utilisateur
+                utilisateurSelectionne.setId(idnom);
                 utilisateurSelectionne.setEmail(newEmail);
                 utilisateurSelectionne.setNom(newNom);
                 utilisateurSelectionne.setPrenom(newPrenom);
@@ -409,7 +440,6 @@ public class UtilisateurController implements Initializable {
                 utilisateurSelectionne.setTel(newNumero);
                 utilisateurSelectionne.setGenre(genre);
                 utilisateurSelectionne.setRole_id(roleId);
-                utilisateurSelectionne.setImage(nomFichierImage);
 
                 // Afficher la boîte de dialogue de confirmation avant la modification
                 Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -422,7 +452,7 @@ public class UtilisateurController implements Initializable {
                 if (result.isPresent() && result.get() == ButtonType.OK) {
                     try {
                         // Mettre à jour l'utilisateur dans la base de données
-                        serviceUtilisateur.modifier(utilisateurSelectionne);
+                        serviceUtilisateur.modifier(utilisateurSelectionne,emailfirst);
                         showAlert(Alert.AlertType.CONFIRMATION, "Succès", "Utilisateur modifié", "Les données de l'utilisateur ont été modifiées avec succès.");
                         clearFields(); // Effacer les champs du formulaire après la modification
                         loadData(); // Rafraîchir la table pour afficher les modifications
@@ -438,6 +468,8 @@ public class UtilisateurController implements Initializable {
             showAlert(Alert.AlertType.WARNING, "Avertissement", "Aucun utilisateur sélectionné", "Veuillez sélectionner un utilisateur à modifier.");
         }
     }
+
+
     private String mapIntToRole(int roleId) {
         switch (roleId) {
             case 1:
@@ -465,11 +497,46 @@ public class UtilisateurController implements Initializable {
         nomFichierImageSelectionne = null;
         imageId.setImage(null);
     }
+
+    public void navigateToRegistreView() {
+        try {MyDatabase myDatabase = MyDatabase.getInstance();
+            Connection connection = myDatabase.getConnection();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/profil.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+
+            Stage stage = (Stage) profil.getScene().getWindow(); // Récupère la fenêtre actuelle
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+    }
     private void showAlert(Alert.AlertType type, String title, String header, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+    @FXML
+    private void handleDeconnexion() {
+        SessionManager.endSession();
+
+        // Fermer la fenêtre utilisateur.fxml
+        Stage stage = (Stage) décnxId.getScene().getWindow();
+        stage.close();
+
+        // Charger et afficher la fenêtre login.fxml
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+            Parent root = loader.load();
+            Stage loginStage = new Stage();
+            loginStage.setScene(new Scene(root));
+            loginStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

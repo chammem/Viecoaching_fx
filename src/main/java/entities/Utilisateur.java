@@ -114,21 +114,6 @@ public class Utilisateur {
         this.active = active;
     }
 
-    @Override
-    public String toString() {
-        return "Utilisateur{" +
-                "id=" + id +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", email='" + email + '\'' +
-                ", tel='" + tel + '\'' +
-                ", mdp='" + mdp + '\'' +
-                ", genre='" + genre + '\'' +
-                ", ville='" + ville + '\'' +
-                ", active=" + active +
-                '}';
-    }
-
 
     public String getImage() {
         return this.image;
@@ -152,5 +137,18 @@ public class Utilisateur {
         this.roleName = roleName;
     }
 
-
+    @Override
+    public String toString() {
+        return "Utilisateur{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", email='" + email + '\'' +
+                ", tel='" + tel + '\'' +
+                ", mdp='" + mdp + '\'' +
+                ", genre='" + genre + '\'' +
+                ", ville='" + ville + '\'' +
+                ", image='" + image + '\'' +
+                '}';
+    }
 }
