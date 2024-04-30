@@ -117,11 +117,11 @@ public class AfficheResController implements Initializable {
         gridPane.add(imageView, 4, row);
 
         //Actions (Supprimer et Mettre à jour)
-        Button deleteButton = new Button("Delete");
+        Button deleteButton = new Button("Supprimer");
         deleteButton.setOnAction(event -> deleteResource(ressources));
         gridPane.add(deleteButton, 5, row);
 
-        Button updateButton = new Button("Update");
+        Button updateButton = new Button("Mettre à jour");
         updateButton.setOnAction(event -> updateResource(ressources));
         gridPane.add(updateButton, 6, row);
     }

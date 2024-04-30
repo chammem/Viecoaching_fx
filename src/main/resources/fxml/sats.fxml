@@ -8,11 +8,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.web.WebView?>
 
-<AnchorPane prefHeight="609.0" prefWidth="783.0" style="-fx-background-color: #EDEEE1;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.StatsController">
+<AnchorPane prefHeight="726.0" prefWidth="1173.0" style="-fx-background-color: #EDEEE1;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.StatsController">
    <children>
-      <PieChart fx:id="pieChart" layoutX="269.0" layoutY="185.0" prefHeight="354.0" prefWidth="688.0" />
-      <VBox prefHeight="679.0" prefWidth="264.0" style="-fx-background-color: F3F5DC;">
+         <WebView fx:id="webView" layoutX="263.2" layoutY="496.0" prefHeight="230.0" prefWidth="910.0" styleClass="web-view-container" stylesheets="@../Css/client.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="263.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="496.0" />
+      <PieChart fx:id="pieChart" layoutX="330.0" layoutY="131.0" prefHeight="336.0" prefWidth="307.0" />
+      <VBox prefHeight="726.0" prefWidth="264.0" style="-fx-background-color: F3F5DC;">
          <children>
             <ImageView fitHeight="307.0" fitWidth="263.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -28,6 +30,9 @@
             <Button fx:id="NavBarCat" mnemonicParsing="false" onAction="#NavBarC" prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Categorie" />
          </children>
       </VBox>
-      <Label layoutX="448.0" layoutY="36.0" prefHeight="35.0" prefWidth="330.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Statistiques Catégorie " textFill="#a5b79b" />
+      <Label layoutX="360.0" layoutY="51.0" prefHeight="35.0" prefWidth="330.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Statistiques Catégories" textFill="#a5b79b" />
+      <PieChart fx:id="piechart1" layoutX="773.0" layoutY="131.0" prefHeight="336.0" prefWidth="357.0" />
+      <Label layoutX="808.0" layoutY="51.0" prefHeight="35.0" prefWidth="330.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Statistiques Ressources" textFill="#a5b79b" />
+
    </children>
 </AnchorPane>

@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import services.ServiceCategorie;
 import services.ServiceRessource;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -165,6 +166,7 @@ public class CategorieController implements Initializable {
     }
     @FXML
     private void selectImage() {
+        JFileChooser chooser = new JFileChooser();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir une image");
         fileChooser.getExtensionFilters().addAll(

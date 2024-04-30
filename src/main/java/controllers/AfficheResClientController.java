@@ -6,8 +6,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.TilePane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import org.controlsfx.control.Rating;
 import services.ServiceRessource;
 
@@ -18,57 +18,75 @@ import java.util.ResourceBundle;
 public class AfficheResClientController implements Initializable {
 
     @FXML
-    private TilePane tilePane;
+    private VBox contentVBox;
 
     private ServiceRessource service;
 
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Initialize the resource service
         service = new ServiceRessource();
+
+        // Load and display resources
         loadResources();
     }
 
     private void loadResources() {
         try {
             for (Ressources ressource : service.afficher()) {
-                HBox card = createResourceCard(ressource);
-                // Set spacing and alignment for the card (optional)
-                card.setSpacing(10);
-                card.setAlignment(javafx.geometry.Pos.CENTER); // Adjust alignment as needed
-                tilePane.getChildren().add(card);
+                // Create a card VBox to hold resource information
+                VBox card = createResourceCard(ressource);
+                contentVBox.getChildren().add(card); // Add the card to the content VBox
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error loading resources", e);
         }
     }
 
-    private HBox createResourceCard(Ressources ressource) {
-        HBox card = new HBox();
+    private VBox createResourceCard(Ressources ressource) {
+        VBox card = new VBox(10); // VBox for the card with spacing
         card.getStyleClass().add("resource-card"); // Apply CSS style for the card
-
         ImageView imageView = new ImageView(new Image(ressource.getUrl()));
-        imageView.setFitWidth(180);
-        imageView.setFitHeight(180);
-
+        imageView.setFitWidth(350);
+        imageView.setFitHeight(350);
+        card.getChildren().add(imageView);
+        // Title
         Label titleLabel = new Label(ressource.getTitre_r());
-        titleLabel.getStyleClass().add("card-title");
+        titleLabel.getStyleClass().add("card-title"); // Apply CSS style for the title
+        card.getChildren().add(titleLabel);
 
+        // Type
+        Label typeLabel = new Label(ressource.getType_r());
+        card.getChildren().add(typeLabel);
+
+        // Description
         Label descriptionLabel = new Label(ressource.getDescription());
+        card.getChildren().add(descriptionLabel);
 
+        // Rating
         Rating rating = new Rating();
-        double initialRating = ressource.getRating();
-        rating.setRating(initialRating);
+        rating.setRating(0); // Example rating, you can bind this to ressource rating
+        card.getChildren().add(rating);
+
+        Label msg =new Label();
+        card.getChildren().add(msg);
+        rating.ratingProperty().addListener((observable, oldValue, newValue) -> {
+            msg.setText("Notation : " + newValue.intValue()); // Met à jour le texte du label
+        });
+
+        // Image
 
         rating.ratingProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 int newRatingValue = newValue.intValue();
                 service.updateRating(ressource.getId(), newRatingValue);
-            } catch (SQLException e) {
-                e.printStackTrace();
+                ressource.setRating(newRatingValue); // Update resource rating locally
+            } catch (SQLException ex) {
+                throw new RuntimeException("Error updating resource rating", ex);
             }
         });
-
-        card.getChildren().addAll(imageView, titleLabel, descriptionLabel, rating);
 
         return card;
     }

@@ -165,5 +165,38 @@ public class ServiceCategorie implements IService<Categorie> {
         return totalCount;
     }
 
+    public int countCategorie() throws SQLException {
+        // Déclaration des variables
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        int count = 0;
+
+        try {
+            // Requête SQL pour compter le nombre de groupes
+            String query = "SELECT COUNT(*) FROM categorie";
+
+            // Préparation de la requête
+            statement = connection.prepareStatement(query);
+
+            // Exécution de la requête et récupération du résultat
+            resultSet = statement.executeQuery();
+
+            // Si des lignes sont retournées, récupérer le nombre de groupes
+            if (resultSet.next()) {
+                count = resultSet.getInt(1);
+            }
+        } finally {
+            // Fermeture des ressources
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+            // La connexion n'est pas fermée ici pour éviter de rompre la connexion pour les autres opérations dans la classe.
+        }
+
+        return count;
+    }
 
 }

@@ -1,48 +1,41 @@
-.content-vbox {
-    -fx-spacing: 20px; /* Espacement entre les éléments enfants */
+/* Styling for the entire application */
+.root {
+    -fx-background-color: #f5f5f5; /* Light gray background color */
 }
-/* Style de la carte principale */
+
+/* Styling for resource cards */
 .resource-card {
-    -fx-background-color: #f0f0f0;
-    -fx-padding: 10px;
-    -fx-spacing: 10px;
+    -fx-background-color: #ffffff; /* White background */
+    -fx-border-color: #e0e0e0; /* Light border color */
     -fx-border-width: 1px;
-    -fx-border-color: #cccccc;
     -fx-border-radius: 5px;
+    -fx-padding: 10px;
+    -fx-spacing: 5px;
 }
 
-/* Style pour le titre */
+/* Styling for card titles */
 .card-title {
+    -fx-font-size: 18px;
     -fx-font-weight: bold;
-    -fx-font-size: 16px;
-    -fx-text-fill: #333333;
+    -fx-text-fill: #333333; /* Dark gray text color */
 }
 
-/* styles.css */
-
-/* Style général pour le conteneur de la carte */
-.web-view-container {
-    -fx-background-color: #f0f0f0; /* Couleur de fond pour le conteneur */
-}
-
-/* Style pour la WebView (contenant la carte Leaflet) */
-.web-view {
-    -fx-font-size: 14px; /* Taille de la police pour le contenu de la WebView */
-    -fx-text-fill: #333333; /* Couleur du texte */
-    -fx-background-color: #ffffff; /* Couleur de fond pour la WebView */
-}
-
-/* Style pour les éléments de contrôle (facultatif) */
-.button {
-    -fx-background-color: #4CAF50; /* Couleur de fond des boutons */
-    -fx-text-fill: #ffffff; /* Couleur du texte des boutons */
-    -fx-padding: 10px 20px; /* Remplissage intérieur des boutons */
-    -fx-font-size: 14px; /* Taille de la police des boutons */
-    -fx-border-radius: 5px; /* Bordure arrondie des boutons */
-}
-
-/* Style pour d'autres éléments comme les libellés, etc. (facultatif) */
+/* Styling for labels */
 .label {
-    -fx-font-size: 16px; /* Taille de la police des libellés */
-    -fx-text-fill: #333333; /* Couleur du texte des libellés */
+    -fx-font-size: 14px;
+    -fx-text-fill: #666666; /* Medium gray text color */
+}
+
+/* Styling for image views */
+.image-view {
+    -fx-effect: dropshadow(three-pass-box, #dddddd, 5, 0, 0, 0); /* Drop shadow effect */
+}
+
+/* Styling for the rating control */
+.rating {
+    -fx-fill: #ffcc00; /* Yellow color for filled stars */
+    -fx-outer-border: #cccccc; /* Outer border color */
+    -fx-outer-border-width: 1px;
+    -fx-inner-border: #cccccc; /* Inner border color */
+    -fx-inner-border-width: 1px;
 }

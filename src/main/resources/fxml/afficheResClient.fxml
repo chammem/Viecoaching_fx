@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="577.0" prefWidth="816.0" style="-fx-background-color: #EDEEE1;" stylesheets="@../Css/client.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficheResClientController">
+<AnchorPane prefHeight="615.0" prefWidth="949.0" style="-fx-background-image: #EDEEE1;" styleClass="image-view" stylesheets="@../Css/client.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficheResClientController">
 
-      
-         <TilePane fx:id="tilePane" hgap="20" layoutX="83.0" layoutY="55.0" prefColumns="1" style="-fx-padding: 20px;" styleClass="resource-card" vgap="20" />
-
-
+    <VBox alignment="CENTER" layoutX="43.0" layoutY="48.0" prefHeight="518.0" prefWidth="862.0" style="-fx-background-color: #BED6B1;" stylesheets="@../Css/client.css">
+        <ScrollPane fitToHeight="true" fitToWidth="true">
+            <content>
+                <!-- VBox to display resource cards -->
+                <VBox fx:id="contentVBox" spacing="10" style="-fx-background-color: #BED6B1;" styleClass="rating" stylesheets="@../Css/client.css">
+                </VBox>
+            </content>
+        </ScrollPane>
+    </VBox>
 
 
 </AnchorPane>

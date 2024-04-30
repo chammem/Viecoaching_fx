@@ -155,5 +155,33 @@ public class ServiceRessource implements IService<Ressources>{
             throw e; // Rethrow the exception to handle at the caller level
         }
     }
+    public List<String> getCategoryTypes() throws SQLException {
+        List<String> categoryTypes = new ArrayList<>();
 
+        String query = "SELECT DISTINCT titre_r FROM ressources"; // Assuming 'type_r' is the category type column
+        try (PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                String categoryType = rs.getString("titre_r");
+                categoryTypes.add(categoryType);
+            }
+        }
+
+        return categoryTypes;
+    }
+    public int getCountByCategoryType(String categoryType) throws SQLException {
+        int count = 0;
+
+        String query = "SELECT COUNT(*) AS category_count FROM ressources WHERE titre_r = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, categoryType);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    count = rs.getInt("category_count");
+                }
+            }
+        }
+
+        return count;
+    }
 }
