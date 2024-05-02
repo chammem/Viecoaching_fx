@@ -1,29 +1,34 @@
-package controllers.RubriqueAdmin;
+package controllers.RubriqueClient;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import javafx.scene.control.*;
-import tests.Main;
+import controllers.RubriqueAdmin.AppModel;
+import controllers.RubriqueAdmin.MainItemController;
 import entities.Commentaire;
 import entities.Rubrique;
 import entities.Utilisateur;
-import controllers.RubriqueAdmin.AppModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.animation.TranslateTransition;
+import javafx.util.Duration;
+
 import javafx.scene.image.ImageView;
+
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import services.ServiceCommentaire;
 import services.ServiceRubrique;
 import services.ServiceUtilisateur;
+import tests.Main;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.sql.Date;
@@ -34,60 +39,26 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-
-public class MainController implements Initializable {
-
-    public VBox vRubrique;
-    public Label lblTitle;
-    public Label lblidrubrique;
+public class RubriqueClientController implements Initializable {
     @FXML
-    private Button btnAllItems;
+    private AnchorPane sideRubrique;
+    @FXML
+    private AnchorPane sideCoaching;
 
     @FXML
-    private Button btnFavorites;
+    private AnchorPane sideCommentaire;
 
     @FXML
-    private Button btnTrash;
+    private VBox vRubrique;
 
     @FXML
-    private Button btnLogin;
+    private TextField txtTitle;
 
     @FXML
-    private Button btnCard;
+    private TextField txtContenu;
 
     @FXML
-    private Button btnIdentity;
-
-    @FXML
-    private Button btnNote;
-
-    @FXML
-    private Button btnWork;
-
-    @FXML
-    private Button btnSocial;
-
-    @FXML
-    private Button btnPersonal;
-
-
-
-    @FXML
-    private Label lblCompanyName;
-
-
-
-    @FXML
-    private Label lblWebsite;
-
-    @FXML
-    private TextArea lblNotes;
-
-    @FXML
-    private Button btnEdit;
-
-    @FXML
-    private Button btnDelete;
+    private VBox vItems;
 
     @FXML
     private TextField tfSearch;
@@ -96,32 +67,32 @@ public class MainController implements Initializable {
     private ImageView btnAdd;
 
     @FXML
-    private VBox vItems;
+    private Button btnGetEmoji;
+    @FXML
+    private Button back;
+    public Label lblidrubrique;
+    public Label lblTitle;
+
+
 
     @FXML
-    private Button btnGetEmoji;
+    private Label lblWebsite;
 
+    @FXML
+    private TextArea lblNotes;
     private boolean[] isSelected;
 
 
-    @FXML
-    void handleButtonClicks(ActionEvent event) {
-
-
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        sideCommentaire.setTranslateX(0);
+        sideCoaching.setTranslateX(-sideCoaching.getWidth());
         ShowRubriques();
-
-
-
     }
 
     public void ShowRubriques(){
         try {
-            ServiceRubrique rubriqueService =  new ServiceRubrique();
+            ServiceRubrique rubriqueService = new ServiceRubrique();
             ServiceUtilisateur u = new ServiceUtilisateur();
             List<Rubrique> rubriques = rubriqueService.listerRubrique();
             List<AppModel> apps = new ArrayList<>();
@@ -130,8 +101,8 @@ public class MainController implements Initializable {
             for (Rubrique rubrique : rubriques) {
                 Utilisateur user = u.trouverParId(rubrique.getAuteur_id());
                 AppModel app = new AppModel(
-                        String.valueOf(rubrique.getId()) ,
-                        user.getPrenom()+" "+user.getNom(),
+                        String.valueOf(rubrique.getId()),
+                        user.getPrenom() + " " + user.getNom(),
                         rubrique.getTitre(),
                         rubrique.getDatePublication().toString(),
                         rubrique.getContenu()
@@ -140,28 +111,16 @@ public class MainController implements Initializable {
             }
 
             Node[] nodes = new Node[rubriques.size()];
+            isSelected = new boolean[apps.size()];
 
             for (int i = 0; i < nodes.length; i++) {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(Main.class.getResource("/fxml/RubriqueAdmin/mainitem.fxml"));
                 nodes[i] = loader.load();
 
-                isSelected = new boolean[apps.size()];
                 final int h = i;
                 MainItemController controller = loader.getController();
                 controller.setItemInfo(apps.get(i).getAuteur(), apps.get(i).getTitle(), apps.get(i).getId());
-
-                nodes[i].setOnMouseEntered(evt -> {
-                    if (!isSelected[h]) {
-                        nodes[h].setStyle("-fx-background-color: #899b77");
-                    }
-                });
-
-                nodes[i].setOnMouseExited(evt -> {
-                    if (!isSelected[h]) {
-                        nodes[h].setStyle("-fx-background-color: rgba(129,170,255,0.1)");
-                    }
-                });
 
                 nodes[i].setOnMousePressed(evt -> {
                     Arrays.fill(isSelected, Boolean.FALSE);
@@ -172,13 +131,12 @@ public class MainController implements Initializable {
                     }
 
                     nodes[h].setStyle("-fx-background-color: #899b77");
-                    lblCompanyName.setText(apps.get(h).getAuteur());
                     ShowCommentaires(Integer.valueOf(apps.get(h).getId()));
-                    lblidrubrique.setText(apps.get(h).getId());
-                    lblTitle.setText(apps.get(h).getTitle());
-                    lblWebsite.setText(apps.get(h).getDate_publication());
-                    lblNotes.setText(apps.get(h).getContenu());
-                    lblNotes.setWrapText(true);
+
+                    // Slide the sideCoaching pane to hide rubrique and show comment session
+                    TranslateTransition slide = new TranslateTransition(Duration.millis(500), sideCoaching);
+                    slide.setByX(-sideCoaching.getWidth()); // Slide by the width of sideCoaching
+                    slide.play();
                 });
 
                 vRubrique.getChildren().add(nodes[i]);
@@ -189,6 +147,8 @@ public class MainController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
+
     public void ShowCommentaires(int rubriqueId) {
         try {
             ServiceUtilisateur u = new ServiceUtilisateur();
@@ -208,16 +168,16 @@ public class MainController implements Initializable {
                 );
 
                 FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(Main.class.getResource("/fxml/RubriqueAdmin/mainitem.fxml"));
+                loader.setLocation(Main.class.getResource("/fxml/RubriqueClient/mainitemClient.fxml"));
                 Node node = loader.load();
-                MainItemController controller = loader.getController();
+                MainItemClientController controller = loader.getController();
                 controller.setItemInfo(app.getAuteur(), app.getTitle(), app.getId());
-
-
-                controller.setIsComment(true); // Set the additional buttons in the controller
-
                 vItems.getChildren().add(node);
             }
+
+            // Show the sideComment pane
+            sideCommentaire.setVisible(true);
+
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -355,6 +315,53 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
     }
+    public void postRubrique(ActionEvent actionEvent) {
+        // Check if the title and content fields are not empty
+        String title = txtTitle.getText().trim();
+        String content = txtContenu.getText().trim();
+
+        if (title.isEmpty() || content.isEmpty()) {
+            // Display an error message if any of the fields are empty
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Empty Fields");
+            alert.setContentText("Please fill in all the fields.");
+            alert.showAndWait();
+            return;
+        }
+
+        // Proceed with adding the Rubrique if all fields are filled
+        Rubrique r = new Rubrique();
+        r.setAuteur_id(Main.userid);
+        r.setContenu(content);
+        r.setDateCréation(Date.valueOf(LocalDate.now()));
+        r.setDatePublication(Date.valueOf(LocalDate.now()));
+        r.setTitre(title);
+        r.setEtat("Published");
+
+        ServiceRubrique service = new ServiceRubrique();
+        service.ajouterRubrique(r);
+
+        // Optionally, you can clear the input fields after successfully posting the Rubrique
+        clearFields();
+    }
+
+    // Helper method to clear input fields after posting Rubrique
+    private void clearFields() {
+        txtTitle.clear();
+        txtContenu.clear();
+    }
+    @FXML
+    void back(ActionEvent event) {
+        if (!lblidrubrique.getText().isEmpty()) {
+            // Slide back and hide the comments panel
+            TranslateTransition slide = new TranslateTransition(Duration.millis(500), sideCoaching);
+            slide.setByX(sideCoaching.getWidth()); // Slide by the width of sideCoaching
+            slide.play();
+            sideCommentaire.setVisible(false);
+        }
+    }
+
 
 
 

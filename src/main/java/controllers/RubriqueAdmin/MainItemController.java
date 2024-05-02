@@ -1,15 +1,19 @@
 package controllers.RubriqueAdmin;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import entities.Commentaire;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import tests.Main;
 import services.ServiceCommentaire;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ResourceBundle;
 
 public class MainItemController implements Initializable {
@@ -27,6 +31,10 @@ public class MainItemController implements Initializable {
 
     @FXML
     private Button btnEdit;
+
+    @FXML
+    private Label lblEmoji;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -67,4 +75,11 @@ public class MainItemController implements Initializable {
         }
 
     }
+
+
+
 }
+
+
+
+
