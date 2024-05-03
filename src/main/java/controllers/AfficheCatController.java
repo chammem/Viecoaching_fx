@@ -43,7 +43,7 @@ public class AfficheCatController implements Initializable {
         serviceCategorie = new ServiceCategorie();
         serviceRessource = new ServiceRessource();
         loadCategories();
-       // displayCategoryStatistics();
+        // displayCategoryStatistics();
         tText.textProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 filterCategories(newValue);
@@ -101,24 +101,10 @@ public class AfficheCatController implements Initializable {
         Label descriptionLabel = new Label(categorie.getDescription());
         gridPane.add(descriptionLabel, 2, row);
 
-        String imageUrl = categorie.getImage(); // Obtenez l'URL de l'image à partir de l'objet Categorie
-
-        if (imageUrl != null && !imageUrl.isEmpty()) {
-            // Créer un objet Image à partir de l'URL
-            Image image = new Image("file:///C:/chemin/vers/le/dossier/images/" + imageUrl); // Remplacez le chemin par le chemin réel de votre dossier d'images
-
-            // Créer un objet ImageView pour afficher l'image
-            ImageView imageView = new ImageView(image);
-            imageView.setFitWidth(100); // Définir la largeur de l'ImageView
-            imageView.setFitHeight(100); // Définir la hauteur de l'ImageView
-
-            // Ajouter l'ImageView au GridPane à l'emplacement spécifié
-            gridPane.add(imageView, 3, row);
-        } else {
-            // Gérer le cas où l'URL de l'image est vide ou null
-            // Vous pouvez afficher un message ou une image par défaut
-            System.out.println("L'URL de l'image est vide ou null.");
-        }
+        ImageView imageView = new ImageView(new Image(categorie.getImage()));
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
+        gridPane.add(imageView, 3, row);
 
         // Boutons d'action (Supprimer et Mettre à jour)
         Button deleteButton = new Button("Supprimer");

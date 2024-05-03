@@ -39,7 +39,7 @@
                <Image url="@../image/logo.png" />
             </image>
          </ImageView>
-         <Button mnemonicParsing="false" onAction="#statsAction" prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Statistiques" />
+         <Button mnemonicParsing="false"  prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Statistiques" />
          <Text strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1.0" />
          <Button mnemonicParsing="false" prefHeight="42.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Groupes" />
          <Text strokeType="OUTSIDE" strokeWidth="0.0" />

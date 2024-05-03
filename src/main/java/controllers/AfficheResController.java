@@ -19,7 +19,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import services.ServiceRessource;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -93,13 +97,19 @@ public class AfficheResController implements Initializable {
             ObservableList<Ressources> resources = FXCollections.observableArrayList(service.afficher());
             gridPane.getChildren().clear(); // Clear existing items in GridPane
             AtomicInteger row = new AtomicInteger(1); // Start from the second row (index 1)
-            resources.forEach(ressource -> addResourceToGrid(ressource, row.getAndIncrement()));
+            resources.forEach(ressource -> {
+                try {
+                    addResourceToGrid(ressource, row.getAndIncrement());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         } catch (SQLException e) {
             e.printStackTrace(); // Handle the exception gracefully
         }
     }
 
-    private void addResourceToGrid(Ressources ressources, int row) {
+    private void addResourceToGrid(Ressources ressources, int row) throws IOException {
         // Titre
         Label typeLabel = new Label(ressources.getType_r());
         gridPane.add(typeLabel, 0, row);
@@ -110,11 +120,44 @@ public class AfficheResController implements Initializable {
         Label descriptionLabel = new Label(ressources.getDescription());
         gridPane.add(descriptionLabel, 2, row);
 
-        // Image (Si besoin d'afficher une image, configurez-la dans ImageView)
-        ImageView imageView = new ImageView(new Image(ressources.getUrl()));
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(100);
-        gridPane.add(imageView, 4, row);
+        String imageUrl = ressources.getUrl();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            try {
+                File file = new File("C:/Users/Hadil Derouich/Desktop/SymfonyProjects/Merge/viecoaching/public/uploads/" + imageUrl);
+
+                if (file.exists()) {
+                    // Local file path exists, load image from local file
+                    InputStream inputStream = new FileInputStream(file);
+                    Image image = new Image(inputStream);
+                    inputStream.close();
+
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitWidth(100);
+                    imageView.setFitHeight(100);
+                    gridPane.add(imageView, 3, row);
+                } else if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+                    // Web URL, load image from web
+                    URL url = new URL(imageUrl);
+                    InputStream inputStream = url.openStream();
+                    Image image = new Image(inputStream);
+                    inputStream.close();
+
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitWidth(100);
+                    imageView.setFitHeight(100);
+                    gridPane.add(imageView, 3, row);
+                } else {
+                    System.err.println("Invalid image URL: " + imageUrl);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Handle image loading errors
+            }
+        }
+
+
+
+
 
         //Actions (Supprimer et Mettre à jour)
         Button deleteButton = new Button("Supprimer");
@@ -178,7 +221,13 @@ public class AfficheResController implements Initializable {
 
         resources.stream()
                 .filter(ressource -> ressource.getType_r().toLowerCase().contains(searchText.toLowerCase()))
-                .forEach(ressource -> addResourceToGrid(ressource, row.getAndIncrement()));
+                .forEach(ressource -> {
+                    try {
+                        addResourceToGrid(ressource, row.getAndIncrement());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     @FXML

@@ -1,6 +1,9 @@
 package controllers;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import entities.Ressources;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,10 +19,13 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import services.ServiceRessource;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class RessourcesController implements Initializable {
@@ -37,10 +43,17 @@ public class RessourcesController implements Initializable {
     private ImageView timage;
 
     private ServiceRessource serviceRessource;
+    private Cloudinary cloudinary;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         serviceRessource = new ServiceRessource();
+
+        // Initialisation de Cloudinary avec vos identifiants
+        cloudinary = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "djtv7pcyp",
+                "api_key", "216986526787688",
+                "api_secret", "93b8-dqk94OppguTtG3BxbUA5cM"));
     }
 
     @FXML
@@ -48,30 +61,57 @@ public class RessourcesController implements Initializable {
         String titre = tTitre.getText();
         String type = tType.getText();
         String description = tDescription.getText();
-        String imageUrl = (timage.getImage() != null) ? timage.getImage().getUrl() : null;
 
         if (!isValidTextField(titre, "Nom de ressource") ||
                 !isValidTextField(type, "Type de Ressource") ||
                 !isValidImageView(timage, "Image") ||
-                !isValidTextField(description, "Description  "))
-        {
+                !isValidTextField(description, "Description")) {
             return;
         }
-            try {
-                ServiceRessource serviceRessource = new ServiceRessource();
-                Ressources ressource = new Ressources(titre, type, imageUrl, description);
-                serviceRessource.ajouter(ressource);
-                showAlert("Ressource ajoutée avec succès !");
 
-                // Charger la vue afficheRessource.fxml après l'ajout réussi
-                loadAfficheRessourceView();
+        try {
+            // Convertir l'ImageView en BufferedImage
+            Image image = timage.getImage();
+            BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
 
-                clearFields(); // Effacer les champs après l'ajout réussi
-            } catch (SQLException e) {
-                showAlert("Erreur lors de l'ajout de la ressource : " + e.getMessage());
-                e.printStackTrace();
-            }
+            // Créer un fichier temporaire pour l'image
+            File tempFile = File.createTempFile("temp-image", ".png");
+            ImageIO.write(bufferedImage, "png", tempFile);
+
+            // Uploader l'image vers Cloudinary
+            Map uploadResult = cloudinary.uploader().upload(tempFile, ObjectUtils.emptyMap());
+            String imageUrl = (String) uploadResult.get("url");
+
+            // Enregistrer la ressource dans la base de données
+            Ressources ressource = new Ressources(titre, type, imageUrl, description);
+            serviceRessource.ajouter(ressource);
+
+            showAlert("Ressource ajoutée avec succès !");
+
+            // Charger la vue afficheRessource.fxml après l'ajout réussi
+            loadAfficheRessourceView();
+
+            clearFields(); // Effacer les champs après l'ajout réussi
+        } catch (IOException | SQLException e) {
+            showAlert("Erreur lors de l'ajout de la ressource : " + e.getMessage());
+            e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void selectImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choisir une image");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif")
+        );
+
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            Image image = new Image(selectedFile.toURI().toString());
+            timage.setImage(image);
+        }
+    }
 
     private boolean isValidTextField(String value, String fieldName) {
         if (value.isEmpty()) {
@@ -88,6 +128,7 @@ public class RessourcesController implements Initializable {
         }
         return true;
     }
+
     // Fonction utilitaire pour charger la vue afficheRessource.fxml
     private void loadAfficheRessourceView() {
         try {
@@ -112,27 +153,4 @@ public class RessourcesController implements Initializable {
         tDescription.clear();
         timage.setImage(null);
     }
-    @FXML
-    private void selectImage() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choisir une image");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif")
-        );
-
-        File selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile != null) {
-            Image image = new Image(selectedFile.toURI().toString());
-            timage.setImage(image);
-        }
-    }
-    public void setImage(Image image) {
-        timage.setImage(image);
-    }
-
-    // Méthode getter pour obtenir l'ImageView
-    public ImageView getImageView() {
-        return timage;
-    }
-
 }
