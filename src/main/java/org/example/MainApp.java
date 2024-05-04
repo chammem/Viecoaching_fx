@@ -7,6 +7,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.ResourceBundle;
+
 public class MainApp extends Application {
 
     @Override
@@ -18,6 +20,7 @@ public class MainApp extends Application {
             primaryStage.setTitle("Lost AND Found");
             primaryStage.setScene(scene);
             primaryStage.show();
+
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Error loading FXML file: " + e.getMessage());

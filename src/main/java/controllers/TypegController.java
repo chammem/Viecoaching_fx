@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -45,7 +46,8 @@ public class TypegController  implements Initializable {
                 alert.setTitle("Succès");
                 alert.setContentText("groupe ajoutée avec succès !");
                 alert.showAndWait();
-                loadAffichetype();
+                loadAfficheCategorieVieww();
+
             } catch (SQLException e) {
                 // En cas d'erreur lors de l'ajout de la groupe, afficher l'erreur dans la console
                 System.out.println("Erreur lors de l'ajout de la groupe : " + e.getMessage());
@@ -54,6 +56,28 @@ public class TypegController  implements Initializable {
 
 
         }
+    private void loadAfficheCategorieVieww() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/AfficheType.fxml"));
+            Stage stage = (Stage) nomField.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de afficheCategorie.fxml : " + e.getMessage());
+        }
+    }
+    private void loadPreviousPage(ActionEvent event) {
+        // Récupérer le nœud source de l'événement (le bouton "Ajouter" dans ce cas)
+        Node sourceNode = (Node) event.getSource();
+
+        // Récupérer la scène actuelle
+        Scene scene = sourceNode.getScene();
+
+        // Récupérer le stage actuel
+        Stage stage = (Stage) scene.getWindow();
+
+        // Fermer le stage actuel pour revenir à la page précédente
+        stage.close();
+    }
     private void  loadAffichetype() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/AfficheType.fxml"));

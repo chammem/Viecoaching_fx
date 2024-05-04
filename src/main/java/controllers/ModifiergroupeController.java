@@ -5,7 +5,9 @@ import entities.Typegroupe;
 import entities.Utilisateur;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -15,6 +17,8 @@ import javafx.stage.Stage;
 import services.ServiceGroupe;
 import services.ServiceTypegroupe;
 import services.ServiceUtilisateur;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import javafx.scene.layout.GridPane;
 
@@ -155,13 +159,21 @@ public class ModifiergroupeController implements Initializable {
         groupe.getUtilisateurs().addAll(utilisateursSelectionnes);
 
         // Appel du service pour modifier le groupe
-        serviceGroupe.modifier(groupe);
+        serviceGroupe.modifierg(groupe, utilisateursSelectionnes);
         showAlert("Le groupe a été modifié avec succès.");
-
         // Fermeture de la scène actuelle
-        Stage stage = (Stage) btnModifier.getScene().getWindow();
-        stage.close();
+        loadAfficheCategorieView();
+
         // Affichage d'une notification de succès
+    }
+    private void loadAfficheCategorieView() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Affichegr.fxml"));
+            Stage stage = (Stage) nomField.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de afficheCategorie.fxml : " + e.getMessage());
+        }
     }
 
     @FXML

@@ -11,6 +11,7 @@ public interface IService <T>{
     public void modifier(T t) throws SQLException;
     public void ajouterAvecUtilisateurs(T t, List<Utilisateur> utilisateursSelectionnes) throws SQLException;
 
+    public void modifierg(T t,List<Utilisateur> utilisateursSelectionnes) throws SQLException;
 
 
 

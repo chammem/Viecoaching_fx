@@ -30,12 +30,15 @@ import services.ServiceTypegroupe;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 public class groupeController implements Initializable {
         @FXML
@@ -59,6 +62,9 @@ public class groupeController implements Initializable {
         private ListView<Utilisateur> utilisateursListView;
 
         public void ajouter(ActionEvent event) throws IOException {
+                // Validation du champ Image
+                String image = nomFichierurlSelectionne; // Utilisez le nom du fichier sélectionné
+
                 // Validation du champ Nom
                 String nom = nomField.getText();
                 if (nom.isEmpty()) {
@@ -87,7 +93,7 @@ public class groupeController implements Initializable {
                 }
 
                 // Autres validations pour les champs facultatifs, comme l'image et la description
-                String image = (imageView.getImage() != null) ? imageView.getImage().getUrl() : null;
+                 image = (imageView.getImage() != null) ? imageView.getImage().getUrl() : null;
                 // Ajoutez des validations supplémentaires au besoin pour les champs facultatifs
 
                 // Validation de la sélection d'utilisateurs
@@ -117,9 +123,7 @@ public class groupeController implements Initializable {
 
                         // Afficher une confirmation
                         showAlert("Groupe ajouté avec succès !");
-                        loadAffichegr();
-
-                } catch (SQLException e) {
+                        loadAfficheCategorieVieww();                } catch (SQLException e) {
                         System.out.println("Erreur lors de l'ajout du groupe : " + e.getMessage());
                         e.printStackTrace();
                         showAleert("Groupe ajouté avec succès !", event);
@@ -129,15 +133,50 @@ public class groupeController implements Initializable {
 
 
         }
-        private void loadAffichegr() {
+        private void loadAfficheCategorieView() {
                 try {
                         Parent root = FXMLLoader.load(getClass().getResource("/fxml/Affichegr.fxml"));
                         Stage stage = (Stage) nomField.getScene().getWindow(); // Récupérer la fenêtre actuelle
                         stage.setScene(new Scene(root));
                 } catch (IOException e) {
-                        System.out.println("Erreur lors du chargement de Affichegr.fxml : " + e.getMessage());
+                        System.out.println("Erreur lors du chargement de afficheCategorie.fxml : " + e.getMessage());
                 }
         }
+        private void loadAffichergr() {
+                try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Affichergr.fxml"));
+                        Parent root = loader.load();
+                        AffichergrController controller = loader.getController();
+                        controller.loadResources(); // Appelez la méthode pour recharger les données
+                        Stage stage = (Stage) nomField.getScene().getWindow();
+                        stage.setScene(new Scene(root));
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
+        }
+        private void loadPreviousPage(ActionEvent event) {
+                // Récupérer le nœud source de l'événement (le bouton "Ajouter" dans ce cas)
+                Node sourceNode = (Node) event.getSource();
+
+                // Récupérer la scène actuelle
+                Scene scene = sourceNode.getScene();
+
+                // Récupérer le stage actuel
+                Stage stage = (Stage) scene.getWindow();
+
+                // Fermer le stage actuel pour revenir à la page précédente
+                stage.close();
+        }
+        private void loadAfficheCategorieVieww() {
+                try {
+                        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Affichegr.fxml"));
+                        Stage stage = (Stage) nomField.getScene().getWindow(); // Récupérer la fenêtre actuelle
+                        stage.setScene(new Scene(root));
+                } catch (IOException e) {
+                        System.out.println("Erreur lors du chargement de afficheCategorie.fxml : " + e.getMessage());
+                }
+        }
+
         private void showAleert(String message, ActionEvent event) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setHeaderText(null);
@@ -153,24 +192,28 @@ public class groupeController implements Initializable {
         @FXML
         private void selectImage() {
                 FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Choisir une url");
+                fileChooser.setTitle("Choisir une image");
                 fileChooser.getExtensionFilters().addAll(
-                        new FileChooser.ExtensionFilter("urls", "*.png", "*.jpg")
+                        new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg")
                 );
 
                 File selectedFile = fileChooser.showOpenDialog(null);
                 if (selectedFile != null) {
-                        // Charger l'url sélectionnée
-                        Image image = new Image(selectedFile.toURI().toString());
+                        try {
+                                // Charger l'image à partir du fichier sélectionné
+                                Image image = new Image(selectedFile.toURI().toString());
+                                imageView.setImage(image);
 
-                        // Afficher l'url dans l'urlView approprié
-                        imageView.setImage(image);
-
-                        // Stocker le nom du fichier sélectionné
-                        nomFichierurlSelectionne = selectedFile.getName();
-                        System.out.println("Nom du fichier sélectionné : " + nomFichierurlSelectionne);
+                                // Stocker le nom du fichier sélectionné (sans le chemin d'accès)
+                                nomFichierurlSelectionne = selectedFile.getName();
+                                System.out.println("Nom du fichier sélectionné : " + nomFichierurlSelectionne);
+                        } catch (Exception e) {
+                                e.printStackTrace();
+                                showAlert("Erreur lors du chargement de l'image : " + e.getMessage());
+                        }
                 }
         }
+
 
 
         // Méthode pour charger une url dans l'urlView

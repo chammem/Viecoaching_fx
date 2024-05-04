@@ -52,6 +52,11 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
 
     }
 
+    @Override
+    public void modifierg(Utilisateur utilisateur, List<Utilisateur> utilisateursSelectionnes) throws SQLException {
+
+    }
+
 
     @Override
     public void supprimer(int id) throws SQLException {

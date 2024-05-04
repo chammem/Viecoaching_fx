@@ -13,7 +13,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         // Chargement du fichier FXML
-        Parent root = FXMLLoader.load(getClass().getResource("/Groupe.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Groupe.fxml"));
         // Création de la scène
         Scene scene = new Scene(root, 600, 400);
         // Configuration de la scène du stage avec la scène créée
@@ -26,6 +26,6 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         // Lancement de l'application JavaFX
-        launch();
+        launch(args);
     }
 }

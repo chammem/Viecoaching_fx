@@ -39,8 +39,7 @@ public class ModifiertypeController implements Initializable {
         try {
             serviceTypegroupe.modifier(typegroupe);
             showAlert("Ressource modifiée avec succès !");
-            modiftype();
-
+            loadAfficheCategorieView();
         } catch (SQLException e) {
             showAlert("Erreur lors de la modification de la ressource : " + e.getMessage());
         }
@@ -54,6 +53,16 @@ public class ModifiertypeController implements Initializable {
             System.out.println("Erreur lors du chargement de afficheRessource.fxml : " + e.getMessage());
         }
     }
+    private void loadAfficheCategorieView() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/AfficheType.fxml"));
+            Stage stage = (Stage) tTitre.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de afficheCategorie.fxml : " + e.getMessage());
+        }
+    }
+
     public void initData(Typegroupe typegroupe) {
         this.typegroupe = typegroupe;
         tTitre.setText(typegroupe.getNomtype());
