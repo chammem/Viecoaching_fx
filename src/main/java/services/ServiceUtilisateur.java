@@ -11,12 +11,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class  ServiceUtilisateur implements IService<Utilisateur>{
+public class ServiceUtilisateur implements IService<Utilisateur> {
+
     Connection connection;
+
+   // public ServiceUtilisateur() {
+      //  connection = MyDatabase.getInstance().getConnection();
 
     public ServiceUtilisateur(Connection connection) {
         this.connection = connection;
     }
+
 
     private static final String IMAGE_DIRECTORY = "src/main/resources/photos";
 
@@ -105,6 +110,24 @@ public class  ServiceUtilisateur implements IService<Utilisateur>{
             }
         }
     }
+    public List<Utilisateur> getAllUtilisateurs() throws SQLException {
+        List<Utilisateur> utilisateurs = new ArrayList<>();
+        String query = "SELECT * FROM utilisateur";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String nom = resultSet.getString("nom");
+                // Récupérez d'autres attributs de l'utilisateur de la base de données
+
+                Utilisateur utilisateur = new Utilisateur(id, nom);
+                utilisateurs.add(utilisateur);
+            }
+        }
+
+        return utilisateurs;
+    }
 
     @Override
     public List<Utilisateur> afficher() throws SQLException {
@@ -129,6 +152,57 @@ public class  ServiceUtilisateur implements IService<Utilisateur>{
         }
         return utilisateurs;
     }
+
+
+
+    public Utilisateur getUtilisateurByNom(String nomUtilisateur) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Utilisateur utilisateur = null;
+
+        try {
+            // Préparer la requête SQL pour récupérer l'utilisateur par son nom
+            String query = "SELECT * FROM utilisateur WHERE nom = ?";
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, nomUtilisateur);
+
+            // Exécuter la requête SQL
+            resultSet = preparedStatement.executeQuery();
+
+            // Vérifier s'il y a un résultat
+            if (resultSet.next()) {
+                // Créer un nouvel objet Utilisateur avec les données récupérées de la base de données
+                utilisateur = new Utilisateur();
+                utilisateur.setId(resultSet.getInt("id"));
+                utilisateur.setNom(resultSet.getString("nom"));
+                utilisateur.setPrenom(resultSet.getString("prenom"));
+                utilisateur.setAge(resultSet.getInt("age"));
+                utilisateur.setEmail(resultSet.getString("email"));
+                utilisateur.setTel(resultSet.getString("tel"));
+                utilisateur.setMdp(resultSet.getString("mdp"));
+                utilisateur.setGenre(resultSet.getString("genre"));
+                utilisateur.setVille(resultSet.getString("ville"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Gérer l'exception SQL
+        } finally {
+            // Fermer les ressources JDBC
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+        }
+
+        // Retourner l'utilisateur trouvé ou null s'il n'est pas trouvé
+        return utilisateur;
+    }
+
+}
+
+   
     private Image loadImage(String imageName) {
         String imagePath = System.getProperty("user.dir") + "/" + IMAGE_DIRECTORY + "/" + imageName;
         return new Image(new File(imagePath).toURI().toString());
