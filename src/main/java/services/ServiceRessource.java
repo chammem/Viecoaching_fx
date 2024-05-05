@@ -82,7 +82,26 @@ public class ServiceRessource implements IService<Ressources>{
         }
         return ressources;
     }
+    public Ressources getRessourceByType(String type) throws SQLException {
+        String query = "SELECT * FROM ressources WHERE titre_r = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, type);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                // Récupérer les données de la ressource
+                int id = resultSet.getInt("id_ressource");
+                String titre = resultSet.getString("titre_r");
+                String typeRessource = resultSet.getString("type_r");
+                String description = resultSet.getString("description");
+                String url = resultSet.getString("url");
 
+                // Créer un objet Ressources avec les données récupérées
+                Ressources ressource = new Ressources(id, titre, typeRessource, description, url);
+                return ressource;
+            }
+        }
+        return null; // Retourner null si aucune ressource n'est trouvée
+    }
     public Ressources getRessourceByNom(String nom) throws SQLException {
         String sql = "SELECT * FROM ressources WHERE titre_r = ?";
         Ressources ressource = null;

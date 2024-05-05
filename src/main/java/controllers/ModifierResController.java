@@ -1,6 +1,9 @@
 package controllers;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import entities.Ressources;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,9 +19,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import services.ServiceRessource;
 
+import javax.imageio.ImageIO;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -40,10 +42,17 @@ public class ModifierResController implements Initializable {
 
     private Ressources ressource; // Ressource à modifier
     private ServiceRessource serviceRessource; // Service pour la gestion des ressources
+    private Cloudinary cloudinary;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.serviceRessource = new ServiceRessource();
+
+        // Initialisation de Cloudinary avec vos identifiants
+        cloudinary = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "djtv7pcyp",
+                "api_key", "216986526787688",
+                "api_secret", "93b8-dqk94OppguTtG3BxbUA5cM"));
     }
 
     public void initData(Ressources ressource) {
@@ -70,8 +79,9 @@ public class ModifierResController implements Initializable {
         String description = tDescription.getText().trim();
 
         // Vérifier chaque champ individuellement
-        if (typeText.isEmpty() || !isValidTitre(tTitreText) || !isValidDescription(description) || !isValidtype(typeText)) {
-            return; // Sortie si l'un des champs est invalide
+        if (typeText.isEmpty() || tTitreText.isEmpty() || description.isEmpty()) {
+            showAlert("Veuillez remplir tous les champs.");
+            return;
         }
 
         try {
@@ -79,7 +89,15 @@ public class ModifierResController implements Initializable {
             ressource.setTitre_r(tTitreText);
             ressource.setDescription(description);
             ressource.setType_r(typeText);
-            ressource.setUrl(timage.getImage().getUrl());
+
+            // Vérifier si une nouvelle image a été sélectionnée
+            if (timage.getImage() != null) {
+                // Uploader l'image vers Cloudinary
+                String imageUrl = uploadImageToCloudinary();
+                if (imageUrl != null) {
+                    ressource.setUrl(imageUrl);
+                }
+            }
 
             // Appeler le service pour effectuer la modification
             serviceRessource.modifier(ressource);
@@ -87,8 +105,8 @@ public class ModifierResController implements Initializable {
             // Afficher une boîte de dialogue d'information pour indiquer la réussite de la modification
             showAlert("Ressource modifiée avec succès!");
 
-            // Charger la vue afficheCategorie.fxml après la modification réussie
-            loadAfficheCategorieView();
+            // Charger la vue afficheRessource.fxml après la modification réussie
+            loadAfficheRessourceView();
 
         } catch (SQLException e) {
             // En cas d'erreur lors de la modification, afficher l'erreur
@@ -97,40 +115,21 @@ public class ModifierResController implements Initializable {
         }
     }
 
-    private boolean isValidTitre(String titre) {
-        if (titre.isEmpty()) {
-            showAlert("Veuillez saisir un titre.");
-            return false;
-        }
-        // Ajoutez d'autres conditions de validation au besoin
-        return true;
-    }
-
-    private boolean isValidDescription(String description) {
-        if (description.isEmpty()) {
-            showAlert("Veuillez saisir une description.");
-            return false;
-        }
-        // Ajoutez d'autres conditions de validation au besoin
-        return true;
-    }
-    private boolean isValidtype(String type) {
-        if (type.isEmpty()) {
-            showAlert("Veuillez saisir Type.");
-            return false;
-        }
-        // Ajoutez d'autres conditions de validation au besoin
-        return true;
-    }
-
-    // Fonction utilitaire pour charger la vue afficheCategorie.fxml
-    private void loadAfficheCategorieView() {
+    private String uploadImageToCloudinary() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/afficheRessource.fxml"));
-            Stage stage = (Stage) tTitre.getScene().getWindow(); // Récupérer la fenêtre actuelle
-            stage.setScene(new Scene(root));
+            // Créer un fichier temporaire pour l'image
+            File tempFile = File.createTempFile("temp-image", ".png");
+
+            // Sauvegarder l'image dans le fichier temporaire
+            ImageIO.write(SwingFXUtils.fromFXImage(timage.getImage(), null), "png", tempFile);
+
+            // Uploader l'image vers Cloudinary
+            return cloudinary.uploader().upload(tempFile, ObjectUtils.emptyMap()).get("url").toString();
+
         } catch (IOException e) {
-            System.out.println("Erreur lors du chargement de afficheCategorie.fxml : " + e.getMessage());
+            showAlert("Erreur lors du chargement de l'image vers Cloudinary : " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -139,25 +138,28 @@ public class ModifierResController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir une image");
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg")
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif")
         );
 
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
-            // Charger l'image sélectionnée
             Image image = new Image(selectedFile.toURI().toString());
-
-            // Afficher l'image dans l'ImageView approprié
             timage.setImage(image);
+        }
+    }
 
-            // Stocker le nom du fichier sélectionné
-            String nomFichierSelectionne = selectedFile.getName();
-            System.out.println("Nom du fichier sélectionné : " + nomFichierSelectionne);
+    private void loadAfficheRessourceView() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/afficheRessource.fxml"));
+            Stage stage = (Stage) tTitre.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            showAlert("Erreur lors du chargement de afficheRessource.fxml : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     private void showAlert(String message) {
-        // Afficher une boîte de dialogue d'alerte avec le message spécifié
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(null);
         alert.setContentText(message);

@@ -1,7 +1,10 @@
 package controllers;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import entities.Categorie;
 import entities.Ressources;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,9 +20,8 @@ import javafx.stage.Stage;
 import services.ServiceCategorie;
 import services.ServiceRessource;
 
+import javax.imageio.ImageIO;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -51,24 +53,33 @@ public class ModifierCatController implements Initializable {
 
     private Categorie categorie;
     private ServiceCategorie serviceCategorie;
+    private Cloudinary cloudinary;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.serviceCategorie = new ServiceCategorie();
 
-        // Initialisez votre ChoiceBox tressource avec des options
+        // Initialisation de Cloudinary avec vos identifiants
+        cloudinary = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "djtv7pcyp",
+                "api_key", "216986526787688",
+                "api_secret", "93b8-dqk94OppguTtG3BxbUA5cM"));
+
         ServiceRessource serviceRessources = new ServiceRessource();
-        List<Ressources> ressourcesList = null; // Supposons que vous avez une méthode pour obtenir toutes les ressources
+        List<Ressources> ressourcesList = null;
         try {
             ressourcesList = serviceRessources.getAllRessources();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            showAlert("Erreur lors de la récupération des ressources : " + e.getMessage());
+            e.printStackTrace();
         }
 
-        // Remplissez la ChoiceBox avec les noms des ressources
-        tressource.getItems().clear(); // Efface les éléments existants (si nécessaire)
-        for (Ressources ressource : ressourcesList) {
-            tressource.getItems().add(ressource.getType_r()); // Ajoutez le nom de la ressource à la liste
+        // Remplir la ChoiceBox avec les noms des ressources
+        if (ressourcesList != null) {
+            tressource.getItems().clear();
+            for (Ressources ressource : ressourcesList) {
+                tressource.getItems().add(ressource.getType_r());
+            }
         }
     }
 
@@ -79,10 +90,16 @@ public class ModifierCatController implements Initializable {
         tnom.setText(categorie.getNom_categorie());
         tressource.setValue(categorie.getRessource_id().getTitre_r());
         tDescription.setText(categorie.getDescription());
-        timage.setImage(new Image(categorie.getImage()));
 
+        // Chargement de l'image
+        try {
+            Image image = new Image(categorie.getImage());
+            timage.setImage(image);
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement de l'image : " + e.getMessage());
+            e.printStackTrace();
+        }
     }
-
 
     @FXML
     void ModifierCategorie(ActionEvent event) {
@@ -117,22 +134,47 @@ public class ModifierCatController implements Initializable {
             // Mettre à jour les propriétés de la catégorie avec les nouvelles valeurs
             categorie.setNom_categorie(nomCategorie);
             categorie.setDescription(description);
+
+            // Télécharger et mettre à jour l'image si elle a été modifiée
+            if (timage.getImage() != null) {
+                String imageUrl = uploadImageToCloudinary();
+                if (imageUrl != null) {
+                    categorie.setImage(imageUrl);
+                }
+            }
+
             categorie.setRessource_id(ressource);
-            categorie.setImage(timage.getImage().getUrl());
 
             // Appeler le service pour effectuer la modification
             serviceCategorie.modifier(categorie);
 
-            // Afficher une boîte de dialogue d'information pour indiquer la réussite de la modification
+            // Afficher un message de succès
             showAlert("Catégorie modifiée avec succès!");
 
-            // Charger la vue afficheCategorie.fxml après la modification réussie
+            // Recharger la vue afficheCategorie.fxml après la modification
             loadAfficheCategorieView();
 
         } catch (SQLException e) {
-            // En cas d'erreur lors de la modification, afficher l'erreur
             showAlert("Erreur lors de la modification de la catégorie : " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    private String uploadImageToCloudinary() {
+        try {
+            // Créer un fichier temporaire pour l'image
+            File tempFile = File.createTempFile("temp-image", ".png");
+
+            // Sauvegarder l'image dans le fichier temporaire
+            ImageIO.write(SwingFXUtils.fromFXImage(timage.getImage(), null), "png", tempFile);
+
+            // Uploader l'image vers Cloudinary
+            return cloudinary.uploader().upload(tempFile, ObjectUtils.emptyMap()).get("url").toString();
+
+        } catch (IOException e) {
+            showAlert("Erreur lors du chargement de l'image vers Cloudinary : " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -152,44 +194,36 @@ public class ModifierCatController implements Initializable {
         return true;
     }
 
-    // Fonction utilitaire pour charger la vue afficheCategorie.fxml
     private void loadAfficheCategorieView() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/afficheCategorie.fxml"));
             Stage stage = (Stage) tnom.getScene().getWindow(); // Récupérer la fenêtre actuelle
             stage.setScene(new Scene(root));
         } catch (IOException e) {
-            System.out.println("Erreur lors du chargement de afficheCategorie.fxml : " + e.getMessage());
-        }
-    }
-
-    @FXML
-    private void selectImage(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choisir une image");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg")
-        );
-
-        File selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile != null) {
-            // Charger l'image sélectionnée
-            Image image = new Image(selectedFile.toURI().toString());
-
-            // Afficher l'image dans l'ImageView approprié
-            timage.setImage(image);
-
-            // Stocker le nom du fichier sélectionné
-            String nomFichierSelectionne = selectedFile.getName();
-            System.out.println("Nom du fichier sélectionné : " + nomFichierSelectionne);
+            showAlert("Erreur lors du chargement de afficheCategorie.fxml : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     private void showAlert(String message) {
-        // Afficher une boîte de dialogue d'alerte avec le message spécifié
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void selectImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choisir une image");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif")
+        );
+
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            Image image = new Image(selectedFile.toURI().toString());
+            timage.setImage(image);
+        }
     }
 }

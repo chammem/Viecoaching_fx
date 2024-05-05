@@ -19,7 +19,10 @@ import javafx.stage.Stage;
 import services.ServiceCategorie;
 import services.ServiceRessource;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
@@ -101,10 +104,41 @@ public class AfficheCatController implements Initializable {
         Label descriptionLabel = new Label(categorie.getDescription());
         gridPane.add(descriptionLabel, 2, row);
 
-        ImageView imageView = new ImageView(new Image(categorie.getImage()));
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(100);
-        gridPane.add(imageView, 3, row);
+        String imageUrl = categorie.getImage();
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            try {
+                File file = new File("C:/Users/Hadil Derouich/Desktop/SymfonyProjects/Merge/viecoaching/public/uploads/" + imageUrl);
+
+                if (file.exists()) {
+                    // Local file path exists, load image from local file
+                    InputStream inputStream = new FileInputStream(file);
+                    Image image = new Image(inputStream);
+                    inputStream.close();
+
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitWidth(100);
+                    imageView.setFitHeight(100);
+                    gridPane.add(imageView, 3, row);
+                } else if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+                    // Web URL, load image from web
+                    URL url = new URL(imageUrl);
+                    InputStream inputStream = url.openStream();
+                    Image image = new Image(inputStream);
+                    inputStream.close();
+
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitWidth(100);
+                    imageView.setFitHeight(100);
+                    gridPane.add(imageView, 3, row);
+                } else {
+                    System.err.println("Invalid image URL: " + imageUrl);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Handle image loading errors
+            }
+        }
+
 
         // Boutons d'action (Supprimer et Mettre à jour)
         Button deleteButton = new Button("Supprimer");
