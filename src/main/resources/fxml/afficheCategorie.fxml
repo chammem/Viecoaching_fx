@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="587.0" prefWidth="1132.0" style="-fx-background-color: #EDEEE1;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficheCatController">
+    <VBox alignment="CENTER" layoutX="284.0" layoutY="77.0" prefHeight="518.0" prefWidth="811.0" style="-fx-background-color: #EDEEE1;">
+        <ScrollPane fitToHeight="true" fitToWidth="true">
+            <content>
+                <!-- GridPane pour afficher les ressources -->
+                <GridPane fx:id="gridPane" hgap="10" prefHeight="354.0" prefWidth="810.0" vgap="10">
+                </GridPane>
+            </content>
+        </ScrollPane>
+      <Button mnemonicParsing="false" onAction="#AjoutCat" prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Ajouter Catégorie" />
+    </VBox>
+   <TextField fx:id="tText" layoutX="298.0" layoutY="18.0" prefHeight="30.0" prefWidth="218.0" promptText="Recherche" style="-fx-background-color: #BED6B1;">
+      <font>
+         <Font name="System Italic" size="14.0" />
+      </font></TextField>
+    <VBox prefHeight="594.0" prefWidth="266.0" style="-fx-background-color: F3F5DC;">
+      <children>
+          <ImageView fitHeight="262.0" fitWidth="388.0" pickOnBounds="true" preserveRatio="true">
+              <image>
+                  <Image url="@../image/logo.png" />
+              </image>
+          </ImageView>
+
+         <Button mnemonicParsing="false" onAction="#stats" prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Statistiques" />
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1.0" />
+         <Button mnemonicParsing="false" prefHeight="42.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Groupes" />
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" />
+         <Button fx:id="NavBarRes" mnemonicParsing="false" onAction="#NavBarRes" prefHeight="39.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Ressources" />
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" />
+         <Button fx:id="NavBarCat" mnemonicParsing="false" onAction="#NavBarCat" prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Categorie" />
+      </children>
+   </VBox>
+     <Label layoutX="614.0" layoutY="16.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="List catégorie" textFill="#a5b79b" />
+</AnchorPane>
