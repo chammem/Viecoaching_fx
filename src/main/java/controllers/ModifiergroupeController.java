@@ -13,9 +13,11 @@ import javafx.stage.FileChooser;
 import services.ServiceGroupe;
 import services.ServiceTypegroupe;
 import services.ServiceUtilisateur;
+import utils.MyDatabase;
 
 import java.io.File;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +54,11 @@ public class ModifiergroupeController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialisation des services
         utilisateursListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        MyDatabase myDatabase = MyDatabase.getInstance();
 
-        serviceUtilisateur = new ServiceUtilisateur();
+        Connection connection = myDatabase.getConnection();
+
+        serviceUtilisateur = new ServiceUtilisateur(connection);
         serviceGroupe = new ServiceGroupe();
         List<Utilisateur> utilisateurs = new ArrayList<>();
 

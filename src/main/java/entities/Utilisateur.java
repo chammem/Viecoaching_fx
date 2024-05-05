@@ -8,6 +8,9 @@ public class Utilisateur {
     private String nom,prenom,email,tel,mdp,genre,ville,image;
     private boolean selected; // Nouveau champ pour indiquer si l'utilisateur est sélectionné
     private BooleanProperty selectedProperty;
+    private int role_id;
+    private boolean active;
+    private String roleName;
 
     // Constructeur et autres méthodes
 
@@ -17,9 +20,7 @@ public class Utilisateur {
         }
         return selectedProperty;
     }
-    private boolean active;
-    private int role_id;
-    private String roleName;
+
 
 
     public Utilisateur() {
@@ -50,14 +51,33 @@ public class Utilisateur {
         this.active = active;
         this.role_id = role_id;
     }
+    public Utilisateur(int id, String prenom, String email, String tel, String mdp, String genre, String ville) {
+        this.id = id;
+        this.prenom = prenom;
+        this.email = email;
+        this.tel = tel;
+        this.mdp = mdp;
+        this.genre = genre;
+        this.ville = ville;
 
+    }
+    public Utilisateur(int id,String nom , String prenom, String email, String tel, String mdp, String genre, String ville) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.tel = tel;
+        this.mdp = mdp;
+        this.genre = genre;
+        this.ville = ville;
+
+    }
     public Utilisateur(Utilisateur utilisateurSelectionne) {
 
     }
 
-    public Utilisateur(int id, int age, String nom, String prenom, String email, String tel, String mdp, String genre, String ville,Boolean selected) {
+    public Utilisateur(int id, String nom, String prenom, String email, String tel, String mdp, String genre, String ville,Boolean selected) {
         this.id = id;
-        this.age = age;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
@@ -191,11 +211,5 @@ public class Utilisateur {
                 '}';
     }
 
-    public int getRole_id() {
-        return role_id;
-    }
 
-    public void setRole_id(int role_id) {
-        this.role_id = role_id;
-    }
 }

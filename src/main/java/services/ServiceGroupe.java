@@ -61,9 +61,14 @@ public class ServiceGroupe implements IService<Groupe> {
         }
     }
 
+    @Override
+    public void modifier(Groupe groupe, String a) throws SQLException {
+
+    }
+
     public List<Utilisateur> afficherUtilisateurs() throws SQLException {
         List<Utilisateur> utilisateurs = new ArrayList<>();
-        String req = "SELECT id, age, nom, prenom, email, tel, mdp, genre, ville FROM utilisateur";
+        String req = "SELECT id, nom, prenom, email, tel, mdp, genre, ville FROM utilisateur";
 
 
         try (Statement st = connection.createStatement();
@@ -71,7 +76,6 @@ public class ServiceGroupe implements IService<Groupe> {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
-                int age = rs.getInt("age");
                 String prenom = rs.getString("prenom");
                 String email = rs.getString("email");
                 String tel = rs.getString("tel");
@@ -79,7 +83,7 @@ public class ServiceGroupe implements IService<Groupe> {
                 String genre = rs.getString("genre");
                 String ville = rs.getString("ville");
 
-                Utilisateur utilisateur = new Utilisateur(id, age, null, prenom, email, tel, mdp, genre, ville);
+                Utilisateur utilisateur = new Utilisateur(id, prenom, email, tel, mdp, genre, ville);
                 utilisateurs.add(utilisateur);
             }
         } catch (SQLException e) {
@@ -161,7 +165,6 @@ public class ServiceGroupe implements IService<Groupe> {
 
             if (rs.next()) {
                 int id = rs.getInt("id");
-                int age = rs.getInt("age");
                 String nom = rs.getString("nom");
                 String prenom = rs.getString("prenom");
                 String email = rs.getString("email");
@@ -172,7 +175,7 @@ public class ServiceGroupe implements IService<Groupe> {
                 // Ajoutez d'autres colonnes si nécessaire
 
                 // Créer un objet Utilisateur avec les données récupérées
-                utilisateur = new Utilisateur(id, age, nom, prenom, email, tel, mdp, genre, ville);
+                utilisateur = new Utilisateur(id, nom, prenom, email, tel, mdp, genre, ville);
             }
         } catch (SQLException e) {
             throw new SQLException("Erreur lors de la récupération de l'utilisateur : " + e.getMessage(), e);

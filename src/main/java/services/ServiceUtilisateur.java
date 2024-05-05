@@ -17,7 +17,6 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
 
    // public ServiceUtilisateur() {
       //  connection = MyDatabase.getInstance().getConnection();
-
     public ServiceUtilisateur(Connection connection) {
         this.connection = connection;
     }
@@ -98,6 +97,11 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
         }
     }
 
+    @Override
+    public void modifier(Utilisateur utilisateur) throws SQLException {
+
+    }
+
     public void supprimer(int userId) throws SQLException {
         String req = "DELETE FROM utilisateur WHERE id=?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(req)) {
@@ -176,7 +180,6 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
                 utilisateur.setId(resultSet.getInt("id"));
                 utilisateur.setNom(resultSet.getString("nom"));
                 utilisateur.setPrenom(resultSet.getString("prenom"));
-                utilisateur.setAge(resultSet.getInt("age"));
                 utilisateur.setEmail(resultSet.getString("email"));
                 utilisateur.setTel(resultSet.getString("tel"));
                 utilisateur.setMdp(resultSet.getString("mdp"));
@@ -200,7 +203,7 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
         return utilisateur;
     }
 
-}
+
 
    
     private Image loadImage(String imageName) {
