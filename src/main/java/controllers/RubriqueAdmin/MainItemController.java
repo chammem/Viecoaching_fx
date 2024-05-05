@@ -34,18 +34,37 @@ public class MainItemController implements Initializable {
 
     @FXML
     private Label lblEmoji;
+    @FXML
+    private Button likeButton;
+
+    @FXML
+    private Button dislikeButton;
+    @FXML
+    private Label lblLikes;
+
+    @FXML
+    private Label lblDislikes;
+    Commentaire selectedComment = null;
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // You can add initialization code here if needed
+        lblLikes.setText("0");
+        lblDislikes.setText("0");
+        updateLikesAndDislikes();
     }
 
-    public void setItemInfo(String appName, String appEmail , String id) {
+   /* public void setItemInfo(String appName, String appEmail , String id) {
         lblidcomment.setText(id);
         lblAppName.setText(appName);
         lblEmail.setText(appEmail);
-    }
+    }*/
+   public void setItemInfo(String appName, String appEmail, String id) {
+       lblidcomment.setText(id);
+       lblAppName.setText(appName);
+       lblEmail.setText(appEmail);
+       updateLikesAndDislikes();
+   }
 
     public void setIsComment(Boolean isComment) {
 
@@ -54,15 +73,19 @@ public class MainItemController implements Initializable {
         if (isComment) {
             // Make delete button visible only if it's a comment
             btnDelete.setVisible(true);
-
+            likeButton.setVisible(true);
+            dislikeButton.setVisible(true);
+            lblLikes.setVisible(true);
+            lblDislikes.setVisible(true);
         } else {
             // If it's not a comment, hide the delete button
             btnDelete.setVisible(false);
+            likeButton.setVisible(false);
+            dislikeButton.setVisible(false);
+            lblLikes.setVisible(false);
+            lblDislikes.setVisible(false);
         }
-
-
-    }
-
+        }
     public void btnDelete(ActionEvent actionEvent) {
         /*ServiceCommentaire s =new ServiceCommentaire();
         s.deleteCommentaire(s.getCommentaireById(Integer.parseInt(lblidcomment.getText())));*/
@@ -75,9 +98,32 @@ public class MainItemController implements Initializable {
         }
 
     }
+    private void updateLikesAndDislikes() {
+        lblLikes.setText(String.valueOf(selectedComment.getLikes()));
+        lblDislikes.setText(String.valueOf(selectedComment.getDislikes()));
+    }
+    private ServiceCommentaire getServiceCommentaire() {
+        return new ServiceCommentaire();
+    }
+    @FXML
+    void likeButtonClicked(ActionEvent event) {
+        int commentId = Integer.parseInt(lblidcomment.getText());
+        Commentaire selectedComment = getServiceCommentaire().getCommentaireById(commentId);
+        if (selectedComment != null) {
+            ServiceCommentaire.likeCommentaire(selectedComment);
+            updateLikesAndDislikes();
+        }
+    }
 
-
-
+    @FXML
+    void dislikeButtonClicked(ActionEvent event) {
+        int commentId = Integer.parseInt(lblidcomment.getText());
+        Commentaire selectedComment = getServiceCommentaire().getCommentaireById(commentId);
+        if (selectedComment != null) {
+            ServiceCommentaire.dislikeCommentaire(selectedComment);
+            updateLikesAndDislikes();
+        }
+    }
 }
 
 

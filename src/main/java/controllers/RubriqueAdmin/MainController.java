@@ -102,6 +102,13 @@ public class MainController implements Initializable {
     private Button btnGetEmoji;
 
     private boolean[] isSelected;
+    @FXML
+    private Button likeButton;
+
+    @FXML
+    private Button dislikeButton;
+    Commentaire selectedComment = null;
+
 
 
     @FXML
@@ -303,7 +310,7 @@ public class MainController implements Initializable {
             // If the comment is valid, proceed with adding it
             int rubriqueId = Integer.parseInt(lblidrubrique.getText()); // Get the Rubrique ID from the label
             ServiceCommentaire commentaireService = new ServiceCommentaire();
-            Commentaire c = new Commentaire(rubriqueId, Main.userid, comment, Date.valueOf(LocalDate.now()));
+            Commentaire c = new Commentaire(rubriqueId, Main.userid, comment, Date.valueOf(LocalDate.now()), selectedComment.getLikes(), selectedComment.getDislikes());
             commentaireService.ajouterCommentaire(c);
             ShowCommentaires(rubriqueId);
             tfSearch.clear(); // Clear the comment field after successfully adding the comment
@@ -356,6 +363,7 @@ public class MainController implements Initializable {
         }
     }
 
+    // Event handler for the like button
 
 
 

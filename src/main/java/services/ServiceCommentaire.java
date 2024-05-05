@@ -10,20 +10,21 @@ import java.util.List;
 import static tests.Main.userid;
 
 public class ServiceCommentaire{
-    Connection connection;
+    static Connection connection;
     public ServiceCommentaire(){
         connection= MyDatabase.getInstance().getConnection();
     }
     public void ajouterCommentaire(Commentaire c){
 
         try {
-            String requete="INSERT INTO Commentaire(rubrique_id, auteur_id, contenu, dateCréation)Values(?,?,?,?)";
+            String requete="INSERT INTO Commentaire(rubrique_id, auteur_id, contenu, dateCréation, likes, dislikes)Values(?,?,?,?,?,?)";
             PreparedStatement pst= MyDatabase.getInstance().getConnection().prepareStatement(requete);
             pst.setInt(1, c.getRubrique_id());
             pst.setInt(2, c.getAuteur_id());
             pst.setString(3, c.getContenu());
             pst.setDate(4, c.getDateCréation());
-
+            pst.setInt(5, c.getLikes());
+            pst.setInt(6, c.getDislikes());
 
             pst.executeUpdate();
             System.out.println("Commentaire Ajouté avec succés!!!");
@@ -44,10 +45,10 @@ public class ServiceCommentaire{
                 Commentaire P=new Commentaire();
 
                 P.setId(rs.getInt(1));
-
                 P.setContenu(rs.getString("contenu"));
                 P.setDateCréation(rs.getDate("dateCréation"));
-
+                P.setLikes(rs.getInt("likes"));
+                P.setDislikes(rs.getInt("dislikes"));
                 mylist.add(P);
 
             }
@@ -74,14 +75,16 @@ public class ServiceCommentaire{
 
     public void modifierCommentaire(Commentaire c){
         try {
-            String requete =  "UPDATE Commentaire SET rubrique_id = ?, auteur_id = ? , contenu =? , dateCréation = ? WHERE id=?";
+            String requete =  "UPDATE Commentaire SET rubrique_id = ?, auteur_id = ? , contenu =? , dateCréation = ?, likes = ?, dislikes = ? WHERE id=?";
 
             PreparedStatement pst= MyDatabase.getInstance().getConnection().prepareStatement(requete);
-            pst.setInt(5, c.getId());
             pst.setInt(1, c.getRubrique_id());
             pst.setInt(2, c.getAuteur_id());
             pst.setString(3, c.getContenu());
             pst.setDate(4, c.getDateCréation());
+            pst.setInt(5, c.getId());
+            pst.setInt(6, c.getLikes());
+            pst.setInt(7, c.getDislikes());
 
             pst.executeUpdate();
             System.out.println("Commentaire modifiée!");
@@ -98,7 +101,7 @@ public class ServiceCommentaire{
             statement.setInt(1, CommentaireId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                Commentaire = new Commentaire(resultSet.getInt("id"), resultSet.getInt("rubrique_id"), resultSet.getInt("auteur_id"), resultSet.getString("contenu"),resultSet.getDate("dateCréation"));
+                Commentaire = new Commentaire(resultSet.getInt("id"), resultSet.getInt("rubrique_id"), resultSet.getInt("auteur_id"), resultSet.getString("contenu"),resultSet.getDate("dateCréation"),resultSet.getInt("likes"),resultSet.getInt("dislikes"));
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -121,7 +124,6 @@ public class ServiceCommentaire{
                 P.setAuteur_id(rs.getInt("auteur_id"));
                 P.setContenu(rs.getString("contenu"));
                 P.setDateCréation(rs.getDate("dateCréation"));
-
                 mylist.add(P);
 
             }
@@ -131,8 +133,40 @@ public class ServiceCommentaire{
             System.out.println(ex.getMessage());
         }
         return mylist;}
+        public static void likeCommentaire(Commentaire c) {
+            try (PreparedStatement statement = connection.prepareStatement("UPDATE Commentaire SET likes = likes + 1 WHERE id =?")) {
+                statement.setInt(1, c.getId());
+                statement.executeUpdate();
+                System.out.println("Commentaire liked!");
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
 
-
-
-
+        public static void dislikeCommentaire(Commentaire c) {
+            try (PreparedStatement statement = connection.prepareStatement("UPDATE Commentaire SET dislikes = dislikes + 1 WHERE id =?")) {
+                statement.setInt(1, c.getId());
+                statement.executeUpdate();
+                System.out.println("Commentaire disliked!");
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    private void updateCommentaireCount(Commentaire c, String column) {
+        try (PreparedStatement statement = connection.prepareStatement("UPDATE Commentaire SET " + column + " = " + column + " + 1 WHERE id =?")) {
+            statement.setInt(1, c.getId());
+            statement.executeUpdate();
+            System.out.println("Commentaire " + column + "!");
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
 }
+
+
+
+
+
+
+
+

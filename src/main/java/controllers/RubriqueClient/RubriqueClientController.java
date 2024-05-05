@@ -39,8 +39,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class RubriqueClientController implements Initializable {
-    @FXML
+public class RubriqueClientController {
+  /*  @FXML
     private AnchorPane sideRubrique;
     @FXML
     private AnchorPane sideCoaching;
@@ -207,10 +207,7 @@ public class RubriqueClientController implements Initializable {
         }
 
 
-    }*/
-
-
-
+    }
 
 
     public void btnAddComment(ActionEvent actionEvent) {
@@ -263,7 +260,7 @@ public class RubriqueClientController implements Initializable {
             // If the comment is valid, proceed with adding it
             int rubriqueId = Integer.parseInt(lblidrubrique.getText()); // Get the Rubrique ID from the label
             ServiceCommentaire commentaireService = new ServiceCommentaire();
-            Commentaire c = new Commentaire(rubriqueId, Main.userid, comment, Date.valueOf(LocalDate.now()));
+            Commentaire c = new Commentaire(rubriqueId, Main.userid, comment, Date.valueOf(LocalDate.now()), selectedComment.getLikes(), selectedComment.getDislikes());
             commentaireService.ajouterCommentaire(c);
             ShowCommentaires(rubriqueId);
             tfSearch.clear(); // Clear the comment field after successfully adding the comment
@@ -367,4 +364,4 @@ public class RubriqueClientController implements Initializable {
 
 
 
-}
+*/}
