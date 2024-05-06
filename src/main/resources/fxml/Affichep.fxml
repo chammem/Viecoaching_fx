@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.AffichepController"
+            prefHeight="400.0" prefWidth="600.0">
+    <VBox alignment="CENTER" layoutX="266.0" layoutY="1.0" prefHeight="664.0" prefWidth="1398.0" spacing="10">
+        <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Liste des groupes" />
+
+        <HBox alignment="CENTER" spacing="10">
+
+        </HBox>
+        <!-- Zone de recherche -->
+        <HBox alignment="CENTER" prefHeight="130.0" prefWidth="943.0" spacing="200">
+        </HBox>
+        <!-- ScrollPane pour afficher les ressources -->
+        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="466.0" prefWidth="1354.0">
+
+            <content>
+                <!-- GridPane pour afficher les ressources -->
+                <GridPane fx:id="gridPane" hgap="10" prefHeight="416.0" prefWidth="1390.0" vgap="10">
+                </GridPane>
+
+            </content>
+        </ScrollPane>
+    </VBox>
+    <VBox layoutY="5.0" prefHeight="656.0" prefWidth="262.0" style="-fx-background-color: F3F5DC;"/>
+    <children/>
+    <HBox prefHeight="100.0" prefWidth="200.0">
+        <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../image/426197672_379463364719872_8698905274837661634_n.png" />
+                </image>
+            </ImageView>
+        </children>
+    </HBox>
+
+</AnchorPane>
