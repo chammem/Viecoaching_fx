@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="665.0" prefWidth="1675.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AffichergrController">
+    <VBox alignment="CENTER" layoutX="266.0" layoutY="1.0" prefHeight="664.0" prefWidth="1398.0" spacing="10">
+        <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Liste des groupes" />
+   
+            <TextField fx:id="searchField" onKeyTyped="#searchAction" promptText="Rechercher..." />
+        <HBox alignment="CENTER" prefHeight="30.0" prefWidth="500.0" spacing="10">
+            <Button text="Page précédente" onAction="#previousPage" />
+            <Button text="Page suivante" onAction="#nextPage" />
+        </HBox>
+        <!-- Zone de recherche -->
+        <HBox alignment="CENTER" prefHeight="130.0" prefWidth="943.0" spacing="200">
+            <PieChart fx:id="pieChart" prefHeight="300.0" prefWidth="500.0" />
+        </HBox>
+        <!-- ScrollPane pour afficher les ressources -->
+        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="466.0" prefWidth="1354.0">
+
+            <content>
+                <!-- GridPane pour afficher les ressources -->
+                <GridPane fx:id="gridPane" hgap="10" prefHeight="416.0" prefWidth="1390.0" vgap="10">
+                </GridPane>
+
+            </content>
+        </ScrollPane>
+        <Button fx:id="ajouterButton" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" onAction="#handleAjouter" text="Ajouter" textAlignment="CENTER" textFill="#77d13f" />
+
+    </VBox>
+    <VBox layoutY="5.0" prefHeight="656.0" prefWidth="262.0" style="-fx-background-color: F3F5DC;">
+        <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+                <children>
+                    <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@../image/426197672_379463364719872_8698905274837661634_n.png" />
+                        </image>
+                    </ImageView>
+                </children>
+            </HBox>
+
+            <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Statistiques" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1.0" />
+            <Button mnemonicParsing="false" onAction="#NavBarCat" prefHeight="42.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Groupes" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Button mnemonicParsing="false" onAction="#NavBarRes" prefHeight="42.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Type Groupes" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Button fx:id="NavBarRes" mnemonicParsing="false" prefHeight="39.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Ressources" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Button fx:id="NavBarCat" mnemonicParsing="false" prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Categorie" />
+        </children>
+    </VBox>
+
+</AnchorPane>

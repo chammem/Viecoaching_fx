@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.image.ImageView?>
+
+<?import java.net.URL?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.ModifiergroupeController"
+            prefHeight="400.0" prefWidth="600.0" >
+
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
+
+    <children>
+        <AnchorPane fx:id="image" prefHeight="623.0" prefWidth="844.0" styleClass="form-container">
+            <children>
+                <VBox prefHeight="300.0" prefWidth="438.0" spacing="10.0"
+                      AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"
+                      AnchorPane.topAnchor="20.0" AnchorPane.bottomAnchor="20.0">
+                    <children>
+                        <Label text="Nom :" />
+                        <Label text="Type de groupe :" />
+                        <Label text="Date de création :" />
+                        <Label text="Image :" />
+                        <Label text="Description :" />
+
+                        <!-- Champs de saisie pour les informations du groupe -->
+                        <TextField fx:id="nomField" />
+                        <ChoiceBox fx:id="typeGroupeField" prefWidth="200.0" />
+                        <DatePicker fx:id="dateCreationField" />
+                        <TextField fx:id="descriptionField" />
+
+                        <HBox spacing="10">
+                            <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                            <!-- Bouton pour insérer une image -->
+                            <Button onAction="#selectImage" text="Insérer une image" />
+                        </HBox>
+
+                        <Label text="Utilisateurs :" />
+                        <!-- ListView pour afficher les utilisateurs -->
+                        <ListView fx:id="utilisateursListView" prefWidth="200" />
+                    </children>
+                </VBox>
+                <Label styleClass="title" text="Liste des ressources" />
+                <ButtonBar prefHeight="40.0" prefWidth="686.0">
+                    <buttons>
+                        <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#modifierGroupe" text="Modifier" />
+                    </buttons>
+                </ButtonBar>
+            </children>
+        </AnchorPane>
+    </children>
+
+</AnchorPane>
