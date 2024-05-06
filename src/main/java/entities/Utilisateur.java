@@ -36,6 +36,18 @@ public class Utilisateur {
         this.role_id = role_id;
     }
 
+    public Utilisateur(int id, String nom, String prenom, String email, String tel, String mdp, String genre, String ville, String image) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.tel = tel;
+        this.mdp = mdp;
+        this.genre = genre;
+        this.ville = ville;
+        this.image = image;
+    }
+
     public Utilisateur(int id, String nom, String prenom, String email, String tel, String mdp, String genre, String ville, String image, boolean active, int role_id, String roleName, boolean selected, BooleanProperty selectedProperty) {
         this.id = id;
         this.nom = nom;
@@ -64,6 +76,7 @@ public class Utilisateur {
         this.ville = ville;
     }
 
+
     public Utilisateur(Utilisateur utilisateurSelectionne) {
 
         this.selected = false; // Par défaut, l'utilisateur n'est pas sélectionné
@@ -82,6 +95,10 @@ public class Utilisateur {
     public void setId(int id) {
         this.id = id;
     }
+
+
+
+
 
     public String getNom() {
         return nom;
@@ -136,6 +153,18 @@ public class Utilisateur {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public Utilisateur(String nom, String prenom, String email, String tel, String mdp, String genre, String ville, String image, boolean active) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.tel = tel;
+        this.mdp = mdp;
+        this.genre = genre;
+        this.ville = ville;
+        this.image = image;
+        this.active = active;
     }
 
     public String getVille() {
