@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="652.0" prefWidth="985.0" style="-fx-background-color: c2c19f;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.asma.asma.controllers.seancetypeController">
+<AnchorPane prefHeight="652.0" prefWidth="985.0" style="-fx-background-color: c2c19f;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.seancetypeController">
    <children>
       <ListView fx:id="mylist" layoutX="348.0" layoutY="94.0" prefHeight="521.0" prefWidth="904.0" />
       <Text layoutX="296.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" />
@@ -26,7 +26,7 @@
       </Label>
       <ImageView fitHeight="74.0" fitWidth="116.0" layoutX="1136.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../assets/imagestyde.jpg" />
+            <Image url="@../assets/imagestyde.jpg" />
          </image>
       </ImageView>
       <Label layoutX="378.0" layoutY="27.0" prefHeight="29.0" prefWidth="169.0" text="Gestion type séance" textFill="#878787">
@@ -34,7 +34,7 @@
             <Font name="Cambria Bold" size="18.0" />
          </font>
       </Label>
-      <VBox layoutX="6.0" layoutY="69.0" prefHeight="554.0" prefWidth="314.0" spacing="15" stylesheets="@../../../style/style.css">
+      <VBox layoutX="6.0" layoutY="69.0" prefHeight="554.0" prefWidth="314.0" spacing="15" stylesheets="@../style/style.css">
          <styleClass>
             <String fx:value="chosen-fruit-card" />
             <String fx:value="shadow" />
@@ -67,12 +67,12 @@
                   </Label>
                   <ImageView fitHeight="47.0" fitWidth="83.0" layoutX="39.0" layoutY="-13.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../assets/student.jpg" />
+                        <Image url="@../assets/student.jpg" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="44.0" fitWidth="64.0" layoutX="231.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../assets/eleanr.jpg" />
+                        <Image url="@../assets/eleanr.jpg" />
                      </image>
                   </ImageView>
                </children>

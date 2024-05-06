@@ -1,4 +1,4 @@
-package com.asma.asma.entities;
+package entities;
 
 import java.sql.Time;
 

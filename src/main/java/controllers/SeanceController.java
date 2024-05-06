@@ -1,20 +1,17 @@
-package com.asma.asma.controllers;
+package controllers;
 
-import com.asma.asma.entities.Seance;
-import com.asma.asma.entities.seanceDTO;
-import com.asma.asma.entities.typeseance;
-import com.asma.asma.service.SeanceService;
-import com.asma.asma.service.TypeSeanceService;
+import entities.Seance;
+import entities.seanceDTO;
+import entities.typeseance;
+import services.SeanceService;
+import services.TypeSeanceService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
 import java.net.URL;
-import java.sql.Date;
 import java.sql.Time;
 import java.util.ResourceBundle;
 import javafx.scene.control.Alert;

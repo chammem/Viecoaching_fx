@@ -1,8 +1,7 @@
-package com.asma.asma.service;
+package services;
 
-import com.asma.asma.entities.Seance;
-import com.asma.asma.entities.typeseance;
-import com.asma.asma.utils.ConnectionBd;
+import entities.typeseance;
+import utils.MyDatabase;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +13,7 @@ import java.util.List;
 public class TypeSeanceService implements ITypeSeance<typeseance>{
 
 
-    Connection cnx = ConnectionBd.getInstance().getCnx();
+    Connection cnx = MyDatabase.getInstance().getConnection();
 
 
     @Override

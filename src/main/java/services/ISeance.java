@@ -1,6 +1,6 @@
-package com.asma.asma.service;
+package services;
 
-import com.asma.asma.entities.Seance;
+import entities.Seance;
 
 import java.util.List;
 

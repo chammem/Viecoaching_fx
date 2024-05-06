@@ -1,8 +1,7 @@
-package com.asma.asma.service;
+package services;
 
-import com.asma.asma.entities.Reservation;
-import com.asma.asma.entities.typeseance;
-import com.asma.asma.utils.ConnectionBd;
+import entities.Reservation;
+import utils.MyDatabase;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ public class ReservationService implements IReservation<Reservation>{
 
 
 
-    Connection cnx = ConnectionBd.getInstance().getCnx();
+    Connection cnx = MyDatabase.getInstance().getConnection();
     @Override
     public void addreservation(Reservation reservation) {
         try {

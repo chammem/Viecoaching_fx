@@ -1,4 +1,4 @@
-package com.asma.asma.entities;
+package entities;
 
 public class typeseance {
     int typeSeanceId;

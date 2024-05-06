@@ -1,8 +1,8 @@
-package com.asma.asma.controllers;
+package controllers;
 
-import com.asma.asma.entities.CalendarActivity;
-import com.asma.asma.entities.Reservation;
-import com.asma.asma.service.ReservationService;
+import entities.CalendarActivity;
+import entities.Reservation;
+import services.ReservationService;
 import javafx.event.ActionEvent;
 
 import javafx.fxml.FXML;
@@ -22,7 +22,6 @@ import javafx.stage.Popup;
 
 import java.net.URL;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class CalendarController implements Initializable {

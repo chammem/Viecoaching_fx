@@ -1,7 +1,6 @@
-package com.asma.asma.service;
+package services;
 
-import com.asma.asma.entities.Reservation;
-import com.asma.asma.entities.typeseance;
+import entities.Reservation;
 
 import java.util.List;
 

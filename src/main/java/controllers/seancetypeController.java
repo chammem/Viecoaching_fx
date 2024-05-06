@@ -1,14 +1,12 @@
-package com.asma.asma.controllers;
+package controllers;
 
-import com.asma.asma.entities.seanceDTO;
-import com.asma.asma.entities.typeseance;
-import com.asma.asma.service.TypeSeanceService;
+import entities.typeseance;
+import services.TypeSeanceService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.net.URL;

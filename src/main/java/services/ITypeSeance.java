@@ -1,7 +1,7 @@
-package com.asma.asma.service;
+package services;
 
 
-import com.asma.asma.entities.typeseance;
+import entities.typeseance;
 
 import java.util.List;
 

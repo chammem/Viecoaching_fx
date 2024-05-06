@@ -1,8 +1,8 @@
-package com.asma.asma.service;
+package services;
 
-import com.asma.asma.entities.Seance;
-import com.asma.asma.entities.seanceDTO;
-import com.asma.asma.utils.ConnectionBd;
+import entities.Seance;
+import entities.seanceDTO;
+import utils.MyDatabase;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,8 +12,7 @@ public class SeanceService implements ISeance<Seance>{
 
 
 
-
-    Connection cnx = ConnectionBd.getInstance().getCnx();
+    Connection cnx = MyDatabase.getInstance().getConnection();
 
 
     @Override
@@ -117,7 +116,7 @@ public class SeanceService implements ISeance<Seance>{
         List<seanceDTO> list = new ArrayList<>();
 
         try {
-            Connection cnx = ConnectionBd.getInstance().getCnx();
+            Connection cnx = MyDatabase.getInstance().getConnection();
 
             String req = "SELECT s.id AS idseance, t.id AS typeId, s.titre, s.duree, s.lien, s.mot_de_passe, t.nom_type FROM Seance s JOIN type_seance t ON s.type_seance_id = t.id;";
 

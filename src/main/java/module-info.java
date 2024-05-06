@@ -2,12 +2,14 @@ module com.baha.baha {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires jbcrypt;
+    requires java.xml.bind;
 
-    opens com.asma.asma to javafx.fxml;
-    opens com.asma.asma.controllers; // Open the controllers package
-
-    exports com.asma.asma;
-    opens com.asma.asma.entities;
+    opens fxml to javafx.fxml;
+    opens controllers; // Open the controllers package
+    opens entities;
+    exports tests;
+    opens tests to javafx.fxml;
 
     // Add any additional configurations if necessary
 }
