@@ -34,6 +34,11 @@ public class ServiceCategorie implements IService<Categorie> {
     }
 
     @Override
+    public void modifier(Categorie categorie, String a) throws SQLException {
+
+    }
+
+    @Override
     public void modifier(Categorie categorie) throws SQLException {
         String req = "UPDATE categorie SET nom_categorie=?, description=?, image=?, ressource_id=? WHERE id=?";
 

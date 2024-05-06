@@ -93,6 +93,11 @@ public class  ServiceUtilisateur implements IService<Utilisateur>{
         }
     }
 
+    @Override
+    public void modifier(Utilisateur utilisateur) throws SQLException {
+
+    }
+
     public void supprimer(int userId) throws SQLException {
         String req = "DELETE FROM utilisateur WHERE id=?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(req)) {

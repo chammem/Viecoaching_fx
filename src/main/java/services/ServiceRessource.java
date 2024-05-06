@@ -30,6 +30,11 @@ public class ServiceRessource implements IService<Ressources>{
     }
 
     @Override
+    public void modifier(Ressources ressources, String a) throws SQLException {
+
+    }
+
+    @Override
     public void modifier(Ressources ressources) throws SQLException {
         // Define the SQL update query
         String sql = "UPDATE ressources SET titre_r=?, type_r=?, description=?, url=? WHERE id=?";
