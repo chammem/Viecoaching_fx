@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="597.0" prefWidth="1096.0" style="-fx-background-color: #EDEEE1;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficheCatController">
-    <VBox alignment="CENTER" layoutX="110.0" layoutY="78.0" prefHeight="518.0" prefWidth="811.0" style="-fx-background-color: #EDEEE1;">
+    <VBox alignment="CENTER" layoutY="78.0" prefHeight="518.0" prefWidth="811.0" style="-fx-background-color: #EDEEE1;">
         <ScrollPane fitToHeight="true" fitToWidth="true">
             <content>
                 <!-- GridPane pour afficher les ressources -->
@@ -18,12 +18,12 @@
                 </GridPane>
             </content>
         </ScrollPane>
-      <Button mnemonicParsing="false" onAction="#AjoutCat" prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Ajouter Catégorie" />
+        <Button mnemonicParsing="false" onAction="#AjoutCat" prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Ajouter Catégorie" />
     </VBox>
-   <TextField fx:id="tText" layoutX="85.0" layoutY="18.0" prefHeight="30.0" prefWidth="218.0" promptText="Recherche" style="-fx-background-color: #BED6B1;">
-      <font>
-         <Font name="System Italic" size="14.0" />
-      </font></TextField>
+    <TextField fx:id="tText" layoutX="25.0" layoutY="17.0" prefHeight="30.0" prefWidth="218.0" promptText="Recherche" style="-fx-background-color: #BED6B1;">
+        <font>
+            <Font name="System Italic" size="14.0" />
+        </font></TextField>
 
-     <Label layoutX="440.0" layoutY="15.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="List catégorie" textFill="#a5b79b" />
+    <Label layoutX="323.0" layoutY="14.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="List catégorie" textFill="#a5b79b" />
 </AnchorPane>
