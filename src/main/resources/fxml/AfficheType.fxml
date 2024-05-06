@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.AffichertypeController"
+            prefHeight="400.0" prefWidth="600.0">
+    <VBox alignment="CENTER" layoutX="6.0" layoutY="-62.0" prefHeight="455.0" prefWidth="772.0">
+        <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="List ressource" />
+        <TableView fx:id="table" prefHeight="258.0" prefWidth="751.0">
+            <columns>
+                <TableColumn fx:id="nomtype" prefWidth="76.800048828125" text="nomtype" />
+
+
+                <TableColumn fx:id="action" prefWidth="137.60001220703123" text="action" />
+            </columns>
+        </TableView>
+    </VBox>
+
+</AnchorPane>
