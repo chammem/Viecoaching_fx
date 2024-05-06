@@ -10,12 +10,12 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="604.0" prefWidth="1216.0" style="-fx-background-color: #EDEEE1;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficheResController">
-    <VBox alignment="CENTER" layoutY="2.0" prefHeight="600.0" prefWidth="926.0" style="-fx-background-color: #EDEEE1;">
+    <VBox alignment="CENTER" layoutY="2.0" prefHeight="600.0" prefWidth="1216.0" style="-fx-background-color: #EDEEE1;">
         <Label contentDisplay="TOP" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="List Ressources" textFill="#a5b79b">
             <font>
                 <Font name="System Bold Italic" size="18.0" />
             </font></Label>
-        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="458.0" prefWidth="875.0">
+        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="458.0" prefWidth="1078.0">
             <content>
                 <!-- GridPane pour afficher les ressources -->
                 <GridPane fx:id="gridPane" hgap="10" prefHeight="457.0" prefWidth="810.0" vgap="10">
