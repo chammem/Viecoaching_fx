@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" styleClass="white-bg" stylesheets="@../css/Styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MdpController">
    <children>
       <AnchorPane prefHeight="441.0" prefWidth="700.0">
@@ -32,7 +31,7 @@
                   </Label>
                   <PasswordField fx:id="mdpId" layoutX="209.0" layoutY="139.0" prefHeight="40.0" prefWidth="270.0" promptText="Insérer le mot de passe" styleClass="textfield" stylesheets="@../css/Styles.css" />
                   <PasswordField fx:id="confId" layoutX="210.0" layoutY="240.0" prefHeight="40.0" prefWidth="270.0" promptText="Confirmer le mot de passe" styleClass="textfield" stylesheets="@../css/Styles.css" />
-                  <Button fx:id="ajouterId" layoutX="420.0" layoutY="324.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" styleClass="update-btn" stylesheets="@../css/Styles.css" text="Modifier" />
+                  <Button layoutX="420.0" layoutY="324.0" mnemonicParsing="false" onAction="#modifierpass" prefHeight="40.0" prefWidth="120.0" styleClass="update-btn" stylesheets="@../css/Styles.css" text="Modifier" />
                </children>
                <styleClass>
                   <String fx:value="white-bg" />

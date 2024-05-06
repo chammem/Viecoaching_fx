@@ -1,137 +1,175 @@
 package controllers;
 
 import entities.Utilisateur;
-import utils.SessionManager;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import services.ServiceAuthentication;
 import utils.MyDatabase;
+import utils.SessionManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
 
-    @FXML
-    private TextField emailTextField;
-    @FXML
-    private PasswordField enterPasswordField;
-    @FXML
-    private Button loginButton;
-    @FXML
-    private Button registreButton;
-    @FXML
-    private ImageView image1View;
-    @FXML
-    private ImageView userView;
-    @FXML
-    private ImageView lockView;
-    private ServiceAuthentication authService;
-    private Connection connection;
+	@FXML
+	private TextField emailTextField;
+	@FXML
+	private PasswordField enterPasswordField;
+	@FXML
+	private TextField captchaTextField;  // TextField to enter CAPTCHA
+	@FXML
+	private Button loginButton;
+	@FXML
+	private Button registreButton;
+	@FXML
+	private Button refreshCaptchaButton;
+	@FXML
+	private ImageView image1View;
+	@FXML
+	private ImageView userView;
+	@FXML
+	private ImageView lockView;
+	@FXML
+	private Text captchaIrenderView;
+	private ServiceAuthentication authService;
+	private Connection connection;
+	private String currentCaptcha;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        authService = new ServiceAuthentication();
+	@Override
+	public void initialize(URL url, ResourceBundle resourceBundle) {
+		authService = new ServiceAuthentication();
 
-        File image1File = new File("images/image1.PNG");
-        Image image1 = new Image(image1File.toURI().toString());
-        image1View.setImage(image1);
+		// Loading images
+		loadImage(image1View, "images/image1.PNG");
+		loadImage(userView, "images/image3.png");
+		loadImage(lockView, "images/image2.png");
 
-        File userFile = new File("images/image3.png");
-        Image user = new Image(userFile.toURI().toString());
-        userView.setImage(user);
-
-        File lockFile = new File("images/image2.png");
-        Image lock = new Image(lockFile.toURI().toString());
-        lockView.setImage(lock);
-
-        loginButton.setOnAction(actionEvent -> handleLogin());
-        registreButton.setOnAction(actionEvent -> handleRegister());
+		// Set actions for buttons
+		loginButton.setOnAction(actionEvent -> handleLogin());
+		registreButton.setOnAction(actionEvent -> navigateToRegistreView());
 
 
-    }
+		generateAndDisplayCaptcha();  // Generate initial CAPTCHA
+	}
 
-    @FXML
-    private void handleLogin() {
-        String email = emailTextField.getText();
-        String password = enterPasswordField.getText();
+	private void loadImage(ImageView imageView, String filePath) {
+		File file = new File(filePath);
+		Image image = new Image(file.toURI().toString());
+		imageView.setImage(image);
+	}
+	@FXML
+	void refreshCaptchaButton(ActionEvent event) {
+generateAndDisplayCaptcha();
+	}
+	private void generateAndDisplayCaptcha() {
+		currentCaptcha = generateRandomString(6);
+		captchaIrenderView.setText("");
+		captchaIrenderView.setText(currentCaptcha);
+	}
 
-        try {
-            MyDatabase myDatabase = MyDatabase.getInstance();
-            Connection connection = myDatabase.getConnection();
-            Utilisateur utilisateur = authService.login(email, password);
+	private String generateRandomString(int length) {
+		String charList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		StringBuilder randStr = new StringBuilder();
+		Random random = new Random();
+		for (int i = 0; i < length; i++) {
+			int number = random.nextInt(charList.length());
+			char ch = charList.charAt(number);
+			randStr.append(ch);
+		}
+		return randStr.toString();
+	}
 
-            if (utilisateur != null) {
-                // Démarrer une session avec l'utilisateur connecté
-                SessionManager.startSession(utilisateur);
-                showAlert(Alert.AlertType.CONFIRMATION, "Connexion réussie", "Bienvenue " + utilisateur.getNom() + " " + utilisateur.getPrenom());
-                // Rediriger vers la page utilisateur
-                navigateToUtilisateurView();
-                Stage stageConnexion = (Stage) enterPasswordField.getScene().getWindow();
-                stageConnexion.close();
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Erreur de connexion", "Adresse email ou mot de passe incorrect");
-            }
-        } catch (IllegalArgumentException e) {
-            showAlert(Alert.AlertType.WARNING, "Erreur de validation", e.getMessage());
-        } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de chargement de la page", "Impossible de charger la page utilisateur.");
-            e.printStackTrace();
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur de connexion à la base de données", "Impossible d'établir une connexion à la base de données.");
-            e.printStackTrace();
-        }
-    }
+	@FXML
+	private void handleLogin() {
+		String email = emailTextField.getText();
+		String password = enterPasswordField.getText();
+		String enteredCaptcha = captchaTextField.getText();
 
-    private void navigateToUtilisateurView() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/utilisateur.fxml"));
-        Parent root = loader.load();
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.show();
+		if (!enteredCaptcha.equals(currentCaptcha)) {
+			showAlert(Alert.AlertType.ERROR, "CAPTCHA Error", "CAPTCHA does not match.");
+			return;
+		}
 
-        // Fermer la fenêtre de connexion
-        Stage stageConnexion = (Stage) enterPasswordField.getScene().getWindow();
-        stageConnexion.close();
-    }
-    public void navigateToRegistreView() {
-        try {MyDatabase myDatabase = MyDatabase.getInstance();
-            Connection connection = myDatabase.getConnection();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/registre.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
+		try {
+			MyDatabase myDatabase = MyDatabase.getInstance();
+			Connection connection = myDatabase.getConnection();
+			Utilisateur utilisateur = authService.login(email, password);
+			if (utilisateur != null) {
+				SessionManager.startSession(utilisateur);
+				showAlert(Alert.AlertType.CONFIRMATION, "Connexion réussie", "Bienvenue " + utilisateur.getNom() + " " + utilisateur.getPrenom());
+				String userPage = utilisateur.getRole_id() == 1 ? "/fxml/patient.fxml" : utilisateur.getRole_id() == 2 ? "/fxml/coach.fxml" : "/fxml/utilisateur.fxml";
+				navigateToUtilisateurView(userPage);
+			} else {
+				showAlert(Alert.AlertType.ERROR, "Erreur de connexion", "Adresse email ou mot de passe incorrect");
+			}
+		} catch (Exception e) {
+			showAlert(Alert.AlertType.ERROR, "Error", "A problem occurred: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
 
-            Stage stage = (Stage) registreButton.getScene().getWindow(); // Récupère la fenêtre actuelle
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
+	private void navigateToUtilisateurView(String nameroot) throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource(nameroot));
+		Parent root = loader.load();
+		Stage stage = new Stage();
+		stage.setScene(new Scene(root));
+		stage.show();
 
-            e.printStackTrace();
-        }
-    }
-    @FXML
-    private void handleRegister() {
+		// Close the current window
+		Stage stageConnexion = (Stage) enterPasswordField.getScene().getWindow();
+		stageConnexion.close();
+	}
 
-        MyDatabase myDatabase = MyDatabase.getInstance();
-        Connection connection = myDatabase.getConnection();
-        navigateToRegistreView();
+	public void navigateToRegistreView() {
+		try {
+			MyDatabase myDatabase = MyDatabase.getInstance();
+			Connection connection = myDatabase.getConnection();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/registre.fxml"));
+			Parent root = loader.load();
+			Scene scene = new Scene(root);
+			Stage stage = (Stage) registreButton.getScene().getWindow();
+			stage.setScene(scene);
+			stage.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-    }
+	@FXML
+	void GoToReset(ActionEvent event) {
+		try {
 
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType, message, ButtonType.OK);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.showAndWait();
-    }}
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/emailReq.fxml"));
+			Parent root = loader.load();
+			Scene scene = new Scene(root);
+			Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+			stage.setScene(scene);
+			stage.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	private void showAlert(Alert.AlertType alertType, String title, String message) {
+		Alert alert = new Alert(alertType, message, ButtonType.OK);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.showAndWait();
+	}
+}

@@ -208,6 +208,7 @@ public class Utilisateur {
                 ", genre='" + genre + '\'' +
                 ", ville='" + ville + '\'' +
                 ", image='" + image + '\'' +
+			",role_id='" + role_id + '\'' +
                 '}';
     }
 

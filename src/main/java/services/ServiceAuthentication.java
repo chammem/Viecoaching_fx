@@ -56,6 +56,7 @@ public class ServiceAuthentication {
                     utilisateur.setTel(rs.getString("tel"));
                     utilisateur.setGenre(rs.getString("genre"));
                     utilisateur.setImage(rs.getString("image"));
+					utilisateur.setRole_id(rs.getInt("role_id"));
                     return utilisateur;
                 }
             }
