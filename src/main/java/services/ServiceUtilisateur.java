@@ -11,12 +11,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class  ServiceUtilisateur implements IService<Utilisateur>{
 public class ServiceUtilisateur implements IService<Utilisateur> {
     Connection connection;
-
-    public ServiceUtilisateur() {
-        connection = MyDatabase.getInstance().getConnection();
 
     public ServiceUtilisateur(Connection connection) {
         this.connection = connection;
@@ -103,24 +99,6 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
 
     }
 
-    public void supprimer(int userId) throws SQLException {
-        String req = "UPDATE utilisateur SET nom=?, prenom=?, age=?, email=?, tel=?, mdp=?, genre=?, ville=? " +
-                "WHERE id=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(req);
-        preparedStatement.setString(1, utilisateur.getNom());
-        preparedStatement.setString(2, utilisateur.getPrenom());
-        preparedStatement.setInt(3, utilisateur.getAge());
-        preparedStatement.setString(4, utilisateur.getEmail());
-        preparedStatement.setString(5, utilisateur.getTel());
-        preparedStatement.setString(6, utilisateur.getMdp());
-        preparedStatement.setString(7, utilisateur.getGenre());
-        preparedStatement.setString(8, utilisateur.getVille());
-        preparedStatement.setInt(9, utilisateur.getId());
-        preparedStatement.executeUpdate();
-        System.out.println("Utilisateur modifié");
-
-    }
-
     @Override
     public void ajouterAvecUtilisateurs(Utilisateur utilisateur, List<Utilisateur> utilisateursSelectionnes) throws SQLException {
 
@@ -133,7 +111,7 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
 
 
     @Override
-    public void supprimer(int id) throws SQLException {
+    public void supprimer(int userId) throws SQLException {
         String req = "DELETE FROM utilisateur WHERE id=?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(req)) {
             preparedStatement.setInt(1, userId);
@@ -242,7 +220,7 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
         return phoneNumber.length() >= 8 && phoneNumber.matches("[0-9]+");
     }
 
-}
+
 
 
 
@@ -267,7 +245,6 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
                 utilisateur.setId(resultSet.getInt("id"));
                 utilisateur.setNom(resultSet.getString("nom"));
                 utilisateur.setPrenom(resultSet.getString("prenom"));
-                utilisateur.setAge(resultSet.getInt("age"));
                 utilisateur.setEmail(resultSet.getString("email"));
                 utilisateur.setTel(resultSet.getString("tel"));
                 utilisateur.setMdp(resultSet.getString("mdp"));

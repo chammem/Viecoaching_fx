@@ -2,6 +2,7 @@ package services;
 
 import entities.Categorie;
 import entities.Ressources;
+import entities.Utilisateur;
 import utils.MyDatabase;
 
 import java.sql.*;
@@ -93,6 +94,17 @@ public class ServiceCategorie implements IService<Categorie> {
 
         return categories;
     }
+
+    @Override
+    public void ajouterAvecUtilisateurs(Categorie categorie, List<Utilisateur> utilisateursSelectionnes) throws SQLException {
+
+    }
+
+    @Override
+    public void modifierg(Categorie categorie, List<Utilisateur> utilisateursSelectionnes) throws SQLException {
+
+    }
+
     private Ressources getRessourceById(int ressourceId) throws SQLException {
         Ressources ressource = null;
         String req = "SELECT * FROM ressources WHERE id = ?";

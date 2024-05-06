@@ -24,6 +24,11 @@ public class ServiceTypegroupe implements IService<Typegroupe> {
     }
 
     @Override
+    public void modifier(Typegroupe typegroupe, String a) throws SQLException {
+
+    }
+
+    @Override
     public void supprimer(int id) throws SQLException {
         String req = "DELETE FROM typegroupe WHERE id=?";
         PreparedStatement preparedStatement = connection.prepareStatement(req);

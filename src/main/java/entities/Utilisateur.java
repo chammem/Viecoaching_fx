@@ -9,9 +9,6 @@ public class Utilisateur {
     private boolean active;
     private int role_id;
     private String roleName;
-
-    private int id,age;
-    private String nom,prenom,email,tel,mdp,genre,ville;
     private boolean selected; // Nouveau champ pour indiquer si l'utilisateur est sélectionné
     private BooleanProperty selectedProperty;
 
@@ -39,8 +36,7 @@ public class Utilisateur {
         this.role_id = role_id;
     }
 
-    public Utilisateur(int id, String nom, String prenom, String email, String tel, String mdp, String genre, String ville, String image, boolean active, int role_id) {
-    public Utilisateur(int id,  String nom, String prenom, String email, String tel, String mdp, String genre, String ville) {
+    public Utilisateur(int id, String nom, String prenom, String email, String tel, String mdp, String genre, String ville, String image) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
@@ -49,8 +45,10 @@ public class Utilisateur {
         this.mdp = mdp;
         this.genre = genre;
         this.ville = ville;
+        this.image = image;
     }
-    public Utilisateur(int id, int age, String nom, String prenom, String email, String tel, String mdp, String genre, String ville,Boolean selected) {
+
+    public Utilisateur(int id, String nom, String prenom, String email, String tel, String mdp, String genre, String ville, String image, boolean active, int role_id, String roleName, boolean selected, BooleanProperty selectedProperty) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
@@ -62,7 +60,22 @@ public class Utilisateur {
         this.image = image;
         this.active = active;
         this.role_id = role_id;
+        this.roleName = roleName;
+        this.selected = selected;
+        this.selectedProperty = selectedProperty;
     }
+
+    public Utilisateur(int id, String nom, String prenom, String email, String tel, String mdp, String genre, String ville) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.tel = tel;
+        this.mdp = mdp;
+        this.genre = genre;
+        this.ville = ville;
+    }
+
 
     public Utilisateur(Utilisateur utilisateurSelectionne) {
 
@@ -83,13 +96,7 @@ public class Utilisateur {
         this.id = id;
     }
 
-    public int getAge() {
-        return age;
-    }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
 
 
 
@@ -146,6 +153,18 @@ public class Utilisateur {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public Utilisateur(String nom, String prenom, String email, String tel, String mdp, String genre, String ville, String image, boolean active) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.tel = tel;
+        this.mdp = mdp;
+        this.genre = genre;
+        this.ville = ville;
+        this.image = image;
+        this.active = active;
     }
 
     public String getVille() {

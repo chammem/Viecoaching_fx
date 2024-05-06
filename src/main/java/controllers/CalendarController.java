@@ -23,11 +23,14 @@ import javafx.stage.Popup;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.Map;
+
 
 public class CalendarController implements Initializable {
 
     ZonedDateTime dateFocus;
     ZonedDateTime today;
+
     Map<Integer, List<CalendarActivity>> activitiesMap;
     @FXML
     private ColorPicker colorPicker;
