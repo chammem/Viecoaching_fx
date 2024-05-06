@@ -24,9 +24,15 @@
         <HBox alignment="CENTER" prefHeight="130.0" prefWidth="943.0" spacing="200">
             <PieChart fx:id="pieChart" prefHeight="300.0" prefWidth="500.0" />
         </HBox>
-        <TextField fx:id="hh" layoutX="275.0" layoutY="14.0" prefHeight="26.0" prefWidth="295.0" promptText="Recherche" style="-fx-background-color: #BED6B1;"/>
 
-        <ScrollPane fitToHeight="true" fitToWidth="true">
+
+        <TextField fx:id="hh"  promptText="Recherche" style="-fx-background-color: #BED6B1;"/>
+        <HBox alignment="CENTER" prefHeight="30.0" prefWidth="500.0" spacing="10">
+            <Button text="<<" onAction="#previousPage" style="-fx-background-color: #77d13f;" />
+            <Button text=">>" onAction="#nextPage" style="-fx-background-color: #77d13f;" />
+
+        </HBox>
+              <ScrollPane fitToHeight="true" fitToWidth="true">
 
             <content>
                 <!-- GridPane pour afficher les ressources -->
@@ -35,6 +41,7 @@
             </content>
 
         </ScrollPane>
+
         <Button fx:id="ajouterButton" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" onAction="#handleAjouter" text="Ajouter" textAlignment="CENTER" textFill="#77d13f">
             <!-- Ajouter des boutons de pagination -->
 

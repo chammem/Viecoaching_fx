@@ -31,6 +31,12 @@ public class ServiceTypegroupe implements IService<Typegroupe> {
         preparedStatement.executeUpdate();
         System.out.println("Type de groupe supprimé");
     }
+
+    @Override
+    public List<Typegroupe> afficher() throws SQLException {
+        return null;
+    }
+
     public Typegroupe getTypegroupebynom(String nom) throws SQLException {
         String sql = "SELECT * FROM typegroupe WHERE nomtype = ?";
         Typegroupe typegroupe = null;
@@ -55,6 +61,24 @@ public class ServiceTypegroupe implements IService<Typegroupe> {
         return typegroupe;
     }
 
+    public List<Typegroupe> afficherg(int pageIndex, int pageSize) throws SQLException {
+        List<Typegroupe> typegroupes = new ArrayList<>();
+        String req = "SELECT * FROM typegroupe LIMIT ? OFFSET ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(req)) {
+            preparedStatement.setInt(1, pageSize);
+            preparedStatement.setInt(2, pageIndex * pageSize);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String nomtype = rs.getString("nomtype");
+
+                    Typegroupe typegroupe = new Typegroupe(id, nomtype);
+                    typegroupes.add(typegroupe);
+                }
+            }
+        }
+        return typegroupes;
+    }
 
     public List<Typegroupe> getAllTypegroupe() throws SQLException {
         List<Typegroupe> typegroupeList = new ArrayList<>();
@@ -80,22 +104,6 @@ public class ServiceTypegroupe implements IService<Typegroupe> {
     }
 
 
-    @Override
-    public List<Typegroupe> afficher() throws SQLException {
-        List<Typegroupe> typegroupes = new ArrayList<>();
-        String req = "SELECT * FROM typegroupe";
-        try (Statement st = connection.createStatement();
-             ResultSet rs = st.executeQuery(req)) {
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String nomtype = rs.getString("nomtype");
-
-                Typegroupe typegroupe = new Typegroupe(id, nomtype);
-                typegroupes.add(typegroupe);
-            }
-        }
-        return typegroupes;
-    }
 
     @Override
     public void modifier(Typegroupe typegroupe) throws SQLException {

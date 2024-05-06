@@ -37,22 +37,29 @@ public class AffichertypeController implements Initializable {
     private TextField hh;
     private int currentPage = 1;
     private int pageIndex = 0; // Index de la première ligne à afficher
-    private final int pageSize = 5;
+
+    private final int pageSize = 3;
+
+
 
     private ObservableList<Typegroupe> displayedTypeGroupes = FXCollections.observableArrayList();
     @FXML
     private void nextPage(ActionEvent event) {
-        pageIndex += pageSize; // Passer à la page suivante
-        loadResources2(); // Recharger les ressources avec la nouvelle plage
+        int maxPageIndex = Math.max(0, displayedTypeGroupes.size() / pageSize); // Calculer le nombre maximal de pages
+        pageIndex = Math.min(pageIndex + 1, maxPageIndex); // Augmenter l'index de page tout en s'assurant qu'il ne dépasse pas la valeur maximale
+        loadResources2();
     }
+
 
     @FXML
     private void previousPage(ActionEvent event) {
-        pageIndex = Math.max(0, pageIndex - pageSize); // Passer à la page précédente (assurez-vous que l'index ne devient pas négatif)
-        loadResources2(); // Recharger les ressources avec la nouvelle plage
+        pageIndex = Math.max(0, pageIndex - pageSize);
+        loadResources2();
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        pageIndex = 0; // Initialiser pageIndex à 0 pour charger la première page
         try {
             loadResources2(); // Appel de loadResources2()
             configurePieChartData(); // Appel de configurePieChartData()
@@ -72,6 +79,7 @@ public class AffichertypeController implements Initializable {
 
 
 
+
     @FXML
     private void handleAjouter(ActionEvent event) {
         try {
@@ -84,23 +92,30 @@ public class AffichertypeController implements Initializable {
     }
     private void loadResources2() {
         try {
-            ObservableList<Typegroupe> typegroupes = FXCollections.observableArrayList(service.afficher());
-            gridPane.getChildren().clear();
-            int startIndex = Math.min(pageIndex, service.countGroupes());
+            ObservableList<Typegroupe> typegroupes;
+            if (pageIndex == 0) {
+                // Si c'est la première page, charger uniquement trois lignes
+                typegroupes = FXCollections.observableArrayList(service.afficherg(pageIndex, pageSize));
+            } else {
+                // Sinon, charger les données normalement avec le pageSize complet
+                typegroupes = FXCollections.observableArrayList(service.afficherg(pageIndex, pageSize));
+            }
 
-            int itemsPerPage = 5;
-            int startIdx = 0;
-            int endIdx = Math.min(startIdx + itemsPerPage, typegroupes.size());
+            gridPane.getChildren().clear();
+
+            // Mettre à jour la liste affichée avec les éléments à afficher sur la page actuelle
+            displayedTypeGroupes = FXCollections.observableArrayList(typegroupes);
+
             AtomicInteger row = new AtomicInteger(1);
 
-            for (int i = startIdx; i < endIdx; i++) {
-                loadResources(typegroupes.get(i), row.getAndIncrement());
-            } // Start from the second row (index 1)
-            typegroupes.forEach(typegroupe ->loadResources(typegroupe,row.getAndIncrement()));
+            // Charger les ressources pour la page actuelle
+            displayedTypeGroupes.forEach(typegroupe -> loadResources(typegroupe, row.getAndIncrement()));
         } catch (SQLException e) {
-            e.printStackTrace(); // Handle the exception gracefully
+            e.printStackTrace(); // Gérer l'exception de manière appropriée
         }
     }
+
+
     private void filterResources(String searchText) throws SQLException {
         ObservableList<Typegroupe> typegroupes = FXCollections.observableArrayList(service.afficher());
         gridPane.getChildren().clear(); // Clear existing items in GridPane
