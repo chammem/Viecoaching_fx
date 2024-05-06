@@ -142,18 +142,7 @@ public class groupeController implements Initializable {
                         System.out.println("Erreur lors du chargement de afficheCategorie.fxml : " + e.getMessage());
                 }
         }
-        private void loadAffichergr() {
-                try {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Affichergr.fxml"));
-                        Parent root = loader.load();
-                        AffichergrController controller = loader.getController();
-                        controller.loadResources(); // Appelez la méthode pour recharger les données
-                        Stage stage = (Stage) nomField.getScene().getWindow();
-                        stage.setScene(new Scene(root));
-                } catch (IOException e) {
-                        e.printStackTrace();
-                }
-        }
+
         private void loadPreviousPage(ActionEvent event) {
                 // Récupérer le nœud source de l'événement (le bouton "Ajouter" dans ce cas)
                 Node sourceNode = (Node) event.getSource();

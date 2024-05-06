@@ -131,40 +131,47 @@ public class ServiceGroupe implements IService<Groupe> {
         }
 
         return utilisateurs;
-        //aaaaaaaa
+
     }
 
 
 
-    @Override
-    public List<Groupe> afficher() throws SQLException {
+    public List<Groupe> afficherPagination(int pageIndex, int pageSize) throws SQLException {
         List<Groupe> groupes = new ArrayList<>();
-        String req = "SELECT * FROM groupe";
+        String req = "SELECT * FROM groupe LIMIT ? OFFSET ?";
 
-        try (Statement st = connection.createStatement();
-             ResultSet rs = st.executeQuery(req)) {
+        try (PreparedStatement st = connection.prepareStatement(req)) {
+            // Calculer l'offset en fonction de l'index de la page et de la taille de la page
+            int offset = pageIndex * pageSize;
 
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                int typegroupe_id = rs.getInt("typegroupe_id");
-                String nom = rs.getString("nom");
-                String description = rs.getString("description");
-                java.sql.Date datecreation = rs.getDate("datecreation");
-                String image = rs.getString("image");
+            // Définir les valeurs pour la requête préparée
+            st.setInt(1, pageSize);
+            st.setInt(2, offset);
 
-                // Récupérer les informations de Typegroupe associées à l'ID de Typegroupe
-                Typegroupe typegroupe = getTypegroupeById(typegroupe_id);
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    // Récupérer les données de chaque ligne
+                    int id = rs.getInt("id");
+                    int typegroupe_id = rs.getInt("typegroupe_id");
+                    String nom = rs.getString("nom");
+                    String description = rs.getString("description");
+                    java.sql.Date datecreation = rs.getDate("datecreation");
+                    String image = rs.getString("image");
 
-                // Récupérer les utilisateurs associés à ce groupe
-                List<Utilisateur> utilisateurs = getUtilisateursByGroupeId(id);
+                    // Récupérer les informations de Typegroupe associées à l'ID de Typegroupe
+                    Typegroupe typegroupe = getTypegroupeById(typegroupe_id);
 
-                // Créer un objet Groupe avec les données récupérées
-                Groupe groupe = new Groupe(id, typegroupe, nom, description, datecreation, image);
+                    // Récupérer les utilisateurs associés à ce groupe
+                    List<Utilisateur> utilisateurs = getUtilisateursByGroupeId(id);
 
-                // Associer les utilisateurs récupérés au groupe
-                groupe.setUtilisateurs(utilisateurs);
+                    // Créer un objet Groupe avec les données récupérées
+                    Groupe groupe = new Groupe(id, typegroupe, nom, description, datecreation, image);
 
-                groupes.add(groupe);
+                    // Associer les utilisateurs récupérés au groupe
+                    groupe.setUtilisateurs(utilisateurs);
+
+                    groupes.add(groupe);
+                }
             }
         } catch (SQLException e) {
             throw new SQLException("Erreur lors de l'affichage des catégories : " + e.getMessage(), e);
@@ -304,6 +311,11 @@ public class ServiceGroupe implements IService<Groupe> {
         preparedStatement.setInt(1, id);
         preparedStatement.executeUpdate();
         System.out.println("Groupe supprimé");
+    }
+
+    @Override
+    public List<Groupe> afficher() throws SQLException {
+        return null;
     }
 
 

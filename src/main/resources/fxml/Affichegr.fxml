@@ -18,6 +18,10 @@
         <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Liste des groupes" />
    
             <TextField fx:id="searchField" onKeyTyped="#searchAction" promptText="Rechercher..." />
+        <HBox alignment="CENTER" prefHeight="30.0" prefWidth="500.0" spacing="10">
+            <Button text="Page précédente" onAction="#previousPage" />
+            <Button text="Page suivante" onAction="#nextPage" />
+        </HBox>
         <!-- Zone de recherche -->
         <HBox alignment="CENTER" prefHeight="130.0" prefWidth="943.0" spacing="200">
             <PieChart fx:id="pieChart" prefHeight="300.0" prefWidth="500.0" />

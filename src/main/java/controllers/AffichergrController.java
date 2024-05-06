@@ -54,15 +54,22 @@ public class AffichergrController implements Initializable {
     private final int pageSize = 3; // Taille de la page (nombre de lignes à afficher)
 
     @FXML
-    private void nextPage(ActionEvent event) {
-        pageIndex += pageSize; // Passer à la page suivante
-        loadResources(); // Recharger les ressources avec la nouvelle plage
+    private void nextPage(ActionEvent event) throws SQLException {
+        int totalGroupes = service.countGroupes(); // Nombre total de groupes
+        int lastPageIndex = (totalGroupes - 1) / pageSize; // Dernier index de page possible
+
+        if (pageIndex < lastPageIndex) {
+            pageIndex++; // Passer à la page suivante si ce n'est pas la dernière page
+            loadResources(); // Recharger les ressources avec la nouvelle plage
+        }
     }
 
     @FXML
     private void previousPage(ActionEvent event) {
-        pageIndex = Math.max(0, pageIndex - pageSize); // Passer à la page précédente (assurez-vous que l'index ne devient pas négatif)
-        loadResources(); // Recharger les ressources avec la nouvelle plage
+        if (pageIndex > 0) {
+            pageIndex--; // Passer à la page précédente si ce n'est pas la première page
+            loadResources(); // Recharger les ressources avec la nouvelle plage
+        }
     }
 
     @FXML
@@ -177,9 +184,8 @@ public class AffichergrController implements Initializable {
             gridPane.getChildren().clear(); // Effacer le contenu actuel du GridPane
 
             final int[] row = {1}; // Commence à partir de la première ligne (index 0)
-            service.afficher().stream()
+            service.afficherPagination(pageIndex, pageSize).stream()
                     .filter(groupe -> groupe.getNom().toLowerCase().contains((searchText != null ? searchText : "").toLowerCase()))
-                    // Limiter le nombre de lignes à afficher par page
                     .forEach(groupe -> {
                         Label typeLabel = new Label(groupe.getTypegroupe_id().getNomtype());
                         gridPane.add(typeLabel, 0, row[0]);
