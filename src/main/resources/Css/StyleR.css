@@ -1,0 +1,36 @@
+.title{
+    -fx-font-size: 2em;
+    -fx-text-fill: #bed6b1;
+    -fx-font-weight: bold;
+}
+.form_container{
+    -fx-background-color: #EEEE;
+}
+.form_container Text{
+    -fx-font-size: 1.2em;
+    -fx-fill: #888888;
+}
+.form_container VBox{
+    -fx-border-width: 0 0 0 1;
+    -fx-background-color: #e1dbdb;
+    -fx-padding: 10;
+    -fx-spacing: 10;
+}
+.form_container TextField{
+    -fx-pref-height: 250;
+    -fx-pref-height: 35;
+    -fx-background-color: #ffff;
+    -fx-font-size: 1.3em;
+    -fx-effect: dropshadow(three-pass-box,#AAAAAA,3,0,0,3);
+}
+.form_container Button{
+    -fx-background-color: linear-gradient(to right, #bed6b1, #a5b79b);
+    -fx-effect: dropshadow(three-pass-box,#AAAAAA,3,0,0,3);
+    -fx-pref-width: 100;
+    -fx-font-size: 1.5em;
+    -fx-font-family: "Calibri Light";
+    -fx-text-fill: #ffffff;
+}
+.form_container Button:hover{
+    -fx-cursor: hand;
+}
