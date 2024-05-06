@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="615.0" prefWidth="949.0" style="-fx-background-image: #EDEEE1;" styleClass="image-view" stylesheets="@../Css/client.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficheResClientController">
+<AnchorPane prefHeight="697.0" prefWidth="1036.0" style="-fx-background-image: #EDEEE1;" styleClass="image-view" stylesheets="@../Css/client.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AfficheResClientController">
 
-    <VBox alignment="CENTER" layoutX="43.0" layoutY="48.0" prefHeight="518.0" prefWidth="862.0" style="-fx-background-color: #BED6B1;" stylesheets="@../Css/client.css">
-        <ScrollPane fitToHeight="true" fitToWidth="true">
+    <VBox alignment="CENTER" layoutX="24.0" layoutY="63.0" prefHeight="614.0" prefWidth="995.0" style="-fx-background-color: #BED6B1;" stylesheets="@../Css/client.css">
+        <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color: #BED6B1;">
             <content>
                 <!-- VBox to display resource cards -->
                 <VBox fx:id="contentVBox" spacing="10" style="-fx-background-color: #BED6B1;" styleClass="rating" stylesheets="@../Css/client.css">
@@ -15,6 +16,7 @@
             </content>
         </ScrollPane>
     </VBox>
+   <Label layoutX="381.0" layoutY="19.0" prefHeight="35.0" prefWidth="443.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Blog Personnel de ressources " textFill="#a5b79b" />
 
 
 </AnchorPane>

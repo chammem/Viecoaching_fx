@@ -29,10 +29,7 @@ public class StatsController implements Initializable {
     private PieChart pieChart ;
     @FXML
     private PieChart piechart1;
-    @FXML
-    private WebView webView;
 
-    private WebEngine webEngine;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         serviceCategorie = new ServiceCategorie();
@@ -45,43 +42,9 @@ public class StatsController implements Initializable {
         }
         //displayCategoryStatistics();
 
-        if (webView != null) {
-            webEngine = webView.getEngine();
-            webView.setContextMenuEnabled(false);
 
-            // Load the Leaflet map
-            loadLeafletMap();
-        } else {
-            System.err.println("WebView is not injected by FXMLLoader");
-        }
     }
-    private void loadLeafletMap() {
-        // Load the HTML content containing the Leaflet map
-        String htmlContent = "<html>"
-                + "<head>"
-                + "    <link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet/dist/leaflet.css\" />"
-                + "    <script src=\"https://unpkg.com/leaflet/dist/leaflet.js\"></script>"
-                + "    <style>"
-                + "        #map { height: 100%; }"
-                + "    </style>"
-                + "</head>"
-                + "<body>"
-                + "    <div id=\"map\" style=\"height: 100%;\"></div>"  // Ensure map container fills WebView
-                + "    <script>"
-                + "        var map = L.map('map').setView([51.505, -0.09], 13);"
-                + "        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {"
-                + "            attribution: '&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors'"
-                + "        }).addTo(map);"
-                + "        L.marker([51.5, -0.09]).addTo(map)"
-                + "            .bindPopup('A pretty CSS popup.<br> Easily customizable.')"
-                + "            .openPopup();"
-                + "    </script>"
-                + "</body>"
-                + "</html>";
 
-        // Load the HTML content into the WebEngine
-        webEngine.loadContent(htmlContent);
-    }
     private void displayCategoryStatistics() {
         try {
             ObservableList<String> categoryTypes = FXCollections.observableArrayList(serviceRessource.getCategoryTypes());

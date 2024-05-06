@@ -132,7 +132,7 @@ public class RessourcesController implements Initializable {
     // Fonction utilitaire pour charger la vue afficheRessource.fxml
     private void loadAfficheRessourceView() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/afficheRessource.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Dashboard.fxml"));
             Stage stage = (Stage) tTitre.getScene().getWindow(); // Récupérer la fenêtre actuelle
             stage.setScene(new Scene(root));
         } catch (IOException e) {

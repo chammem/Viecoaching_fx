@@ -196,7 +196,7 @@ public class ModifierCatController implements Initializable {
 
     private void loadAfficheCategorieView() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/afficheCategorie.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Dashboard.fxml"));
             Stage stage = (Stage) tnom.getScene().getWindow(); // Récupérer la fenêtre actuelle
             stage.setScene(new Scene(root));
         } catch (IOException e) {
