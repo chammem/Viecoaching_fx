@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.EmailRequestController">
+   <left>
+      <AnchorPane maxHeight="380.0" maxWidth="280.0" minHeight="380.0" minWidth="280.0" prefHeight="380.0" prefWidth="280.0" BorderPane.alignment="CENTER">
+
+         <ImageView fx:id="image1View" fitHeight="380.0" fitWidth="295.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@../../../../images/image1.PNG" />
+         </ImageView>
+
+      </AnchorPane>
+   </left>
+   <center>
+      <AnchorPane maxHeight="380.0" maxWidth="328.0" minHeight="380.0" minWidth="280.0" prefHeight="380.0" prefWidth="328.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
+
+         <Label layoutX="49.0" layoutY="41.0" text="Forget Password">
+            <font>
+               <Font name="Arial Rounded MT Bold" size="29.0" />
+            </font>
+         </Label>
+         <HBox layoutX="58.0" layoutY="88.0" prefHeight="30.0" prefWidth="250.0">
+            <children>
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter your email">
+                  <font>
+                     <Font name="System Italic" size="21.0" />
+                  </font>
+               </Text>
+            </children>
+
+         </HBox>
+         <HBox layoutX="25.0" layoutY="154.0" prefHeight="41.0" prefWidth="291.0">
+            <children>
+               <TextField fx:id="emailReq" prefHeight="45.0" prefWidth="296.0" promptText="Enter email">
+                  <font>
+                     <Font size="22.0" />
+                  </font>
+               </TextField>
+            </children>
+
+         </HBox>
+         <Button fx:id="ResetButton" layoutX="79.0" layoutY="284.0" mnemonicParsing="false" onAction="#ResetButton" prefHeight="30.0" prefWidth="184.0" style="-fx-background-color: #17a2b8; -fx-border-radius: 20px;" text="Envoyer email" textFill="WHITE">
+            <font>
+               <Font size="14.0" />
+            </font>
+         </Button>
+         <Text fx:id="errorcaptcha" fill="#d70c0c" layoutX="62.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="242.21630859375" />
+         <Text fx:id="erreurT" fill="#e11616" layoutX="59.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="223.21630859375">
+            <font>
+               <Font size="26.0" />
+            </font>
+         </Text>
+
+      </AnchorPane>
+   </center>
+</BorderPane>
