@@ -13,7 +13,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import services.ServiceCategorie;
+import services.ServiceGroupe;
 import services.ServiceRessource;
+import services.ServiceTypegroupe;
 
 import java.io.IOException;
 import java.net.URL;
@@ -49,6 +51,12 @@ public class DashboardController implements Initializable {
     private ServiceRessource serviceRessource;
     @FXML
     private PieChart pieChart ;
+    @FXML
+    private PieChart piechart2;
+
+    @FXML
+    private PieChart piechart3;
+
     @FXML
     private PieChart piechart1;
 
@@ -133,6 +141,8 @@ public class DashboardController implements Initializable {
     void NavBarRub(ActionEvent event) {
 
     }
+    private ServiceTypegroupe serviceTypegroupe;
+    private ServiceGroupe serviceGroupe;
 
     @FXML
     void NavBarSeance(ActionEvent event) {
@@ -145,7 +155,35 @@ public class DashboardController implements Initializable {
     }
     @FXML
     void NavBarGroupe(ActionEvent event) {
+        try {
+            // Load showsponsoring.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Affichegr.fxml"));
+            Node eventFXML = loader.load();
 
+            // Clear existing content from vboxdash
+            vbox.getChildren().clear();
+
+            // Add the loaded eventFXML to vboxdash
+            vbox.getChildren().add(eventFXML);
+        } catch (IOException e) {
+            e.printStackTrace();  // Handle IOException (e.g., file not found or invalid FXML)
+        }
+    }
+    @FXML
+    void NavBarType(ActionEvent event) {
+        try {
+            // Load showsponsoring.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AfficheType.fxml"));
+            Node eventFXML = loader.load();
+
+            // Clear existing content from vboxdash
+            vbox.getChildren().clear();
+
+            // Add the loaded eventFXML to vboxdash
+            vbox.getChildren().add(eventFXML);
+        } catch (IOException e) {
+            e.printStackTrace();  // Handle IOException (e.g., file not found or invalid FXML)
+        }
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -158,14 +196,30 @@ public class DashboardController implements Initializable {
         } else {
             System.err.println("WebView is not injected by FXMLLoader");
         }
+        serviceTypegroupe = new ServiceTypegroupe();
+        serviceGroupe = new ServiceGroupe();
+
         serviceCategorie = new ServiceCategorie();
         serviceRessource = new ServiceRessource();
         displayCategoryStatistics();
         try {
-            configurePieChartData();
+            configurePieChartDataa();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        try {
+            configurePieChartDataGroupe();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            configurePieChartData();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
         //displayCategoryStatistics();
 
 
@@ -186,7 +240,19 @@ public class DashboardController implements Initializable {
         }
 
     }
+    private void configurePieChartDataa() throws SQLException {
+        // Obtenir le nombre de groupes depuis le service ou la méthode de service appropriée
+        int nombreGroupes = serviceTypegroupe.countGroupes();
 
+        // Créer une liste observable pour stocker les données du PieChart
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("Types Groupes", nombreGroupes),
+                new PieChart.Data("Reste", 100 - nombreGroupes) // Vous pouvez ajuster cette valeur en fonction de vos besoins
+        );
+
+        // Ajouter les données au PieChart
+        piechart3.setData(pieChartData);
+    }
     private void configurePieChartData() throws SQLException {
         // Obtenir le nombre de groupes depuis le service ou la méthode de service appropriée
         int nbr = serviceCategorie.countCategorie();
@@ -199,6 +265,19 @@ public class DashboardController implements Initializable {
 
         // Ajouter les données au PieChart
         pieChart.setData(pieChartData);
+    }
+    private void configurePieChartDataGroupe() throws SQLException {
+        // Obtenir le nombre de groupes depuis le service ou la méthode de service appropriée
+        int nombreGroupes = serviceGroupe.countGroupes();
+
+        // Créer une liste observable pour stocker les données du PieChart
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("Groupes", nombreGroupes),
+                new PieChart.Data("Reste", 100 - nombreGroupes) // Vous pouvez ajuster cette valeur en fonction de vos besoins
+        );
+
+        // Ajouter les données au PieChart
+        piechart2.setData(pieChartData);
     }
 }
 

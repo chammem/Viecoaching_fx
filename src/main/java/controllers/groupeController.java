@@ -1,10 +1,15 @@
 package controllers;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import com.google.protobuf.BoolValue;
@@ -27,6 +32,7 @@ import javafx.stage.Stage;
 import services.ServiceGroupe;
 import services.ServiceTypegroupe;
 
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -35,10 +41,8 @@ import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.UUID;
+import java.util.*;
+import java.util.Map;
 
 public class groupeController implements Initializable {
         @FXML
@@ -55,15 +59,13 @@ public class groupeController implements Initializable {
         @FXML
         private TextField descriptionField;
 
-
-
         private String nomFichierurlSelectionne;
         @FXML
         private ListView<Utilisateur> utilisateursListView;
+        private Cloudinary cloudinary;
 
         public void ajouter(ActionEvent event) throws IOException {
                 // Validation du champ Image
-                String image = nomFichierurlSelectionne; // Utilisez le nom du fichier sélectionné
 
                 // Validation du champ Nom
                 String nom = nomField.getText();
@@ -93,7 +95,7 @@ public class groupeController implements Initializable {
                 }
 
                 // Autres validations pour les champs facultatifs, comme l'image et la description
-                 image = (imageView.getImage() != null) ? imageView.getImage().getUrl() : null;
+                String image=uploadImageToCloudinary();
                 // Ajoutez des validations supplémentaires au besoin pour les champs facultatifs
 
                 // Validation de la sélection d'utilisateurs
@@ -133,6 +135,7 @@ public class groupeController implements Initializable {
 
 
         }
+
         private void loadAfficheCategorieView() {
                 try {
                         Parent root = FXMLLoader.load(getClass().getResource("/fxml/Affichegr.fxml"));
@@ -165,7 +168,28 @@ public class groupeController implements Initializable {
                         System.out.println("Erreur lors du chargement de afficheCategorie.fxml : " + e.getMessage());
                 }
         }
+        private String uploadImageToCloudinary() {
+                try {
+                        Image image = imageView.getImage();
 
+                        if (image != null) {
+                                // Convertir l'ImageView en BufferedImage
+                                BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
+
+                                // Créer un fichier temporaire pour l'image
+                                File tempFile = File.createTempFile("temp-image", ".png");
+                                ImageIO.write(bufferedImage, "png", tempFile);
+
+                                // Uploader l'image vers Cloudinary
+                                Map uploadResult = cloudinary.uploader().upload(tempFile, ObjectUtils.emptyMap());
+                                return (String) uploadResult.get("url");
+                        }
+                } catch (IOException e) {
+                        System.out.println("Erreur lors du chargement de l'image vers Cloudinary : " + e.getMessage());
+                        e.printStackTrace();
+                }
+                return null;
+        }
         private void showAleert(String message, ActionEvent event) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setHeaderText(null);
@@ -219,6 +243,11 @@ public class groupeController implements Initializable {
         public void initialize(URL url, ResourceBundle resourceBundle) {
                 // Initialisez votre ChoiceBox de type de groupe avec des options
                 ServiceTypegroupe serviceTypegroupe = new ServiceTypegroupe();
+                cloudinary = new Cloudinary(ObjectUtils.asMap(
+                        "cloud_name", "dsjnvpodf",
+                        "api_key", "746525825315851",
+                        "api_secret", "XVhMJcWUwUjOa9DK6N41402p3hk"));
+
                 List<Typegroupe> typegroupeList;
 
                 try {

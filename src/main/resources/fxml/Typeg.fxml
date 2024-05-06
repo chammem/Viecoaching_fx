@@ -1,35 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<?import java.net.URL?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.TypegController"
-            prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css" >
-    <stylesheets>
-        <URL value="@styles.css" />
-    </stylesheets>
+<AnchorPane prefHeight="650.0" prefWidth="857.0" style="-fx-background-color: #F7F4D9;" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.TypegController">
+
     <GridPane hgap="10" layoutX="50" layoutY="50" vgap="10">
-
-        <!-- Labels pour les titres -->
-        <Label text="Type De Groupe :" />
-
-
-        <!-- Champs de saisie pour les informations du groupe -->
-        <TextField fx:id="nomField" GridPane.columnIndex="1" />
 
 
 
         <!-- Boutons pour les actions -->
-        <HBox spacing="10" GridPane.columnSpan="2" GridPane.rowIndex="6">
-            <Button onAction="#ajouter" text="Ajouter" />
-
-        </HBox>
+        <HBox spacing="10" GridPane.columnSpan="2" GridPane.rowIndex="6" />
 
         <!-- Contraintes de colonnes -->
         <columnConstraints>
@@ -50,6 +37,15 @@
         </rowConstraints>
 
     </GridPane>
+    <Button layoutX="410.0" layoutY="330.0" onAction="#ajouter" text="Ajouter" />
+
+
+    <!-- Champs de saisie pour les informations du groupe -->
+    <TextField fx:id="nomField" layoutX="207.0" layoutY="134.0" prefHeight="30.0" prefWidth="422.0" style="-fx-background-color: EFD0B5;" />
+
+    <!-- Labels pour les titres -->
+    <Label layoutX="99.0" layoutY="140.0" text="Type De Groupe :" />
+    <Label alignment="CENTER" layoutX="276.0" layoutY="39.0" prefHeight="35.0" prefWidth="332.0" styleClass="title" text="Ajout Type Groupe" textFill="#b75f5f" />
 
 
 

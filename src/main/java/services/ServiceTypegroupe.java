@@ -65,6 +65,25 @@ public class ServiceTypegroupe implements IService<Typegroupe> {
 
         return typegroupe;
     }
+    public List<Typegroupe> filterBySearch(String searchText) throws SQLException {
+        List<Typegroupe> filteredTypegroupes = new ArrayList<>();
+        String query = "SELECT * FROM typegroupe WHERE nomtype LIKE ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, "%" + searchText + "%"); // Recherche partiellement correspondante
+
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String nomtype = rs.getString("nomtype");
+
+                    Typegroupe typegroupe = new Typegroupe(id, nomtype);
+                    filteredTypegroupes.add(typegroupe);
+                }
+            }
+        }
+        return filteredTypegroupes;
+    }
+
 
     public List<Typegroupe> afficherg(int pageIndex, int pageSize) throws SQLException {
         List<Typegroupe> typegroupes = new ArrayList<>();

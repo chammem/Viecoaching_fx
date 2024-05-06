@@ -25,37 +25,37 @@ public class TypegController  implements Initializable {
     @FXML
     private TextField nomField;
     private String nomFichierurlSelectionne;
-        @FXML
+    @FXML
 
-        void ajouter(ActionEvent event) {
-            String nom =nomField.getText();
-
-
-
-            ServiceTypegroupe serviceTypegroupe = new ServiceTypegroupe();
-
-            try {
-                // Créer une nouvelle groupe avec les valeurs obtenues
-                Typegroupe typegroupe = new Typegroupe(nom);
-
-                // Ajouter la groupe en utilisant le service
-                serviceTypegroupe.ajouter(typegroupe);
-
-                // Afficher une boîte de dialogue d'information pour indiquer que la groupe a été ajoutée avec succès
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Succès");
-                alert.setContentText("groupe ajoutée avec succès !");
-                alert.showAndWait();
-                loadAfficheCategorieVieww();
-
-            } catch (SQLException e) {
-                // En cas d'erreur lors de l'ajout de la groupe, afficher l'erreur dans la console
-                System.out.println("Erreur lors de l'ajout de la groupe : " + e.getMessage());
-                e.printStackTrace();
-            }
+    void ajouter(ActionEvent event) {
+        String nom =nomField.getText();
 
 
+
+        ServiceTypegroupe serviceTypegroupe = new ServiceTypegroupe();
+
+        try {
+            // Créer une nouvelle groupe avec les valeurs obtenues
+            Typegroupe typegroupe = new Typegroupe(nom);
+
+            // Ajouter la groupe en utilisant le service
+            serviceTypegroupe.ajouter(typegroupe);
+
+            // Afficher une boîte de dialogue d'information pour indiquer que la groupe a été ajoutée avec succès
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Succès");
+            alert.setContentText("groupe ajoutée avec succès !");
+            alert.showAndWait();
+            loadAfficheCategorieVieww();
+
+        } catch (SQLException e) {
+            // En cas d'erreur lors de l'ajout de la groupe, afficher l'erreur dans la console
+            System.out.println("Erreur lors de l'ajout de la groupe : " + e.getMessage());
+            e.printStackTrace();
         }
+
+
+    }
     private void loadAfficheCategorieVieww() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/AfficheType.fxml"));
@@ -90,9 +90,9 @@ public class TypegController  implements Initializable {
 
 
 
-        @Override
-        public void initialize(URL url, ResourceBundle resourceBundle) {
-            // À compléter selon les besoins
-        }
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        // À compléter selon les besoins
+    }
 
 }

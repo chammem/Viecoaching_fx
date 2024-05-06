@@ -1,20 +1,20 @@
 package services;
 
-        import entities.Groupe;
-        import entities.Typegroupe;
-        import entities.Utilisateur;
+import entities.Groupe;
+import entities.Typegroupe;
+import entities.Utilisateur;
 import services.IService;
 import utils.MyDatabase;
 
-        import javax.mail.*;
-        import javax.mail.internet.InternetAddress;
-        import javax.mail.internet.MimeMessage;
-        import java.sql.Date;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.sql.Date;
 
-        import java.sql.*;
-        import java.util.ArrayList;
-        import java.util.List;
-        import java.util.Properties;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 public class ServiceGroupe implements IService<Groupe> {
     Connection connection;
@@ -320,8 +320,33 @@ public class ServiceGroupe implements IService<Groupe> {
 
     @Override
     public List<Groupe> afficher() throws SQLException {
-        return null;
+        List<Groupe> groupes = new ArrayList<>();
+        String req = "SELECT * FROM groupe";
+
+        try (PreparedStatement st = connection.prepareStatement(req);
+             ResultSet rs = st.executeQuery()) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int typegroupe_id = rs.getInt("typegroupe_id");
+                String nom = rs.getString("nom");
+                String description = rs.getString("description");
+                java.sql.Date datecreation = rs.getDate("datecreation");
+                String image = rs.getString("image");
+
+                // Récupérer les informations de Typegroupe associées à l'ID de Typegroupe
+                Typegroupe typegroupe = getTypegroupeById(typegroupe_id);
+
+                // Créer un nouvel objet Groupe et l'ajouter à la liste
+                Groupe groupe = new Groupe(id, typegroupe, nom, description, datecreation, image);
+                groupes.add(groupe);
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Erreur lors de l'affichage des groupes : " + e.getMessage(), e);
+        }
+
+        return groupes;
     }
+
 
 
     public int countGroupes() throws SQLException {

@@ -1,11 +1,10 @@
 package controllers;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.PdfContentByte;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
-
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.File;
@@ -221,9 +220,13 @@ public class AffichergrController implements Initializable {
 
                         Button updateButton = new Button("Update");
                         updateButton.setOnAction(event -> updaategroupe(groupe));
+                        updateButton.setStyle(" -fx-background-color: green");
+
+                        ;
                         gridPane.add(updateButton, 6, row[0]);
                         Button pdfButton = new Button("Generate PDF");
-                        pdfButton.setOnAction(event -> generatePDF(groupe)); // Ajouter le gestionnaire d'événements pour générer le PDF
+                        pdfButton.setOnAction(event -> generatePDF(groupe));
+                        pdfButton.setStyle(" -fx-background-color: orange");
                         gridPane.add(pdfButton, 8, row[0]);
 
                         StringBuilder utilisateursText = new StringBuilder();
@@ -248,13 +251,21 @@ public class AffichergrController implements Initializable {
             Parent modif = loader.load();
             ModifiergroupeController controller = loader.getController();
             controller.initData(groupe);
-            Stage stage = (Stage) searchField.getScene().getWindow();
-            stage.setScene(new Scene(modif));
+
+            // Utilisez un nœud réel de votre scène actuelle
+            Scene currentScene = gridPane.getScene();
+            if (currentScene != null) {
+                Stage stage = (Stage) currentScene.getWindow();
+                stage.setScene(new Scene(modif));
+            } else {
+                System.err.println("Impossible de récupérer la scène actuelle. Veuillez utiliser un nœud réel de votre interface utilisateur.");
+            }
             Platform.runLater(this::loadResources);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     private void showAlertGroupeModifie() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Groupe modifié");
@@ -335,24 +346,48 @@ public class AffichergrController implements Initializable {
             // Spécifier le chemin du fichier PDF à créer
             String userHomeDir = System.getProperty("user.home"); // Obtenir le répertoire de l'utilisateur
             String filePath = userHomeDir + "/Downloads/Groupe_" + groupe.getId() + ".pdf"; // Chemin complet pour enregistrer le fichier dans le répertoire de téléchargement de l'utilisateur
-            PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
 
             // Ouvrir le document
             document.open();
 
             // Ajouter le contenu au document
-            document.add(new Paragraph("Informations sur le groupe :"));
-            document.add(new Paragraph("Nom du groupe : " + groupe.getNom()));
-            document.add(new Paragraph("Description : " + groupe.getDescription()));
-            document.add(new Paragraph("Date de création : " + groupe.getDatecreation()));
+            // Titre du document avec une police personnalisée et en gras
+            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+            Paragraph title = new Paragraph(new Chunk("Informations sur le groupe :", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.RED)));
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            // Informations sur le groupe avec un espacement et une police différente
+            Font infoFont = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
+            Paragraph info = new Paragraph();
+            info.add(new Chunk("Nom du groupe : ", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
+            info.add(new Chunk(groupe.getNom(), infoFont));
+            info.add(Chunk.NEWLINE);
+            info.add(new Chunk("Description : ", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
+            info.add(new Chunk(groupe.getDescription(), infoFont));
+            info.add(Chunk.NEWLINE);
+            info.add(new Chunk("Date de création : ", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
+            info.add(new Chunk(groupe.getDatecreation().toString(), infoFont));
+            document.add(info);
 
             // Ajouter l'image du groupe au document
-
+            // Ajouter ici votre code pour ajouter l'image
 
             // Ajouter la liste des utilisateurs du groupe au document
             StringBuilder utilisateursText = new StringBuilder("Utilisateurs : ");
-            groupe.getUtilisateurs().forEach(utilisateur -> utilisateursText.append(utilisateur.getNom()).append(", "));
-            document.add(new Paragraph(utilisateursText.toString()));
+            for (Utilisateur utilisateur : groupe.getUtilisateurs()) {
+                utilisateursText.append(utilisateur.getNom()).append(", ");
+            }
+            document.add(new Paragraph(utilisateursText.toString(), infoFont));
+
+            // Ajouter un pied de page avec le numéro de page
+            PdfContentByte canvas = writer.getDirectContent();
+            Phrase footer = new Phrase("Page " + document.getPageNumber(), infoFont);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_CENTER,
+                    footer,
+                    (document.right() - document.left()) / 2 + document.leftMargin(),
+                    document.bottom() - 10, 0);
 
             // Fermer le document
             document.close();
@@ -363,10 +398,11 @@ public class AffichergrController implements Initializable {
             // Ouvrir le fichier PDF dans le visualiseur PDF par défaut de l'utilisateur
             openPDFFile(filePath);
 
-        } catch (DocumentException  | IOException e) {
+        } catch (DocumentException | IOException e) {
             e.printStackTrace();
         }
     }
+
 
     private void openPDFFile(String filePath) {
         try {
