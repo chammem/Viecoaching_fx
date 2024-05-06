@@ -15,13 +15,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class  ServiceUtilisateur implements IService<Utilisateur>{
 public class ServiceUtilisateur implements IService<Utilisateur> {
     Connection connection;
-
-    public ServiceUtilisateur() {
-        connection = MyDatabase.getInstance().getConnection();
-
     public ServiceUtilisateur(Connection connection) {
         this.connection = connection;
     }
@@ -30,14 +25,6 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
 
     private UtilisateurController utilisateurController;
 
-
-    public ServiceUtilisateur(Connection connection) {
-        this.connection = connection;
-    }
-
-    private static final String IMAGE_DIRECTORY = "src/main/resources/photos";
-
-    private UtilisateurController utilisateurController;
 
     @Override
     public void ajouter(Utilisateur utilisateur) throws SQLException {
@@ -151,68 +138,6 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
     }
 
     public void supprimer(int userId) throws SQLException {
-        String req = "UPDATE utilisateur SET nom=?, prenom=?, age=?, email=?, tel=?, mdp=?, genre=?, ville=? " +
-                "WHERE id=?";
-        PreparedStatement preparedStatement = connection.prepareStatement(req);
-        preparedStatement.setString(1, utilisateur.getNom());
-        preparedStatement.setString(2, utilisateur.getPrenom());
-        preparedStatement.setInt(3, utilisateur.getAge());
-        preparedStatement.setString(4, utilisateur.getEmail());
-        preparedStatement.setString(5, utilisateur.getTel());
-        preparedStatement.setString(6, utilisateur.getMdp());
-        preparedStatement.setString(7, utilisateur.getGenre());
-        preparedStatement.setString(8, utilisateur.getVille());
-        preparedStatement.setInt(9, utilisateur.getId());
-        preparedStatement.executeUpdate();
-        System.out.println("Utilisateur modifié");
-
-    }
-
-    @Override
-    public void ajouterAvecUtilisateurs(Utilisateur utilisateur, List<Utilisateur> utilisateursSelectionnes) throws SQLException {
-
-    }
-
-    @Override
-    public void modifierg(Utilisateur utilisateur, List<Utilisateur> utilisateursSelectionnes) throws SQLException {
-
-    }
-
-
-    @Override
-    public void supprimer(int id) throws SQLException {
-    public void modifier(Utilisateur utilisateur , String email) throws SQLException {
-        System.out.println(utilisateur);
-        String req = "UPDATE utilisateur SET nom = ?, prenom = ?, email = ?, mdp = ?, ville = ?, tel = ?," +
-                " genre = ?, image = ?, role_id = ?, active = ? WHERE email = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(req)) {
-            preparedStatement.setString(1, utilisateur.getNom());
-            preparedStatement.setString(2, utilisateur.getPrenom());
-            preparedStatement.setString(3, utilisateur.getEmail());
-            preparedStatement.setString(4, utilisateur.getMdp());
-            preparedStatement.setString(5, utilisateur.getVille());
-            preparedStatement.setString(6, utilisateur.getTel());
-            preparedStatement.setString(7, utilisateur.getGenre());
-            preparedStatement.setString(8, utilisateur.getImage());
-            preparedStatement.setInt(9, utilisateur.getRole_id());
-            preparedStatement.setBoolean(10, utilisateur.isActive());
-            preparedStatement.setString(11, email);
-
-            int rowsAffected = preparedStatement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                System.out.println("Utilisateur modifié avec succès.");
-            } else {
-                System.out.println("Aucune modification n'a été effectuée pour cet utilisateur.");
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Erreur lors de la modification de l'utilisateur : " + e.getMessage());
-            throw e;
-        }
-    }
-
-    public void supprimer(int userId) throws SQLException {
         String req = "DELETE FROM utilisateur WHERE id=?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(req)) {
             preparedStatement.setInt(1, userId);
@@ -224,7 +149,7 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
             }
         }
     }
-    public List<Utilisateur> getAllUtilisateurs() throws SQLException {
+  /*  public List<Utilisateur> getAllUtilisateurs() throws SQLException {
         List<Utilisateur> utilisateurs = new ArrayList<>();
         String query = "SELECT * FROM utilisateur";
 
@@ -250,7 +175,7 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
                 System.out.println("Aucun utilisateur n'a été supprimé.");
             }
         }
-    }
+    }*/
 
     @Override
     public List<Utilisateur> afficher() throws SQLException {
@@ -271,12 +196,21 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
             utilisateur.setRole_id(rs.getInt("role_id"));
             String imageFileName = rs.getString("image");
             utilisateur.setImage(imageFileName);
-            String imageFileName = rs.getString("image");
-            utilisateur.setImage(imageFileName);
             utilisateurs.add(utilisateur);
         }
         return utilisateurs;
     }
+
+    @Override
+    public void ajouterAvecUtilisateurs(Utilisateur utilisateur, List<Utilisateur> utilisateursSelectionnes) throws SQLException {
+
+    }
+
+    @Override
+    public void modifierg(Utilisateur utilisateur, List<Utilisateur> utilisateursSelectionnes) throws SQLException {
+
+    }
+
     private Image loadImage(String imageName) {
         String imagePath = System.getProperty("user.dir") + "/" + IMAGE_DIRECTORY + "/" + imageName;
         return new Image(new File(imagePath).toURI().toString());
@@ -332,10 +266,6 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
         return phoneNumber.length() >= 8 && phoneNumber.matches("[0-9]+");
     }
 
-}
-
-
-
     public Utilisateur getUtilisateurByNom(String nomUtilisateur) throws SQLException {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -357,7 +287,6 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
                 utilisateur.setId(resultSet.getInt("id"));
                 utilisateur.setNom(resultSet.getString("nom"));
                 utilisateur.setPrenom(resultSet.getString("prenom"));
-                utilisateur.setAge(resultSet.getInt("age"));
                 utilisateur.setEmail(resultSet.getString("email"));
                 utilisateur.setTel(resultSet.getString("tel"));
                 utilisateur.setMdp(resultSet.getString("mdp"));
@@ -381,60 +310,6 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
         return utilisateur;
     }
 
-}
-    private Image loadImage(String imageName) {
-        String imagePath = System.getProperty("user.dir") + "/" + IMAGE_DIRECTORY + "/" + imageName;
-        return new Image(new File(imagePath).toURI().toString());
-    }
 
-
-    private boolean validateFields(String nom, String prenom, String email, String mdp, String ville, String tel, String genre) throws IllegalArgumentException {
-        boolean isValid = true;
-
-        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || mdp.isEmpty() || ville.isEmpty() || tel.isEmpty() || genre.isEmpty()) {
-            throw new IllegalArgumentException("Tous les champs obligatoires doivent être remplis.");
-        }
-
-        if (!isValidEmail(email)) {
-            throw new IllegalArgumentException("Adresse email invalide.");
-        }
-
-        if (emailExists(email)) {
-            throw new IllegalArgumentException("Adresse email déjà utilisée.");
-        }
-
-        if (mdp.length() < 6) {
-            throw new IllegalArgumentException("Le mot de passe doit contenir au moins 6 caractères.");
-        }
-
-
-
-        if (!isValidPhoneNumber(tel)) {
-            throw new IllegalArgumentException("Numéro de téléphone doit contenir au moins 8 chiffres.");
-        }
-
-        return isValid;
-    }
-    public boolean isValidEmail(String email) {
-        return email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}");
-    }
-
-    private boolean emailExists(String email) {
-        try {
-            String sql = "SELECT COUNT(*) FROM utilisateur WHERE email = ?";
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, email);
-            ResultSet rs = st.executeQuery();
-            rs.next();
-            int count = rs.getInt(1);
-            return count > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return true;
-        }}
-
-    private boolean isValidPhoneNumber(String phoneNumber) {
-        return phoneNumber.length() >= 8 && phoneNumber.matches("[0-9]+");
-    }
 
 }

@@ -19,8 +19,10 @@ import services.ServiceTypegroupe;
 import services.ServiceUtilisateur;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.time.LocalDate;
 import javafx.scene.layout.GridPane;
+import utils.MyDatabase;
 
 import java.io.File;
 import java.net.URL;
@@ -62,7 +64,9 @@ public class ModifiergroupeController implements Initializable {
         // Initialisation des services
         utilisateursListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        serviceUtilisateur = new ServiceUtilisateur();
+        MyDatabase myDatabase = MyDatabase.getInstance();
+        Connection connection = myDatabase.getConnection();
+        this.serviceUtilisateur = new ServiceUtilisateur(connection);
         serviceGroupe = new ServiceGroupe();
         List<Utilisateur> utilisateurs = new ArrayList<>();
 

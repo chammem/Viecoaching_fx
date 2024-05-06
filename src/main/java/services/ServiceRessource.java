@@ -1,6 +1,7 @@
 package services;
 
 import entities.Ressources;
+import entities.Utilisateur;
 import utils.MyDatabase;
 
 import java.sql.*;
@@ -87,6 +88,17 @@ public class ServiceRessource implements IService<Ressources>{
         }
         return ressources;
     }
+
+    @Override
+    public void ajouterAvecUtilisateurs(Ressources ressources, List<Utilisateur> utilisateursSelectionnes) throws SQLException {
+
+    }
+
+    @Override
+    public void modifierg(Ressources ressources, List<Utilisateur> utilisateursSelectionnes) throws SQLException {
+
+    }
+
     public Ressources getRessourceByType(String type) throws SQLException {
         String query = "SELECT * FROM ressources WHERE titre_r = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
