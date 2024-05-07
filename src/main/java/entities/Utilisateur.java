@@ -2,14 +2,28 @@ package entities;
 
 public class Utilisateur {
     private int id;
-    private String nom,prenom,email,tel,mdp,genre,ville;
+    private String nom,prenom,email,tel,mdp,genre,ville,image;
     private boolean active;
     private int role_id;
+    private String roleName;
+
 
     public Utilisateur() {
     }
 
-    public Utilisateur(int id, String nom, String prenom, String email, String tel, String mdp, String genre, String ville, boolean active, int role_id) {
+    public Utilisateur(String nom, String prenom, String email, String mdp, String ville, String tel, String genre, String image, int role_id) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.mdp = mdp;
+        this.ville = ville;
+        this.tel = tel;
+        this.genre = genre;
+        this.image = image;
+        this.role_id = role_id;
+    }
+
+    public Utilisateur(int id, String nom, String prenom, String email, String tel, String mdp, String genre, String ville, String image, boolean active, int role_id) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
@@ -18,9 +32,15 @@ public class Utilisateur {
         this.mdp = mdp;
         this.genre = genre;
         this.ville = ville;
+        this.image = image;
         this.active = active;
         this.role_id = role_id;
     }
+
+    public Utilisateur(Utilisateur utilisateurSelectionne) {
+
+    }
+
 
     public int getId() {
         return id;
@@ -94,6 +114,29 @@ public class Utilisateur {
         this.active = active;
     }
 
+
+    public String getImage() {
+        return this.image;
+    }
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public int getRole_id() {
+        return role_id;
+    }
+
+    public void setRole_id(int role_id) {
+        this.role_id = role_id;
+    }
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
     @Override
     public String toString() {
         return "Utilisateur{" +
@@ -105,15 +148,8 @@ public class Utilisateur {
                 ", mdp='" + mdp + '\'' +
                 ", genre='" + genre + '\'' +
                 ", ville='" + ville + '\'' +
-                ", active=" + active +
+                ", image='" + image + '\'' +
+			",role_id='" + role_id + '\'' +
                 '}';
-    }
-
-    public int getRole_id() {
-        return role_id;
-    }
-
-    public void setRole_id(int role_id) {
-        this.role_id = role_id;
     }
 }

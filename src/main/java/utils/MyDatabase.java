@@ -2,33 +2,32 @@ package utils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-public class MyDatabase {
 
-    final String URL="jdbc:mysql://localhost:3306/viecoaching";
+    public class MyDatabase {
+        private static MyDatabase instance;
+        private Connection connection;
 
-    final String USERNAME="root";
-    final String PASSWORD="";
-    Connection connection;
+        private MyDatabase() {
+            // Initialisation de la connexion à la base de données
+            try {
+                String URL="jdbc:mysql://localhost:3306/viecoaching";
+                String USERNAME="root";
+                String PASSWORD="";
+                this.connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            } catch (SQLException e) {
+                System.err.println("Erreur lors de la connexion à la base de données: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
 
-    static MyDatabase instance;
+        public static MyDatabase getInstance() {
+            if (instance == null) {
+                instance = new MyDatabase();
+            }
+            return instance;
+        }
 
-    private MyDatabase(){
-        try {
-            connection= DriverManager.getConnection(URL,USERNAME,PASSWORD);
-            System.out.println("Connexion établie");
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        public Connection getConnection() {
+            return connection;
         }
     }
-
-    public static MyDatabase getInstance(){
-        if (instance==null){
-            instance= new MyDatabase();
-        }
-        return instance;
-    }
-
-    public Connection getConnection() {
-        return connection;
-    }
-}

@@ -1,6 +1,5 @@
 package controllers;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -12,13 +11,13 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import services.ServiceRegistre;
-import utils.PasswordHasher;
+import utils.MyDatabase;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.util.ResourceBundle;
-import javax.xml.bind.ValidationException;
 
 
 public class RegistreController implements Initializable {
@@ -55,6 +54,8 @@ public class RegistreController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        MyDatabase myDatabase = MyDatabase.getInstance();
+        Connection connection = myDatabase.getConnection();
         File logoFile = new File("images/logo.png");
         Image logo = new Image(logoFile.toURI().toString());
         logoView.setImage(logo);
@@ -114,6 +115,8 @@ public class RegistreController implements Initializable {
 
     @FXML
     private void handleInscription(ServiceRegistre serviceRegistre) {
+        MyDatabase myDatabase = MyDatabase.getInstance();
+        Connection connection = myDatabase.getConnection();
         // Récupérer les valeurs des autres champs
         String nom = nomView.getText();
         String prenom = prenomView.getText();
@@ -134,6 +137,7 @@ public class RegistreController implements Initializable {
         }
 
         try {
+
             if (nomFichierImageSelectionne == null) {
                 if (serviceRegistre.registerUser(nom, prenom, email, mdp, confMdp, ville, tel, genre, null)) {
                     showAlert(Alert.AlertType.CONFIRMATION, "Succès", "Inscription avec succès", "Utilisateur enregistré avec succès dans la base de données.");

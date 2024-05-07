@@ -1,8 +1,6 @@
 package services;
 import utils.PasswordHasher;
 import controllers.RegistreController;
-import javafx.scene.control.Alert;
-import javafx.scene.image.ImageView;
 import utils.MyDatabase;
 import java.sql.*;
 import java.sql.Connection;
@@ -13,7 +11,6 @@ public class ServiceRegistre {
     private RegistreController registreController;
 
     public ServiceRegistre(RegistreController registreController) {
-        connection = MyDatabase.getInstance().getConnection();
         this.registreController = registreController;
     }
 
@@ -24,7 +21,8 @@ public class ServiceRegistre {
 
         String mdpHash = PasswordHasher.hashPassword(mdp);
 
-        try {
+        try {MyDatabase myDatabase = MyDatabase.getInstance();
+            Connection connection = myDatabase.getConnection();
             String sql = "INSERT INTO utilisateur (nom, prenom, email, mdp, ville, tel, genre, image, role_id, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, nom);
@@ -79,7 +77,12 @@ public class ServiceRegistre {
         return email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}");
     }
 
-    private boolean emailExists(String email) {
+    public boolean emailExists(String email) {
+        if (connection == null) {
+            // Gérer l'erreur de connexion
+            System.err.println("La connexion à la base de données est null.");
+            return false;
+        }
         try {
             String sql = "SELECT COUNT(*) FROM utilisateur WHERE email = ?";
             PreparedStatement st = connection.prepareStatement(sql);
@@ -90,8 +93,10 @@ public class ServiceRegistre {
             return count > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            return true;
-        }}
+            // Gérer les erreurs SQL
+            return false;
+        }
+    }
 
     private boolean isValidPhoneNumber(String phoneNumber) {
         return phoneNumber.length() >= 8 && phoneNumber.matches("[0-9]+");
