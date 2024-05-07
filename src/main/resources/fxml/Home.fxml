@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane prefHeight="663.0" prefWidth="858.0" style="-fx-background-color: #EDEEE1;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.HomeController">
    <children>
       <HBox fx:id="hbox" layoutY="28.0" prefHeight="113.0" prefWidth="1039.0">
@@ -21,9 +20,9 @@
                </image>
             </ImageView>
             <Button mnemonicParsing="false" onAction="#SideBlog" prefHeight="44.0" prefWidth="195.0" style="-fx-background-color: #BED6B1;" text="Blog" />
-            <Button mnemonicParsing="false" onAction="#SideContact" prefHeight="44.0" prefWidth="195.0" style="-fx-background-color: #BED6B1;" text="Contact" />
+            <Button mnemonicParsing="false" onAction="#SideContact" prefHeight="44.0" prefWidth="195.0" style="-fx-background-color: #BED6B1;" text="Réservation" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="28.800047874450684" />
-            <ImageView fitHeight="96.0" fitWidth="89.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="54.0" fitWidth="102.0" onMouseClicked="#openLogin" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../image/login.png" />
                </image>

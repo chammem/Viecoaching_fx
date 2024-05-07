@@ -122,8 +122,6 @@ public class UtilisateurController implements Initializable {
         ajouterId.setOnAction(actionEvent -> handleAjouterUtilisateur());
         supprimerId.setOnAction(actionEvent -> handleSupprimerUtilisateur());
         ModifierId.setOnAction(actionEvent -> handleModifierUtilisateur());
-        décnxId.setOnAction(actionEvent -> handleDeconnexion());
-        profil.setOnAction(actionEvent -> navigateToRegistreView());
         tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 handleUserSelection();
@@ -389,6 +387,7 @@ public class UtilisateurController implements Initializable {
     }
 
     // Cette méthode est appelée lorsque vous cliquez sur le bouton pour modifier l'utilisateur
+    @FXML
     private void handleModifierUtilisateur() {
         Utilisateur utilisateurSelectionne = tableView.getSelectionModel().getSelectedItem();
         String emailfirst = utilisateurSelectionne.getEmail();
@@ -406,20 +405,20 @@ public class UtilisateurController implements Initializable {
             String roleString = RoleId.getValue().toString();
             int roleId = mapRoleToInt(roleString);
 
-            // Contrôles de saisie
-            if (newNom.length() < 5 || newPrenom.length() < 5 || newVille.length() < 5) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Champs nom, prénom et ville", "Les champs nom, prénom et ville doivent comporter au moins 5 caractères.");
-                return;
-            }
-
-            if (newNumero.length() < 8) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Numéro de téléphone", "Le numéro de téléphone doit comporter au moins 8 caractères.");
-                return;
-            }
-
-            if (!serviceUtilisateur.isValidEmail(newEmail)) {
-                showAlert(Alert.AlertType.ERROR, "Erreur de saisie", "Adresse email invalide", "Veuillez saisir une adresse email valide.");
-                return;
+            // Vérifier si une nouvelle image est sélectionnée
+            String nomFichierImage = utilisateurSelectionne.getImage(); // Conservez le nom de fichier existant
+            InputStream imageStream = selectImage();
+            if (imageStream != null) {
+                // Générez un nom de fichier unique pour la nouvelle image
+                String nomFichierImageSansExtension = "profile_" + System.currentTimeMillis();
+                try {
+                    // Enregistrez la nouvelle image et récupérez son nom
+                    nomFichierImage = saveImage(nomFichierImageSansExtension, imageStream, "jpg"); // Modifiez le troisième paramètre en "png" si nécessaire
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de l'enregistrement de l'image", "Une erreur s'est produite lors de l'enregistrement de l'image.");
+                    return; // Arrêtez le processus si une erreur se produit lors de l'enregistrement de l'image
+                }
             }
 
             // Vérifier si les données ont été modifiées
@@ -429,7 +428,8 @@ public class UtilisateurController implements Initializable {
                     !utilisateurSelectionne.getVille().equals(newVille) ||
                     !utilisateurSelectionne.getTel().equals(newNumero) ||
                     !utilisateurSelectionne.getGenre().equals(genre) ||
-                    utilisateurSelectionne.getRole_id() != roleId) {
+                    utilisateurSelectionne.getRole_id() != roleId ||
+                    !utilisateurSelectionne.getImage().equals(nomFichierImage)) {
 
                 // Mettre à jour les données de l'utilisateur
                 utilisateurSelectionne.setId(idnom);
@@ -440,6 +440,7 @@ public class UtilisateurController implements Initializable {
                 utilisateurSelectionne.setTel(newNumero);
                 utilisateurSelectionne.setGenre(genre);
                 utilisateurSelectionne.setRole_id(roleId);
+                utilisateurSelectionne.setImage(nomFichierImage);
 
                 // Afficher la boîte de dialogue de confirmation avant la modification
                 Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -468,8 +469,6 @@ public class UtilisateurController implements Initializable {
             showAlert(Alert.AlertType.WARNING, "Avertissement", "Aucun utilisateur sélectionné", "Veuillez sélectionner un utilisateur à modifier.");
         }
     }
-
-
     private String mapIntToRole(int roleId) {
         switch (roleId) {
             case 1:
@@ -498,21 +497,7 @@ public class UtilisateurController implements Initializable {
         imageId.setImage(null);
     }
 
-    public void navigateToRegistreView() {
-        try {MyDatabase myDatabase = MyDatabase.getInstance();
-            Connection connection = myDatabase.getConnection();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/profil.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
 
-            Stage stage = (Stage) profil.getScene().getWindow(); // Récupère la fenêtre actuelle
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
-    }
     private void showAlert(Alert.AlertType type, String title, String header, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -520,23 +505,5 @@ public class UtilisateurController implements Initializable {
         alert.setContentText(content);
         alert.showAndWait();
     }
-    @FXML
-    private void handleDeconnexion() {
-        SessionManager.endSession();
 
-        // Fermer la fenêtre utilisateur.fxml
-        Stage stage = (Stage) décnxId.getScene().getWindow();
-        stage.close();
-
-        // Charger et afficher la fenêtre login.fxml
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
-            Parent root = loader.load();
-            Stage loginStage = new Stage();
-            loginStage.setScene(new Scene(root));
-            loginStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

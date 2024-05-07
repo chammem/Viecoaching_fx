@@ -82,7 +82,7 @@ public class ProfilController implements Initializable {
             stage.close();
 
             // Charger et afficher la nouvelle fenêtre (utilisateur.fxml)
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/utilisateur.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
             Parent root;
             try {
                 root = loader.load();

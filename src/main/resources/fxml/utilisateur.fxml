@@ -14,67 +14,12 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.UtilisateurController">
    <children>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
             <BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/Styles.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <left>
-                  <AnchorPane prefHeight="600.0" prefWidth="164.0" styleClass="nav-form" stylesheets="@../css/Styles.css" BorderPane.alignment="CENTER">
-                     <children>
-                        <ImageView fx:id="logoId" fitHeight="88.0" fitWidth="145.0" layoutX="34.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true" />
-                        <Label alignment="CENTER" layoutX="1.0" layoutY="116.0" prefHeight="21.0" prefWidth="206.0" text="Bienvenue" textAlignment="CENTER" textFill="WHITE">
-                           <font>
-                              <Font name="Arial" size="18.0" />
-                           </font>
-                        </Label>
-                        <Button layoutX="3.0" layoutY="204.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-font-family: 'FontAwesome';" styleClass="home" stylesheets="@../css/Styles.css" text="Accueil" textFill="#f5f5f5">
-                           <font>
-                              <Font name="Arial Black" size="24.0" />
-                           </font>
-                           <graphic>
-                            <!--   <FontAwesomeIcon fill="WHITE" glyphName="HOME" size="2em" />-->
-                           </graphic></Button>
-                        <Line endX="100.0" layoutX="103.0" layoutY="177.0" startX="-100.0" stroke="WHITE" />
-                        <Button fx:id="utilisateurId" layoutX="13.0" layoutY="249.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-font-family: 'FontAwesome';" styleClass="home" stylesheets="@../css/Styles.css" text="Utilisateurs" textFill="#f5f5f5">
-                           <font>
-                              <Font name="Arial Black" size="24.0" />
-                           </font>
-                           <graphic>
-                              <!--  <FontAwesomeIcon fill="WHITE" glyphName="USER" size="2em" />-->
-                            </graphic>
-                         </Button>
-                         <Button layoutX="13.0" layoutY="294.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-font-family: 'FontAwesome';" styleClass="home" stylesheets="@../css/Styles.css" text="Ressources" textFill="#f5f5f5">
-                            <font>
-                               <Font name="Arial Black" size="24.0" />
-                            </font>
-                            <graphic>
-                               <!--<FontAwesomeIcon fill="WHITE" glyphName="FOLDER" size="2em" />-->
-                           </graphic>
-                        </Button>
-                        <Button layoutX="6.0" layoutY="341.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="180.0" style="-fx-background-color: transparent; -fx-font-family: 'FontAwesome';" styleClass="home" stylesheets="@../css/Styles.css" text="Séances" textFill="#f5f5f5">
-                           <font>
-                              <Font name="Arial Black" size="24.0" />
-                           </font>
-                           <graphic>
-                              <!-- <FontAwesomeIcon fill="WHITE" glyphName="DESKTOP" size="1.7em" tabSize="6" />-->
-                            </graphic>
-                         </Button>
-                         <Button layoutX="14.0" layoutY="561.0" mnemonicParsing="false" style="-fx-background-color: transparent;" />
-                         <AnchorPane layoutX="6.0" layoutY="537.0" prefHeight="48.0" prefWidth="98.0">
-                            <children>
-                               <!--<FontAwesomeIcon glyphName="SIGN_OUT" layoutX="24.0" layoutY="42.0" size="2.5em" />-->
-                               <Label layoutX="64.0" layoutY="20.0" />
-                              <Button fx:id="décnxId" layoutX="14.0" layoutY="5.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="164.0" style="-fx-background-color: transparent;" text="Déconnexion" />
-                            </children>
-                         </AnchorPane>
-                        <Button fx:id="profil" layoutX="47.0" layoutY="140.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="119.0" style="-fx-background-color: black;" text="Profil" textAlignment="CENTER" textFill="WHITE" />
-                      </children>
-                   </AnchorPane>
-                </left>
                 <center>
                    <AnchorPane prefHeight="600.0" prefWidth="522.0" BorderPane.alignment="CENTER">
                       <children>

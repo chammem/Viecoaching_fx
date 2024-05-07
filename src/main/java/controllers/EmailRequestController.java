@@ -10,14 +10,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import services.ServiceReset;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.Random;
+import java.util.ResourceBundle;
 
 public class EmailRequestController implements Serializable {
 	Random rnd = new Random();
@@ -40,10 +44,14 @@ public class EmailRequestController implements Serializable {
 	@FXML
 	private ImageView image1View;
 
-	//initialize
-	public void initialize() {
-		// Loading images
 
+	public void initialize(URL url, ResourceBundle resourceBundle) {
+		// Loading images
+		loadImage(image1View, "images/image1.PNG");}
+	private void loadImage(ImageView imageView, String filePath) {
+		File file = new File(filePath);
+		Image image = new Image(file.toURI().toString());
+		imageView.setImage(image);
 	}
 
 	@FXML

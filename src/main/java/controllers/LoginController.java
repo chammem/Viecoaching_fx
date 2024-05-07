@@ -114,7 +114,7 @@ generateAndDisplayCaptcha();
 			if (utilisateur != null) {
 				SessionManager.startSession(utilisateur);
 				showAlert(Alert.AlertType.CONFIRMATION, "Connexion réussie", "Bienvenue " + utilisateur.getNom() + " " + utilisateur.getPrenom());
-				String userPage = utilisateur.getRole_id() == 1 ? "/fxml/patient.fxml" : utilisateur.getRole_id() == 2 ? "/fxml/coach.fxml" : "/fxml/utilisateur.fxml";
+				String userPage = utilisateur.getRole_id() == 1 ? "/fxml/Home.fxml" : utilisateur.getRole_id() == 2 ? "/fxml/Dashboard.fxml" : "/fxml/Dashboard.fxml";
 				navigateToUtilisateurView(userPage);
 			} else {
 				showAlert(Alert.AlertType.ERROR, "Erreur de connexion", "Adresse email ou mot de passe incorrect");

@@ -9,34 +9,56 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Label;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import services.ServiceCategorie;
 import services.ServiceRessource;
+import services.ServiceUtilisateur;
+import utils.MyDatabase;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class StatsController implements Initializable {
+    public Label labelTotalPatients;
+    public Label labelTotalCoaches;
+    public Label labelTotalUsers;
     private ServiceCategorie serviceCategorie;
     private ServiceRessource serviceRessource;
     @FXML
     private PieChart pieChart ;
     @FXML
     private PieChart piechart1;
+    private ServiceUtilisateur serviceUtilisateur;
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        MyDatabase myDatabase = MyDatabase.getInstance();
+        Connection connection = myDatabase.getConnection();
+        this.serviceUtilisateur = new ServiceUtilisateur(connection);
         serviceCategorie = new ServiceCategorie();
         serviceRessource = new ServiceRessource();
         displayCategoryStatistics();
         try {
             configurePieChartData();
+            // Récupérer le nombre total d'utilisateurs
+            int totalPatients = serviceUtilisateur.countPatients();
+            int totalCoaches = serviceUtilisateur.countCoaches();
+            int totalUsers = serviceUtilisateur.countAllUsers();
+
+            // Mettre à jour le label correspondant avec le nombre total d'utilisateurs
+            labelTotalUsers.setText(String.valueOf(totalUsers));
+            labelTotalPatients.setText(String.valueOf(totalPatients));
+            labelTotalCoaches.setText(String.valueOf(totalCoaches));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -106,4 +128,6 @@ public class StatsController implements Initializable {
             System.out.println("Erreur lors du chargement de afficheRessource.fxml : " + e.getMessage());
         }
     }
+
+
 }

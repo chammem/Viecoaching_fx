@@ -8,15 +8,15 @@ import javax.mail.internet.*;
 
 public class Sendmail extends ServiceReset {
 
-	final String username = "sinda.user@outlook.fr"; // Your Outlook username
-	final String password = "sindauser2024"; // Your Outlook password
+	final String username = "sinda.user@outlook.fr";
+	final String password = "sindauser2024";
 
 	public void envoyer(String Toemail, String Subject, String Object) {
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true"); // Enable STARTTLS
+		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.host", "smtp.office365.com");
-		props.put("mail.smtp.port", "587"); // Correct port for STARTTLS
+		props.put("mail.smtp.port", "587");
 
 		Session session = Session.getInstance(props, new Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {

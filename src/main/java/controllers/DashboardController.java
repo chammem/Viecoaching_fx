@@ -7,20 +7,34 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import services.ServiceCategorie;
 import services.ServiceRessource;
+import services.ServiceUtilisateur;
+import utils.MyDatabase;
+import utils.SessionManager;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
+    @FXML
+    public Button décnxId;
+    public Button profil;
+    public Label labelTotalUsers;
+    public Label labelTotalCoaches;
+    public Label labelTotalPatients;
     @FXML
     private Button NavBarCat;
 
@@ -51,6 +65,55 @@ public class DashboardController implements Initializable {
     private PieChart pieChart ;
     @FXML
     private PieChart piechart1;
+    private ServiceUtilisateur serviceUtilisateur;
+
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Vérifier si webView est injecté
+        if (webView != null) {
+            webEngine = webView.getEngine();
+            webView.setContextMenuEnabled(false);
+
+            // Charger la carte Leaflet
+            loadLeafletMap();
+        } else {
+            System.err.println("WebView is not injected by FXMLLoader");
+        }
+
+        // Initialiser le service de catégorie et de ressource
+        serviceCategorie = new ServiceCategorie();
+        serviceRessource = new ServiceRessource();
+
+        // Afficher les statistiques de catégorie
+        displayCategoryStatistics();
+
+        // Configurer les données du PieChart
+        try {
+            configurePieChartData();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Initialiser le service utilisateur et mettre à jour les labels
+        MyDatabase myDatabase = MyDatabase.getInstance();
+        Connection connection = myDatabase.getConnection();
+        this.serviceUtilisateur = new ServiceUtilisateur(connection);
+        try {
+            // Récupérer le nombre total d'utilisateurs
+            int totalPatients = serviceUtilisateur.countPatients();
+            int totalCoaches = serviceUtilisateur.countCoaches();
+            int totalUsers = serviceUtilisateur.countAllUsers();
+
+            // Mettre à jour le label correspondant avec le nombre total d'utilisateurs
+            labelTotalUsers.setText(String.valueOf(totalUsers));
+            labelTotalPatients.setText(String.valueOf(totalPatients));
+            labelTotalCoaches.setText(String.valueOf(totalCoaches));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private void loadLeafletMap() {
         // Load the HTML content containing the Leaflet map
@@ -136,40 +199,44 @@ public class DashboardController implements Initializable {
 
     @FXML
     void NavBarSeance(ActionEvent event) {
+        try {
+            // Load showsponsoring.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/seance.fxml"));
+            Node eventFXML = loader.load();
+
+            // Clear existing content from vboxdash
+            vbox.getChildren().clear();
+
+            // Add the loaded eventFXML to vboxdash
+            vbox.getChildren().add(eventFXML);
+        } catch (IOException e) {
+            e.printStackTrace();  // Handle IOException (e.g., file not found or invalid FXML)
+        }
 
     }
 
     @FXML
     void NavBarUser(ActionEvent event) {
+        try {
+            // Load showsponsoring.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/utilisateur.fxml"));
+            Node eventFXML = loader.load();
+
+            // Clear existing content from vboxdash
+            vbox.getChildren().clear();
+
+            // Add the loaded eventFXML to vboxdash
+            vbox.getChildren().add(eventFXML);
+        } catch (IOException e) {
+            e.printStackTrace();  // Handle IOException (e.g., file not found or invalid FXML)
+        }
 
     }
     @FXML
     void NavBarGroupe(ActionEvent event) {
 
     }
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        if (webView != null) {
-            webEngine = webView.getEngine();
-            webView.setContextMenuEnabled(false);
 
-            // Load the Leaflet map
-            loadLeafletMap();
-        } else {
-            System.err.println("WebView is not injected by FXMLLoader");
-        }
-        serviceCategorie = new ServiceCategorie();
-        serviceRessource = new ServiceRessource();
-        displayCategoryStatistics();
-        try {
-            configurePieChartData();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        //displayCategoryStatistics();
-
-
-    }
     private void displayCategoryStatistics() {
         try {
             ObservableList<String> categoryTypes = FXCollections.observableArrayList(serviceRessource.getCategoryTypes());
@@ -199,6 +266,43 @@ public class DashboardController implements Initializable {
 
         // Ajouter les données au PieChart
         pieChart.setData(pieChartData);
+    }
+
+    @FXML
+    private void handleDeconnexion() {
+        SessionManager.endSession();
+
+        // Fermer la fenêtre utilisateur.fxml
+        Stage stage = (Stage) décnxId.getScene().getWindow();
+        stage.close();
+
+        // Charger et afficher la fenêtre login.fxml
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Home.fxml"));
+            Parent root = loader.load();
+            Stage loginStage = new Stage();
+            loginStage.setScene(new Scene(root));
+            loginStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    public void navigateToProfil() {
+        try {
+            MyDatabase myDatabase = MyDatabase.getInstance();
+            Connection connection = myDatabase.getConnection();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/profil.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+
+            Stage stage = (Stage) profil.getScene().getWindow(); // Récupère la fenêtre actuelle
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
     }
 }
 

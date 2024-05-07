@@ -5,15 +5,20 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
+import services.ServiceAuthentication;
 import utils.MyDatabase;
 
+import java.io.File;
 import java.io.Serializable;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 public class VerifCodeResController  implements Serializable {
 	private final Connection con;
@@ -86,5 +91,14 @@ Parent page2 = javafx.fxml.FXMLLoader.load(getClass().getResource("/fxml/changmd
 			return false;
 
 		}
+	}
+
+	public void initialize(URL url, ResourceBundle resourceBundle) {
+		// Loading images
+		loadImage(image1View, "images/image1.PNG");}
+	private void loadImage(ImageView imageView, String filePath) {
+		File file = new File(filePath);
+		Image image = new Image(file.toURI().toString());
+		imageView.setImage(image);
 	}
 }

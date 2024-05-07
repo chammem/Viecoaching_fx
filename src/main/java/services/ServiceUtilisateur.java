@@ -95,41 +95,6 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
             System.out.println("Erreur lors de la modification de l'utilisateur : " + e.getMessage());
             throw e;
         }
-        if (!validateFields(utilisateur.getNom(), utilisateur.getPrenom(), utilisateur.getEmail(), utilisateur.getMdp(), utilisateur.getVille(), utilisateur.getTel(), utilisateur.getGenre())) {
-            throw new IllegalArgumentException("Échec de la validation des champs.");
-        }
-        // Préparez la requête SQL d'insertion
-        String sql = "INSERT INTO utilisateur (nom, prenom, email, mdp, ville, tel, genre, image, role_id, active) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        // Créez une PreparedStatement pour exécuter la requête
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            // Remplacez les paramètres de la requête par les valeurs de l'utilisateur
-            statement.setString(1, utilisateur.getNom());
-            statement.setString(2, utilisateur.getPrenom());
-            statement.setString(3, utilisateur.getEmail());
-            statement.setString(4, PasswordHasher.hashPassword(utilisateur.getMdp())); // Assurez-vous de hasher le mot de passe avant de l'insérer
-            statement.setString(5, utilisateur.getVille());
-            statement.setString(6, utilisateur.getTel());
-            statement.setString(7, utilisateur.getGenre());
-            statement.setString(8, utilisateur.getImage()); // Assurez-vous que l'image est correctement gérée
-            statement.setInt(9, utilisateur.getRole_id());
-            statement.setBoolean(10, true); // Vous pouvez définir l'activité de l'utilisateur ici
-
-            // Exécutez la requête SQL d'insertion
-            int rowsAffected = statement.executeUpdate();
-
-            // Vérifiez si des lignes ont été affectées (c'est-à-dire si l'insertion a réussi)
-            if (rowsAffected > 0) {
-                System.out.println("Utilisateur ajouté avec succès.");
-            } else {
-                System.out.println("Échec de l'ajout de l'utilisateur.");
-            }
-        } catch (SQLException e) {
-            // Gérez les exceptions SQL
-            e.printStackTrace();
-            throw e; // Vous pouvez choisir de gérer ou de propager l'exception
-        }
     }
 
     @Override
@@ -137,18 +102,31 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
 
     }
 
+    @Override
     public void supprimer(int userId) throws SQLException {
-        String req = "DELETE FROM utilisateur WHERE id=?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(req)) {
-            preparedStatement.setInt(1, userId);
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Utilisateur supprimé avec succès.");
-            } else {
-                System.out.println("Aucun utilisateur n'a été supprimé.");
+        try {
+            // Vérifier que la connexion à la base de données est établie
+            if (connection == null || connection.isClosed()) {
+                System.err.println("La connexion à la base de données est invalide.");
+                return;
             }
+
+            String req = "DELETE FROM utilisateur WHERE id=?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(req)) {
+                preparedStatement.setInt(1, userId);
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Utilisateur supprimé avec succès.");
+                } else {
+                    System.out.println("Aucun utilisateur n'a été supprimé pour l'ID : " + userId);
+                }
+            }
+        } catch (SQLException e) {
+            // Capturer et afficher les exceptions
+            System.err.println("Erreur lors de la suppression de l'utilisateur : " + e.getMessage());
         }
     }
+
   /*  public List<Utilisateur> getAllUtilisateurs() throws SQLException {
         List<Utilisateur> utilisateurs = new ArrayList<>();
         String query = "SELECT * FROM utilisateur";
@@ -211,7 +189,7 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
 
     }
 
-    private Image loadImage(String imageName) {
+    public Image loadImage(String imageName) {
         String imagePath = System.getProperty("user.dir") + "/" + IMAGE_DIRECTORY + "/" + imageName;
         return new Image(new File(imagePath).toURI().toString());
     }
@@ -310,6 +288,74 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
         return utilisateur;
     }
 
+    // Méthode pour compter tous les utilisateurs
+    public int countAllUsers() throws SQLException {
+        int userCount = 0;
+        String query = "SELECT COUNT(*) FROM utilisateur";
 
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+            if (resultSet.next()) {
+                userCount = resultSet.getInt(1);
+            }
+        }
 
+        return userCount;
+    }
+
+    // Méthode pour compter le nombre de patients
+    public int countPatients() throws SQLException {
+        return countUsersByRole(1); // Le rôle ID pour les patients est 1
+    }
+
+    // Méthode pour compter le nombre de coachs
+    public int countCoaches() throws SQLException {
+        return countUsersByRole(2); // Le rôle ID pour les coachs est 2
+    }
+
+    // Méthode pour compter le nombre total d'utilisateurs ayant un rôle spécifique
+    private int countUsersByRole(int roleId) throws SQLException {
+        int userCount = 0;
+        String query = "SELECT COUNT(*) FROM utilisateur WHERE role_id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, roleId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    userCount = resultSet.getInt(1);
+                }
+            }
+        }
+
+        return userCount;
+    }
+
+    public List<Utilisateur> getCoaches() throws SQLException {
+        List<Utilisateur> coaches = new ArrayList<>();
+        String query = "SELECT * FROM utilisateur WHERE role_id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, 2); // 2 est l'ID du rôle pour les coachs
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    // Créer un objet Utilisateur pour chaque coach trouvé
+                    Utilisateur coach = createUserFromResultSet(resultSet);
+                    coaches.add(coach);
+                }
+            }
+        }
+
+        return coaches;
+    }
+
+    // Méthode utilitaire pour créer un objet Utilisateur à partir d'un ResultSet
+    private Utilisateur createUserFromResultSet(ResultSet resultSet) throws SQLException {
+        Utilisateur user = new Utilisateur();
+        user.setId(resultSet.getInt("id"));
+        user.setNom(resultSet.getString("nom"));
+        user.setEmail(resultSet.getString("email"));
+        // Ajoutez d'autres propriétés selon votre structure de base de données
+        return user;
+    }
 }
+

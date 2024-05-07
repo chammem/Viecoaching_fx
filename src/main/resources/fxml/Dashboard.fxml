@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -9,17 +11,16 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.web.WebView?>
 
-<?import javafx.scene.chart.PieChart?>
-<?import javafx.scene.control.Label?>
 <AnchorPane prefHeight="816.0" prefWidth="1077.0" style="-fx-background-color: #EDEEE1;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DashboardController">
    <children>
-      <VBox layoutY="-3.0" prefHeight="830.0" prefWidth="263.0" style="-fx-background-color: F3F5DC;">
+      <VBox layoutY="-3.0" prefHeight="830.0" prefWidth="263.0" styleClass="nav-form" stylesheets="@../css/Styles.css">
          <children>
-            <ImageView fitHeight="225.0" fitWidth="263.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="185.0" fitWidth="209.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../image/logo.png" />
                </image>
             </ImageView>
+            <Button fx:id="profil" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#navigateToProfil" prefHeight="30.0" prefWidth="263.0" style="-fx-background-color: black; -fx-alignment: center;" text="Profil" textAlignment="CENTER" textFill="WHITE" />
             <Button mnemonicParsing="false" onAction="#stats" prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Statistiques" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="1.0" />
             <Button fx:id="NavBarGroupe" mnemonicParsing="false" onAction="#NavBarGroupe" prefHeight="42.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Groupes" />
@@ -33,15 +34,46 @@
             <Button fx:id="NavBarRub" layoutX="10.0" layoutY="447.0" mnemonicParsing="false" onAction="#NavBarRub" prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Rubriques " />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" />
             <Button fx:id="NavBarSeance" layoutX="10.0" layoutY="507.0" mnemonicParsing="false" onAction="#NavBarSeance" prefHeight="44.0" prefWidth="262.0" style="-fx-background-color: #BED6B1;" text="Liste séance en ligne" />
+            <Button fx:id="décnxId" mnemonicParsing="false" onAction="#handleDeconnexion" prefHeight="39.0" prefWidth="263.0" style="-fx-background-color: black;" text="Déconnexion" textFill="WHITE" />
          </children>
       </VBox>
-      <VBox fx:id="vbox" layoutX="263.0" layoutY="-1.0" prefHeight="631.0" prefWidth="830.0" >
+      <VBox fx:id="vbox" layoutX="263.0" layoutY="-1.0" prefHeight="631.0" prefWidth="830.0">
          <Label layoutX="138.0" layoutY="51.0" prefHeight="35.0" prefWidth="330.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Statistiques Catégories" textFill="#a5b79b" />
 
          <PieChart fx:id="pieChart" layoutX="128.0" layoutY="131.0" prefHeight="336.0" prefWidth="307.0" />
          <Label layoutX="529.0" layoutY="51.0" prefHeight="35.0" prefWidth="330.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Statistiques Ressources" textFill="#a5b79b" />
 
          <PieChart fx:id="piechart1" layoutX="502.0" layoutY="131.0" prefHeight="336.0" prefWidth="357.0" />
+         <HBox spacing="20.0">
+            <children>
+               <!-- Card pour le nombre d'utilisateurs -->
+               <VBox spacing="10.0" style="-fx-background-color: #eff5ec; -fx-background-radius: 5; -fx-padding: 20px;">
+                  <children>
+                     <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Nombre d'utilisateurs" textFill="#ffbb44" />
+                     <!-- Ajoutez votre code pour afficher le nombre d'utilisateurs -->
+                     <Label fx:id="labelTotalUsers" style="-fx-font-size: 24px;" text="" />
+                  </children>
+               </VBox>
+   
+               <!-- Card pour le nombre de coachs -->
+               <VBox spacing="10.0" style="-fx-background-color: #eff5ec; -fx-background-radius: 5; -fx-padding: 20px;">
+                  <children>
+                     <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Nombre de coachs" textFill="#ffbb44" />
+                     <!-- Ajoutez votre code pour afficher le nombre de coachs -->
+                     <Label fx:id="labelTotalCoaches" style="-fx-font-size: 24px;" text="" />
+                  </children>
+               </VBox>
+   
+               <!-- Card pour le nombre de patients -->
+               <VBox spacing="10.0" style="-fx-background-color: #eff5ec; -fx-background-radius: 5; -fx-padding: 20px;">
+                  <children>
+                     <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Nombre de patients" textFill="#ffbb44" />
+                     <!-- Ajoutez votre code pour afficher le nombre de patients -->
+                     <Label fx:id="labelTotalPatients" style="-fx-font-size: 24px;" text="" />
+                  </children>
+               </VBox>
+            </children>
+         </HBox>
 
       </VBox>
       <HBox layoutX="263.0" layoutY="633.0" prefHeight="190.0" prefWidth="830.0">
