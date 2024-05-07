@@ -4,6 +4,7 @@ module com.baha.baha {
     requires java.sql;
     requires jbcrypt;
     requires java.xml.bind;
+    requires java.mail;
 
     opens fxml to javafx.fxml;
     opens controllers; // Open the controllers package
