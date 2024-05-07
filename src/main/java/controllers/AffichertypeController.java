@@ -60,19 +60,13 @@ public class AffichertypeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
+
             loadResources2(); // Appel de loadResources2()
-            configurePieChartData(); // Appel de configurePieChartData()
-        } catch (SQLException e) {
-            e.printStackTrace(); // Gérer l'exception de manière appropriée
-        }
+
 
         // Ajouter un écouteur de changement pour le champ de texte de recherche
-        hh.textProperty().addListener((observable, oldValue, newValue) -> {
 
-            filterResources(newValue);
 
-        });
     }
 
 
@@ -84,7 +78,7 @@ public class AffichertypeController implements Initializable {
     private void handleAjouter(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/Typeg.fxml"));
-            Stage stage = (Stage) hh.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            Stage stage = (Stage) gridPane.getScene().getWindow(); // Récupérer la fenêtre actuelle
             stage.setScene(new Scene(root));
         } catch (IOException e) {
             System.out.println("Erreur lors du chargement de afficheRessource.fxml : " + e.getMessage());
@@ -235,7 +229,7 @@ public class AffichertypeController implements Initializable {
             Parent modif = loader.load();
             ModifiertypeController controller = loader.getController();
             controller.initData(typegroupe);
-            Stage stage = (Stage) hh.getScene().getWindow();
+            Stage stage = (Stage) gridPane.getScene().getWindow();
             stage.setScene(new Scene(modif));
             Platform.runLater(this::loadResources2);
         } catch (IOException e) {

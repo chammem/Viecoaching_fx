@@ -32,7 +32,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
-
 public class AffichepController implements Initializable {
     @FXML
     private GridPane gridPane;
@@ -131,6 +130,8 @@ public class AffichepController implements Initializable {
     }
 
 
+
+
     private void generatePDF(Groupe groupe) {
         // Créer un nouveau document PDF
         Document document = new Document();
@@ -164,9 +165,16 @@ public class AffichepController implements Initializable {
             info.add(new Chunk(groupe.getDatecreation().toString(), infoFont));
             document.add(info);
 
-
-
-
+            // Ajouter l'image du groupe au document
+            if (groupe.getImage() != null && !groupe.getImage().isEmpty()) {
+                try {
+                    Image image = new Image(groupe.getImage());
+                    document.add((Element) image);
+                } catch (Exception e) {
+                    // Gérer les erreurs lors du chargement de l'image
+                    e.printStackTrace();
+                }
+            }
 
             // Ajouter un pied de page avec le numéro de page
             PdfContentByte canvas = writer.getDirectContent();
@@ -189,6 +197,7 @@ public class AffichepController implements Initializable {
             e.printStackTrace();
         }
     }
+
 
 
 

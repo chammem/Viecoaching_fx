@@ -20,7 +20,6 @@
             </font></Label>
         <HBox alignment="CENTER" prefHeight="130.0" prefWidth="943.0" spacing="200">
 
-            <TextField fx:id="hh" promptText="Recherche" style="-fx-background-color: #BED6B1;" />
             <PieChart fx:id="pieChart" prefHeight="300.0" prefWidth="500.0" />
         </HBox>
 
