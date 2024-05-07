@@ -51,6 +51,18 @@ public class HomeController implements Initializable {
 
     @FXML
     void SideGroupe(ActionEvent event) {
+        try {
+            // Load showsponsoring.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Affichep.fxml"));
+            Node eventFXML = loader.load();
 
+            // Clear existing content from vboxdash
+            vbox.getChildren().clear();
+
+            // Add the loaded eventFXML to vboxdash
+            vbox.getChildren().add(eventFXML);
+        } catch (IOException e) {
+            e.printStackTrace();  // Handle IOException (e.g., file not found or invalid FXML)
+        }
     }
 }

@@ -1,37 +1,36 @@
 package controllers;
+
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.scene.control.*;
 import com.itextpdf.text.pdf.PdfWriter;
-
-import java.io.File;
-import java.nio.file.*;
-import java.awt.Desktop;
-
 import entities.Groupe;
 import entities.Utilisateur;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.chart.PieChart;
-import javafx.scene.image.Image ;
+import javafx.scene.image.Image; // Importation de l'image de JavaFX
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import services.ServiceGroupe;
 
-import java.io.FileNotFoundException;
+import java.awt.Desktop;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -114,11 +113,6 @@ public class AffichergrController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         service = new ServiceGroupe();
         loadResources();
-        try {
-            configurePieChartData();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
 
         // Ajouter des labels pour définir les champs au-dessus de chaque colonne
@@ -371,10 +365,14 @@ public class AffichergrController implements Initializable {
             info.add(new Chunk(groupe.getDatecreation().toString(), infoFont));
             document.add(info);
 
-            // Ajouter l'image du groupe au document
-            // Ajouter ici votre code pour ajouter l'image
+
 
             // Ajouter la liste des utilisateurs du groupe au document
+            Paragraph title1 = new Paragraph("Liste Des Utilisateur :", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.RED));
+            title1.setAlignment(Element.ALIGN_CENTER);
+            document.add(title1);
+
+
             StringBuilder utilisateursText = new StringBuilder("Utilisateurs : ");
             for (Utilisateur utilisateur : groupe.getUtilisateurs()) {
                 utilisateursText.append(utilisateur.getNom()).append(", ");

@@ -1,21 +1,18 @@
 package controllers;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 import entities.Groupe;
-import javafx.application.Platform;
+import entities.Utilisateur;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -23,7 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
 import services.ServiceGroupe;
 
 import java.awt.*;
@@ -34,141 +31,104 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
-public class AffichepController  implements Initializable {
-    @FXML
-    private PieChart pieChart;
+public class AffichepController implements Initializable {
     @FXML
     private GridPane gridPane;
-
     @FXML
     private TextField searchField;
+    @FXML
+    private Button prevPageButton;
+    @FXML
+    private Button nextPageButton;
 
-    private String searchText;
+    private String searchText = "";
     private ServiceGroupe service;
-    private int pageIndex = 0; // Index de la première ligne à afficher
-    private final int pageSize = 3; // Taille de la page (nombre de lignes à afficher)
-
-
-
-
-
-
-
-
-
-
+    private int pageIndex = 0;
+    private final int pageSize = 3;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         service = new ServiceGroupe();
         loadResources();
-        try {
-            configurePieChartData();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    }
+
+    @FXML
+    private void goToPreviousPage(ActionEvent event) {
+        if (pageIndex > 0) {
+            pageIndex--;
+            refreshGridPane();
         }
-
-
-        // Ajouter des labels pour définir les champs au-dessus de chaque colonne
-        Label typeLabel = new Label("Type de groupe");
-        typeLabel.setStyle("-fx-font-weight: bold;"); // Appliquer le style en gras
-        gridPane.add(typeLabel, 0, 0);
-
-        Label titleLabel = new Label("Nom de groupe");
-        titleLabel.setStyle("-fx-font-weight: bold;");
-        gridPane.add(titleLabel, 1, 0);
-
-        Label descriptionLabel = new Label("Description");
-        descriptionLabel.setStyle("-fx-font-weight: bold;");
-        gridPane.add(descriptionLabel, 2, 0);
-
-        Label dateCreationLabel = new Label("Date de création");
-        dateCreationLabel.setStyle("-fx-font-weight: bold;");
-        gridPane.add(dateCreationLabel, 3, 0);
-
-        Label imageLabel = new Label("Image");
-        imageLabel.setStyle("-fx-font-weight: bold;");
-        gridPane.add(imageLabel, 4, 0);
-
-
-
-
-        Label pdf = new Label("Generer PDF");
-        pdf.setStyle("-fx-font-weight: bold;");
-        gridPane.add(pdf, 5, 0);
     }
 
-    private void showAlertGroupeSupprime() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Groupe supprimé");
-        alert.setHeaderText(null);
-        alert.setContentText("Le groupe a été supprimé avec succès !");
-        alert.showAndWait();
+    @FXML
+    private void goToNextPage(ActionEvent event) throws SQLException {
+        int totalGroups = service.countGroupes();
+        if ((pageIndex + 1) * pageSize < totalGroups) {
+            pageIndex++;
+            refreshGridPane();
+        }
     }
 
-    private void configurePieChartData() throws SQLException {
-        // Obtenir le nombre de groupes depuis le service ou la méthode de service appropriée
-        int nombreGroupes = service.countGroupes();
-
-        // Créer une liste observable pour stocker les données du PieChart
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-                new PieChart.Data("Groupes", nombreGroupes),
-                new PieChart.Data("Reste", 100 - nombreGroupes) // Vous pouvez ajuster cette valeur en fonction de vos besoins
-        );
+    @FXML
+    private void search(KeyEvent event) {
+        searchText = searchField.getText().toLowerCase();
+        pageIndex = 0;
+        refreshGridPane();
     }
-        // Ajouter les données au PieChart
 
-    public void loadResources() {
+    @FXML
+    private void loadResources() {
         try {
-            gridPane.getChildren().clear(); // Effacer le contenu actuel du GridPane
-            int startIndex = Math.min(pageIndex, service.countGroupes());
+            gridPane.getChildren().clear();
+            int startIndex = pageIndex * pageSize;
             int endIndex = Math.min(startIndex + pageSize, service.countGroupes());
 
-            final int[] row = {1}; // Commence à partir de la première ligne (index 0)
+            final int[] row = {1};
             service.afficher().stream()
-                    .filter(groupe -> groupe.getNom().toLowerCase().contains((searchText != null ? searchText : "").toLowerCase()))
-                    .skip(pageIndex) // Ignorer les lignes avant l'index de la première ligne à afficher
-                    .limit(pageSize) // Limiter le nombre de lignes à afficher par page
+                    .filter(groupe -> {
+                        String nom = groupe.getNom();
+                        return nom != null && nom.toLowerCase().contains(searchText);
+                    })
+                    .skip(startIndex)
+                    .limit(endIndex - startIndex)
                     .forEach(groupe -> {
-                        Label typeLabel = new Label(groupe.getTypegroupe_id().getNomtype());
-                        gridPane.add(typeLabel, 0, row[0]);
+                        // Créer les éléments d'interface utilisateur pour afficher les données du groupe
+                        ImageView imageView = new ImageView(new Image(groupe.getImage()));
+                        imageView.setFitWidth(250);
+                        imageView.setFitHeight(250);
+                        gridPane.add(imageView, 0, row[0]);
 
+                        VBox vbox = new VBox(); // Créer une VBox pour le titre, la description et le type de groupe
                         Label titleLabel = new Label(groupe.getNom());
-                        gridPane.add(titleLabel, 1, row[0]);
+                        titleLabel.setStyle("-fx-font-weight: bold");
+                        vbox.getChildren().add(titleLabel);
 
                         Label descriptionLabel = new Label(groupe.getDescription());
-                        gridPane.add(descriptionLabel, 2, row[0]);
+                        vbox.getChildren().add(descriptionLabel);
 
-                        Label datecreationLabel = new Label(groupe.getDatecreation().toString());
-                        gridPane.add(datecreationLabel, 3, row[0]);
+                        Label typeLabel = new Label("Type de groupe : " + groupe.getTypegroupe_id().getNomtype());
+                        vbox.getChildren().add(typeLabel);
 
-                        ImageView imageView = new ImageView(new Image(groupe.getImage()));
-                        imageView.setFitWidth(100);
-                        imageView.setFitHeight(100);
-                        gridPane.add(imageView, 4, row[0]);
-
+                        gridPane.add(vbox, 1, row[0]); // Ajouter la VBox à la deuxième colonne
 
                         Button pdfButton = new Button("Generate PDF");
-                        pdfButton.setOnAction(event -> generatePDF(groupe)); // Ajouter le gestionnaire d'événements pour générer le PDF
-                        gridPane.add(pdfButton, 5, row[0]);
-
-
+                        pdfButton.setOnAction(event -> generatePDF(groupe));
+                        pdfButton.setStyle("-fx-background-color: orange");
+                        gridPane.add(pdfButton, 2, row[0]); // Ajouter le bouton à la troisième colonne
 
                         row[0]++;
                     });
+
+            // Désactiver le bouton "Page précédente" si nous sommes sur la première page
+            prevPageButton.setDisable(pageIndex == 0);
+            // Désactiver le bouton "Page suivante" si nous sommes sur la dernière page
+            nextPageButton.setDisable((pageIndex + 1) * pageSize >= service.countGroupes());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-
-
-
-
-
 
 
     private void generatePDF(Groupe groupe) {
@@ -179,24 +139,42 @@ public class AffichepController  implements Initializable {
             // Spécifier le chemin du fichier PDF à créer
             String userHomeDir = System.getProperty("user.home"); // Obtenir le répertoire de l'utilisateur
             String filePath = userHomeDir + "/Downloads/Groupe_" + groupe.getId() + ".pdf"; // Chemin complet pour enregistrer le fichier dans le répertoire de téléchargement de l'utilisateur
-            PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
 
             // Ouvrir le document
             document.open();
 
             // Ajouter le contenu au document
-            document.add(new Paragraph("Informations sur le groupe :"));
-            document.add(new Paragraph("Nom du groupe : " + groupe.getNom()));
-            document.add(new Paragraph("Description : " + groupe.getDescription()));
-            document.add(new Paragraph("Date de création : " + groupe.getDatecreation()));
+            // Titre du document avec une police personnalisée et en gras
+            com.itextpdf.text.Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+            Paragraph title = new Paragraph(new Chunk("Informations sur le groupe :", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.RED)));
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
 
-            // Ajouter l'image du groupe au document
+            // Informations sur le groupe avec un espacement et une police différente
+            Font infoFont = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
+            Paragraph info = new Paragraph();
+            info.add(new Chunk("Nom du groupe : ", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
+            info.add(new Chunk(groupe.getNom(), infoFont));
+            info.add(Chunk.NEWLINE);
+            info.add(new Chunk("Description : ", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
+            info.add(new Chunk(groupe.getDescription(), infoFont));
+            info.add(Chunk.NEWLINE);
+            info.add(new Chunk("Date de création : ", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
+            info.add(new Chunk(groupe.getDatecreation().toString(), infoFont));
+            document.add(info);
 
 
-            // Ajouter la liste des utilisateurs du groupe au document
-            StringBuilder utilisateursText = new StringBuilder("Utilisateurs : ");
-            groupe.getUtilisateurs().forEach(utilisateur -> utilisateursText.append(utilisateur.getNom()).append(", "));
-            document.add(new Paragraph(utilisateursText.toString()));
+
+
+
+            // Ajouter un pied de page avec le numéro de page
+            PdfContentByte canvas = writer.getDirectContent();
+            Phrase footer = new Phrase("Page " + document.getPageNumber(), infoFont);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_CENTER,
+                    footer,
+                    (document.right() - document.left()) / 2 + document.leftMargin(),
+                    document.bottom() - 10, 0);
 
             // Fermer le document
             document.close();
@@ -212,9 +190,10 @@ public class AffichepController  implements Initializable {
         }
     }
 
+
+
     private void openPDFFile(String filePath) {
         try {
-            // Vérifier si le support de bureau est pris en charge et le fichier PDF existe
             if (Desktop.isDesktopSupported() && Files.exists(Paths.get(filePath))) {
                 Desktop.getDesktop().open(new File(filePath));
             }
@@ -222,6 +201,7 @@ public class AffichepController  implements Initializable {
             e.printStackTrace();
         }
     }
+
     private void showAlertPDFGenerated() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("PDF généré");
@@ -230,11 +210,8 @@ public class AffichepController  implements Initializable {
         alert.showAndWait();
     }
 
-
-
     private void refreshGridPane() {
-        gridPane.getChildren().clear(); // Effacer le contenu actuel du GridPane
-        loadResources(); // Recharger les ressources et mettre à jour le GridPane
+        gridPane.getChildren().clear();
+        loadResources();
     }
 }
-
