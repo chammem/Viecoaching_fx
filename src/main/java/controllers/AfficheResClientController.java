@@ -13,7 +13,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -78,16 +82,35 @@ public class AfficheResClientController implements Initializable {
         String imageUrl = resource.getUrl();
         ImageView imageView;
 
-        try {
-            imageView = new ImageView(new Image(imageUrl));
-            imageView.setFitWidth(250);
-            imageView.setFitHeight(250);
-        } catch (Exception e) {
-            System.err.println("Error loading image for resource: " + e.getMessage());
-            imageView = new ImageView(); // Empty image view
-            imageView.setFitWidth(250);
-            imageView.setFitHeight(250);
+        if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+            // Load image from Cloudinary (remote URL)
+            try {
+                imageView = new ImageView(new Image(imageUrl));
+            } catch (Exception e) {
+                System.err.println("Error loading image from URL: " + e.getMessage());
+                imageView = new ImageView(); // Empty image view
+            }
+        } else {
+            // Load image from local file system
+            try {
+                File file = new File("C:/Users/Hadil Derouich/Desktop/SymfonyProjects/mergefinal/viecoaching/public/uploads/" + imageUrl);
+
+                if (file.exists()) {
+                    InputStream inputStream = new FileInputStream(file);
+                    imageView = new ImageView(new Image(inputStream));
+                    inputStream.close();
+                } else {
+                    System.err.println("Local image file not found: " + imageUrl);
+                    imageView = new ImageView(); // Empty image view
+                }
+            } catch (IOException e) {
+                System.err.println("Error loading local image: " + e.getMessage());
+                imageView = new ImageView(); // Empty image view
+            }
         }
+
+        imageView.setFitWidth(250);
+        imageView.setFitHeight(250);
 
         card.getChildren().add(imageView);
         card.getChildren().add(new Label(resource.getTitre_r())); // Title
@@ -114,4 +137,5 @@ public class AfficheResClientController implements Initializable {
 
         return card;
     }
+
 }

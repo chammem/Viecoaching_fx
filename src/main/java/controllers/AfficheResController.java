@@ -124,7 +124,7 @@ public class AfficheResController implements Initializable {
         String imageUrl = ressources.getUrl();
         if (imageUrl != null && !imageUrl.isEmpty()) {
             try {
-                File file = new File("C:/Users/Hadil Derouich/Desktop/SymfonyProjects/Merge/viecoaching/public/uploads/" + imageUrl);
+                File file = new File("C:/Users/Hadil Derouich/Desktop/SymfonyProjects/mergefinal/viecoaching/public/uploads/" + imageUrl);
 
                 if (file.exists()) {
                     // Local file path exists, load image from local file
