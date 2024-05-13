@@ -2,8 +2,6 @@ package controllers;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import entities.Categorie;
-import entities.Ressources;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +17,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import services.ServiceCategorie;
 import services.ServiceRessource;
+import entities.Categorie;
+import entities.Ressources;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -37,16 +37,13 @@ public class ModifierCatController implements Initializable {
     private AnchorPane image;
 
     @FXML
-    private Button insertView;
-
-    @FXML
     private TextArea tDescription;
 
     @FXML
-    private ImageView timage;
+    private TextField tnom; // Utiliser TextField au lieu de Text
 
     @FXML
-    private TextField tnom;
+    private ImageView timage;
 
     @FXML
     private ChoiceBox<String> tressource;
@@ -66,20 +63,14 @@ public class ModifierCatController implements Initializable {
                 "api_secret", "yQBtTPY_dzeUjCcUHQcmHvJevgg"));
 
         ServiceRessource serviceRessources = new ServiceRessource();
-        List<Ressources> ressourcesList = null;
+        List<Ressources> ressourcesList;
         try {
             ressourcesList = serviceRessources.getAllRessources();
+            // Remplir la ChoiceBox avec les noms des ressources
+            tressource.getItems().addAll(ressourcesList.stream().map(Ressources::getType_r).toList());
         } catch (SQLException e) {
             showAlert("Erreur lors de la récupération des ressources : " + e.getMessage());
             e.printStackTrace();
-        }
-
-        // Remplir la ChoiceBox avec les noms des ressources
-        if (ressourcesList != null) {
-            tressource.getItems().clear();
-            for (Ressources ressource : ressourcesList) {
-                tressource.getItems().add(ressource.getType_r());
-            }
         }
     }
 
@@ -87,9 +78,8 @@ public class ModifierCatController implements Initializable {
         this.categorie = categorie;
 
         // Pré-remplir les champs avec les valeurs de la catégorie à modifier
-        tnom.setText(categorie.getNom_categorie());
-        tressource.setValue(categorie.getRessource_id().getTitre_r());
         tDescription.setText(categorie.getDescription());
+        tnom.setText(categorie.getNom_categorie()); // Utiliser setText au lieu de setTextContent
 
         // Chargement de l'image
         try {
@@ -110,30 +100,19 @@ public class ModifierCatController implements Initializable {
         }
 
         // Récupérer les nouvelles valeurs des champs
-        String nomCategorie = tnom.getText().trim();
         String description = tDescription.getText().trim();
-        String ressourceNom = tressource.getValue();
+        String nom = tnom.getText().trim(); // Utiliser getText au lieu de getTextContent
 
         // Vérifier chaque champ individuellement
-        if (!isValidTextField(nomCategorie, "Nom de catégorie") ||
-                !isValidTextField(description, "Description") ||
+        if (!isValidTextField(description, "Description") ||
                 !isValidChoiceBox(tressource, "Ressource")) {
             return;
         }
 
         try {
-            // Vérifier si la ressource spécifiée existe
-            ServiceRessource serviceRessource = new ServiceRessource();
-            Ressources ressource = serviceRessource.getRessourceByNom(ressourceNom);
-
-            if (ressource == null) {
-                showAlert("La ressource spécifiée n'existe pas.");
-                return;
-            }
-
             // Mettre à jour les propriétés de la catégorie avec les nouvelles valeurs
-            categorie.setNom_categorie(nomCategorie);
             categorie.setDescription(description);
+            categorie.setNom_categorie(nom);
 
             // Télécharger et mettre à jour l'image si elle a été modifiée
             if (timage.getImage() != null) {
@@ -143,16 +122,12 @@ public class ModifierCatController implements Initializable {
                 }
             }
 
-            categorie.setRessource_id(ressource);
-
             // Appeler le service pour effectuer la modification
             serviceCategorie.modifier(categorie);
 
             // Afficher un message de succès
             showAlert("Catégorie modifiée avec succès!");
-
-            // Recharger la vue afficheCategorie.fxml après la modification
-            loadAfficheCategorieView();
+            loadAfficheRessourceView();
 
         } catch (SQLException e) {
             showAlert("Erreur lors de la modification de la catégorie : " + e.getMessage());
@@ -194,17 +169,6 @@ public class ModifierCatController implements Initializable {
         return true;
     }
 
-    private void loadAfficheCategorieView() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Dashboard.fxml"));
-            Stage stage = (Stage) tnom.getScene().getWindow(); // Récupérer la fenêtre actuelle
-            stage.setScene(new Scene(root));
-        } catch (IOException e) {
-            showAlert("Erreur lors du chargement de afficheCategorie.fxml : " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(null);
@@ -224,6 +188,17 @@ public class ModifierCatController implements Initializable {
         if (selectedFile != null) {
             Image image = new Image(selectedFile.toURI().toString());
             timage.setImage(image);
+        }
+    }
+
+    private void loadAfficheRessourceView() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Dashboard.fxml"));
+            Stage stage = (Stage) tDescription.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            showAlert("Erreur lors du chargement de afficheRessource.fxml : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

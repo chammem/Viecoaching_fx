@@ -62,7 +62,35 @@ public class ModifierResController implements Initializable {
         tTitre.setText(ressource.getTitre_r());
         tType.setText(ressource.getType_r());
         tDescription.setText(ressource.getDescription());
-        timage.setImage(new Image(ressource.getUrl()));
+
+        // Charger l'image à partir de l'URL stockée dans la ressource
+        loadImage(ressource.getUrl());
+        try {
+            Image image = new Image(ressource.getUrl());
+            timage.setImage(image);
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement de l'image : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void loadImage(String imageUrl) {
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            // Vérifier si l'image est une URL Cloudinary
+            if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+                // Charger l'image à partir de l'URL distante (Cloudinary)
+                timage.setImage(new Image(imageUrl));
+            } else {
+                // Charger l'image à partir du chemin local
+                File file = new File(imageUrl);
+                if (file.exists()) {
+                    Image image = new Image(file.toURI().toString());
+                    timage.setImage(image);
+                } else {
+                    System.err.println("Fichier image introuvable : " + imageUrl);
+                }
+            }
+        }
     }
 
     @FXML
@@ -92,10 +120,10 @@ public class ModifierResController implements Initializable {
 
             // Vérifier si une nouvelle image a été sélectionnée
             if (timage.getImage() != null) {
-                // Uploader l'image vers Cloudinary
-                String imageUrl = uploadImageToCloudinary();
-                if (imageUrl != null) {
-                    ressource.setUrl(imageUrl);
+                // Uploader l'image vers Cloudinary et mettre à jour l'URL de la ressource
+                String newImageUrl = uploadImageToCloudinary();
+                if (newImageUrl != null) {
+                    ressource.setUrl(newImageUrl);
                 }
             }
 

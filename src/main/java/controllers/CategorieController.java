@@ -72,7 +72,7 @@ public class CategorieController implements Initializable {
         // Remplissez la ChoiceBox avec les noms des ressources
         tressource.getItems().clear();
         for (Ressources ressource : ressourcesList) {
-            tressource.getItems().add(ressource.getType_r());
+            tressource.getItems().add(ressource.getTitre_r());
         }
     }
 
