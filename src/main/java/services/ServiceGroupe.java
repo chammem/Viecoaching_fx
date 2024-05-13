@@ -70,8 +70,8 @@ public class ServiceGroupe implements IService<Groupe> {
         }
     }
     public static void sendEmail(String recipientEmail, String subject, String content) {
-        final String username = "mariem.dghaies@gmail.com";
-        final String password = "nkxn otmj jasy tprd";
+        final String username = "chammemcinda@gmail.com";
+        final String password = "oyfx ftde hnzv fxlb";
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");

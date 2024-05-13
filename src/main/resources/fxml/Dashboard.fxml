@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane prefHeight="816.0" prefWidth="1077.0" style="-fx-background-color: #EDEEE1;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DashboardController">
+<AnchorPane prefHeight="650.0" prefWidth="800.0" style="-fx-background-color: #EDEEE1;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DashboardController">
    <children>
       <VBox layoutY="-3.0" prefHeight="932.0" prefWidth="263.0" style="-fx-background-color: F3F5DC;"/>
       <VBox layoutY="-3.0" prefHeight="830.0" prefWidth="263.0" styleClass="nav-form" stylesheets="@../Css/Styles.css">
