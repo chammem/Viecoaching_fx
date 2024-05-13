@@ -159,26 +159,25 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
     public List<Utilisateur> afficher() throws SQLException {
         List<Utilisateur> utilisateurs = new ArrayList<>();
         String req = "SELECT * FROM utilisateur";
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery(req);
-        while (rs.next()) {
-            Utilisateur utilisateur = new Utilisateur();
-            utilisateur.setNom(rs.getString("nom"));
-            utilisateur.setPrenom(rs.getString("prenom"));
-            utilisateur.setEmail(rs.getString("email"));
-            utilisateur.setTel(rs.getString("tel"));
-            utilisateur.setMdp(rs.getString("mdp"));
-            utilisateur.setGenre(rs.getString("genre"));
-            utilisateur.setVille(rs.getString("ville"));
-            utilisateur.setActive(true); // Définit active à true par défaut
-            utilisateur.setRole_id(rs.getInt("role_id"));
-            String imageFileName = rs.getString("image");
-            utilisateur.setImage(imageFileName);
-            utilisateurs.add(utilisateur);
+        try (Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(req)) {
+            while (rs.next()) {
+                Utilisateur utilisateur = new Utilisateur();
+                utilisateur.setNom(rs.getString("nom"));
+                utilisateur.setPrenom(rs.getString("prenom"));
+                utilisateur.setEmail(rs.getString("email"));
+                utilisateur.setTel(rs.getString("tel"));
+                utilisateur.setMdp(rs.getString("mdp"));
+                utilisateur.setGenre(rs.getString("genre"));
+                utilisateur.setVille(rs.getString("ville"));
+                utilisateur.setActive(true); // Définit active à true par défaut
+                utilisateur.setRole_id(rs.getInt("role_id"));
+                utilisateur.setImage(rs.getString("image"));
+                utilisateurs.add(utilisateur);
+            }
         }
         return utilisateurs;
     }
-
     @Override
     public void ajouterAvecUtilisateurs(Utilisateur utilisateur, List<Utilisateur> utilisateursSelectionnes) throws SQLException {
 
@@ -354,6 +353,7 @@ public class ServiceUtilisateur implements IService<Utilisateur> {
         user.setId(resultSet.getInt("id"));
         user.setNom(resultSet.getString("nom"));
         user.setEmail(resultSet.getString("email"));
+        user.setImage(resultSet.getString("image"));
         // Ajoutez d'autres propriétés selon votre structure de base de données
         return user;
     }

@@ -87,15 +87,14 @@
                               <!--<FontAwesomeIconView glyphName="SEARCH" layoutX="193.0" layoutY="36.0" size="1.5em" />-->
                                <TableView fx:id="tableView" layoutX="17.0" layoutY="60.0" prefHeight="234.0" prefWidth="747.0" stylesheets="@../css/Styles.css">
                                  <columns>
-                                   <TableColumn fx:id="imageColumn" prefWidth="59.0" text="Image" />
-                                   <TableColumn fx:id="emailColumn" prefWidth="109.0" text="Email" />
-                                     <TableColumn fx:id="nomColumn" prefWidth="71.0" text="Nom" />
-                                     <TableColumn fx:id="prenomColumn" prefWidth="69.00003051757812" text="Prénom" />
-                                     <TableColumn fx:id="villeColumn" prefWidth="68.0" text="Ville" />
-                                     <TableColumn fx:id="numColumn" prefWidth="97.0" text="Numéro téléphoneom" />
-                                     <TableColumn fx:id="genreColumn" prefWidth="74.0" text="Genre" />
-                                     <TableColumn fx:id="roleColumn" prefWidth="77.0" text="Role" />
-                                     <TableColumn fx:id="etatColumn" prefWidth="119.0" text="Etat" />
+                                   <TableColumn fx:id="imageColumn" prefWidth="92.0" text="Image" />
+                                   <TableColumn fx:id="emailColumn" prefWidth="112.0" text="Email" />
+                                     <TableColumn fx:id="nomColumn" prefWidth="86.0" text="Nom" />
+                                     <TableColumn fx:id="prenomColumn" prefWidth="75.0" text="Prénom" />
+                                     <TableColumn fx:id="villeColumn" prefWidth="89.0" text="Ville" />
+                                     <TableColumn fx:id="numColumn" prefWidth="114.0" text="Numéro téléphone" />
+                                     <TableColumn fx:id="genreColumn" prefWidth="79.0" text="Genre" />
+                                     <TableColumn fx:id="roleColumn" prefWidth="94.0" text="Role" />
                                  </columns>
                                </TableView>
                             </children>

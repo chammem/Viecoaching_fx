@@ -1,5 +1,8 @@
 package controllers;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import entities.Utilisateur;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -23,6 +26,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class ProfilController implements Initializable {
@@ -45,11 +49,16 @@ public class ProfilController implements Initializable {
     private ServiceProfil serviceProfil;
     private String nomFichierImageSelectionne;
 
+    private Cloudinary cloudinary;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         MyDatabase myDatabase = MyDatabase.getInstance();
         Connection connection = myDatabase.getConnection();
         this.serviceProfil = new ServiceProfil(connection);
+        cloudinary = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "dppj3e5cp",
+                "api_key", "647876725794588",
+                "api_secret", "yQBtTPY_dzeUjCcUHQcmHvJevgg"));
 
         afficherDonneesUtilisateur();
 
@@ -96,51 +105,50 @@ public class ProfilController implements Initializable {
         sauvegarder.setOnAction(event -> sauvegarderModification());
         sauvegarder.setVisible(false); // Cache le bouton de sauvegarde par défaut
     }
-    private InputStream selectImage() {
-        // Vérifier d'abord si une image a déjà été sélectionnée
-        if (nomFichierImageSelectionne != null) {
-            try {
-                return new FileInputStream(nomFichierImageSelectionne);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        // Si aucune image n'a été sélectionnée précédemment, afficher le dialogue de sélection d'image
+    @FXML
+    private void selectImage() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir une image");
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg")
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.gif")
         );
+
         File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
-            // Afficher l'image sélectionnée dans l'interface utilisateur
-            Image image = new Image(selectedFile.toURI().toString());
-            imageId.setImage(image);
-
-            // Mettre à jour la variable avec le nom du fichier sélectionné
-            nomFichierImageSelectionne = selectedFile.getAbsolutePath();
-
-            System.out.println("Nom du fichier sélectionné : " + nomFichierImageSelectionne);
-
             try {
-                return new FileInputStream(selectedFile);
+                // Créer un InputStream à partir du fichier sélectionné
+                InputStream imageStream = new FileInputStream(selectedFile);
+
+                // Enregistrer le chemin du fichier sélectionné
+                nomFichierImageSelectionne = selectedFile.getAbsolutePath();
+
+                // Afficher l'image sélectionnée dans l'interface utilisateur
+                Image image = new Image(selectedFile.toURI().toString());
+                imageId.setImage(image);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                return null;
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Fichier introuvable", "Le fichier sélectionné est introuvable.");
             }
         }
-        return null; // Retourner null si aucun fichier image n'est sélectionné
     }
+    private String uploadImage(InputStream imageStream, String nomFichierImage) throws IOException {
+        // Créer un tableau de bytes pour contenir le contenu du flux d'entrée
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = imageStream.read(buffer)) != -1) {
+            byteArrayOutputStream.write(buffer, 0, bytesRead);
+        }
+        byte[] imageData = byteArrayOutputStream.toByteArray();
 
+        // Charger l'image vers Cloudinary
+        Map<String, Object> uploadResult = cloudinary.uploader().upload(imageData, ObjectUtils.asMap(
+                "folder", "votre_dossier_images",
+                "public_id", nomFichierImage));
 
-
-    public File loadImage(String imageName) {
-        String imagePath = System.getProperty("user.dir") + "/" + IMAGE_DIRECTORY + "/" + imageName;
-        return new File(imagePath);
+        // Retourner l'URL de l'image téléchargée
+        return (String) uploadResult.get("url");
     }
-
     private void controleBtnRadio() {
         ToggleGroup genreToggleGroup = new ToggleGroup();
         hommeId.setToggleGroup(genreToggleGroup);
@@ -177,10 +185,25 @@ public class ProfilController implements Initializable {
                 }
             }
 
-            String imagePath = IMAGE_DIRECTORY + "/" + utilisateurConnecte.getImage();
-            File file = new File(imagePath);
-            Image image = new Image(file.toURI().toString());
-            imageId.setImage(image);
+            try {
+                String imagePath = utilisateurConnecte.getImage();
+                Image imageUrl;
+                if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
+                    // Charger l'image à partir de l'URL Cloudinary
+                    imageUrl = new Image(imagePath);
+                } else {
+                    // Charger l'image à partir du dossier local sur le PC
+                    imageUrl = new Image(new File("C:/Users/LENOVO/Desktop/3A55/Pidev/viecoaching/public/images/user/" + imagePath).toURI().toString());
+                }
+                imageId.setImage(imageUrl);
+                imageId.setFitWidth(150);
+                imageId.setFitHeight(150);
+                // Afficher l'image dans imageId (ou tout autre ImageView que vous utilisez)
+                imageId.setImage(imageUrl);
+            } catch (Exception e) {
+                System.out.println("Erreur lors du chargement de l'image : " + e.getMessage());
+                imageId.setImage(null); // Assurez-vous de définir l'image sur null en cas d'erreur
+            }
         } else {
             // Gérer le cas où aucun utilisateur n'est connecté
             // Peut-être afficher un message d'erreur ou rediriger vers la page de connexion
@@ -188,24 +211,7 @@ public class ProfilController implements Initializable {
     }
 
 
-    public String saveImage(String nomFichierImage, InputStream imageStream, String extension) throws IOException {
-        // Obtenez le chemin absolu du répertoire d'images
-        Path imageDirectoryPath = Paths.get(IMAGE_DIRECTORY);
 
-        // Créez le répertoire s'il n'existe pas déjà
-        if (!Files.exists(imageDirectoryPath)) {
-            Files.createDirectories(imageDirectoryPath);
-        }
-
-        // Construisez le chemin complet du fichier dans le répertoire "photos" avec l'extension appropriée
-        Path destinationPath = imageDirectoryPath.resolve(nomFichierImage + "." + extension);
-
-        // Copiez l'image dans le répertoire spécifié
-        Files.copy(imageStream, destinationPath, StandardCopyOption.REPLACE_EXISTING);
-
-        // Retournez le nom de l'image enregistrée avec l'extension
-        return nomFichierImage + "." + extension;
-    }
 
     private void sauvegarderModification() {
         // Récupère les nouvelles valeurs des champs
@@ -222,35 +228,25 @@ public class ProfilController implements Initializable {
             return;
         }
 
-// Contrôle de saisie pour le prénom
+        // Contrôle de saisie pour le prénom
         if (nouveauPrenom.length() < 6) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Prénom invalide", "Le prénom doit comporter au moins 6 caractères.");
             return;
         }
 
-// Contrôle de saisie pour la ville
+        // Contrôle de saisie pour la ville
         if (nouvelleVille.length() < 6) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Ville invalide", "La ville doit comporter au moins 6 caractères.");
             return;
         }
 
-// Contrôle de saisie pour le numéro de téléphone
+        // Contrôle de saisie pour le numéro de téléphone
         if (!nouveauNumero.matches("\\d{8}")) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Numéro de téléphone invalide", "Le numéro de téléphone doit comporter exactement 8 chiffres.");
             return;
         }
 
-// Contrôle de saisie pour le genre
-        if ((hommeSelected && femmeSelected) || (!hommeSelected && !femmeSelected)) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Sélection de genre invalide", "Veuillez sélectionner uniquement un genre (homme ou femme).");
-            return;
-        }
-
-        if (nouveauNumero.length() < 8 || !nouveauNumero.matches("\\d{8}")) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Numéro de téléphone invalide", "Le numéro de téléphone doit comporter au moins 8 chiffres.");
-            return;
-        }
-
+        // Contrôle de saisie pour le genre
         if ((hommeSelected && femmeSelected) || (!hommeSelected && !femmeSelected)) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Sélection de genre invalide", "Veuillez sélectionner uniquement un genre (homme ou femme).");
             return;
@@ -263,10 +259,7 @@ public class ProfilController implements Initializable {
         confirmationAlert.setContentText("Êtes-vous sûr de vouloir sauvegarder les modifications ?");
         confirmationAlert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                // Récupère la nouvelle image sélectionnée
-                InputStream imageStream = selectImage();
-
-                // Met à jour les données de l'utilisateur
+                // Mettre à jour les données de l'utilisateur
                 Utilisateur utilisateurConnecte = SessionManager.getUtilisateurConnecte();
                 if (utilisateurConnecte != null) {
                     utilisateurConnecte.setNom(nouveauNom);
@@ -275,19 +268,13 @@ public class ProfilController implements Initializable {
                     utilisateurConnecte.setTel(nouveauNumero);
                     utilisateurConnecte.setGenre(hommeSelected ? "Homme" : "Femme"); // Met à jour le genre de l'utilisateur en fonction de la sélection
 
-                    // Met à jour l'image si une nouvelle image est sélectionnée
-                    if (imageStream != null) {
-                        try {
-                            // Sauvegarde la nouvelle image et récupère son nom
-                            String nomFichierImage = saveImage("profile_" + System.currentTimeMillis(), imageStream, "jpg");
-                            utilisateurConnecte.setImage(nomFichierImage);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            return; // Arrêtez le processus si une erreur se produit lors de l'enregistrement de l'image
-                        }
+                    // Mettre à jour l'image si une nouvelle image est sélectionnée
+                    String imageUrl = selectAndUpdateImage();
+                    if (imageUrl != null) {
+                        utilisateurConnecte.setImage(imageUrl);
                     }
 
-                    // Met à jour les données dans la base de données
+                    // Mettre à jour les données dans la base de données
                     try {
                         this.serviceProfil.modifier(utilisateurConnecte, utilisateurConnecte.getEmail());
                         afficherDonneesUtilisateur(); // Rafraîchit les données affichées après la modification
@@ -299,6 +286,32 @@ public class ProfilController implements Initializable {
                 }
             }
         });
+    }
+    private String selectAndUpdateImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null) {
+            try {
+                // Créer un InputStream à partir du fichier sélectionné
+                InputStream imageStream = new FileInputStream(selectedFile);
+
+                // Générer un nom de fichier unique
+                String nomFichierImageSansExtension = "profile_" + System.currentTimeMillis();
+
+                // Téléverser l'image vers Cloudinary et obtenir l'URL de l'image téléchargée
+                String imageUrl = uploadImage(imageStream, nomFichierImageSansExtension);
+
+                // Retourner l'URL de l'image téléchargée
+                return imageUrl;
+            } catch (IOException e) {
+                e.printStackTrace();
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Échec de la sélection de l'image", "Une erreur s'est produite lors de la sélection de l'image.");
+            }
+        }
+
+        return null; // Retourner null si aucun fichier sélectionné ou en cas d'erreur
     }
 
     private void activerEdition() {
