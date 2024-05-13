@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.asma.asma.controllers.ApprouveController">
+   <children>
+      <Text layoutX="30.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Liste des reservations">
+         <font>
+            <Font name="Apple Chancery" size="32.0" />
+         </font>
+      </Text>
+      <ListView fx:id="listeRes" layoutX="30.0" layoutY="65.0" prefHeight="309.0" prefWidth="387.0" style="-fx-background-color: white;" />
+      <Button layoutX="433.0" layoutY="87.0" mnemonicParsing="false" onAction="#approuver" prefHeight="30.0" prefWidth="157.0" style="-fx-background-color: Green;" text="Approuver" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Button>
+      <Button layoutX="432.0" layoutY="147.0" mnemonicParsing="false" onAction="#refuser" prefHeight="30.0" prefWidth="157.0" style="-fx-background-color: red;" text="Refuser" textFill="WHITE">
+         <font>
+            <Font name="System Bold Italic" size="16.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
