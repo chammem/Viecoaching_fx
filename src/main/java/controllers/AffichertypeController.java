@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class AffichertypeController implements Initializable {
 
@@ -59,23 +60,16 @@ public class AffichertypeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        pageIndex = 0; // Initialiser pageIndex à 0 pour charger la première page
-        try {
+
             loadResources2(); // Appel de loadResources2()
-            configurePieChartData(); // Appel de configurePieChartData()
-        } catch (SQLException e) {
-            e.printStackTrace(); // Gérer l'exception de manière appropriée
-        }
+
 
         // Ajouter un écouteur de changement pour le champ de texte de recherche
-        hh.textProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                filterResources(newValue);
-            } catch (SQLException e) {
-                e.printStackTrace(); // Handle the exception gracefully
-            }
-        });
+
+
     }
+
+
 
 
 
@@ -84,7 +78,7 @@ public class AffichertypeController implements Initializable {
     private void handleAjouter(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/Typeg.fxml"));
-            Stage stage = (Stage) hh.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            Stage stage = (Stage) gridPane.getScene().getWindow(); // Récupérer la fenêtre actuelle
             stage.setScene(new Scene(root));
         } catch (IOException e) {
             System.out.println("Erreur lors du chargement de afficheRessource.fxml : " + e.getMessage());
@@ -116,48 +110,57 @@ public class AffichertypeController implements Initializable {
     }
 
 
-    private void filterResources(String searchText) throws SQLException {
-        ObservableList<Typegroupe> typegroupes = FXCollections.observableArrayList(service.afficher());
-        gridPane.getChildren().clear(); // Clear existing items in GridPane
-        AtomicInteger row = new AtomicInteger(1); // Start from the second row (index 1)
+    @FXML
+    private void filterResources(String searchText) {
+        try {
+            List<Typegroupe> filteredList = service.getAllTypegroupe().stream()
+                    .filter(typegroupe -> typegroupe.getNomtype().toLowerCase().contains(searchText.toLowerCase()))
+                    .collect(Collectors.toList());
 
-        typegroupes.stream()
-                .filter(typegroupe -> typegroupe.getNomtype().toLowerCase().contains(searchText.toLowerCase()))
-                .forEach(typegroupe -> loadResources(typegroupe,row.getAndIncrement()));
+            displayedTypeGroupes = FXCollections.observableArrayList(filteredList);
+
+            pageIndex = 0; // Réinitialiser l'index de la page à 0 après la recherche
+            loadResources2(); // Recharger les ressources en fonction de la recherche et de la pagination
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
+
+
     private void loadResources(Typegroupe typegroupe ,int row) {
 
 
 
-            // Titres de colonnes en gras
-            Label titleLabel1 = new Label("type Groupe");
-            gridPane.add(titleLabel1, 0, 0);
-            titleLabel1.setStyle("-fx-font-weight: bold;");
+        // Titres de colonnes en gras
+        Label titleLabel1 = new Label("type Groupe");
+        gridPane.add(titleLabel1, 0, 0);
+        titleLabel1.setStyle("-fx-font-weight: bold;");
 
-            Label titleLabel2 = new Label("Supprimer");
-            titleLabel2.setStyle("-fx-font-weight: bold;");
-            gridPane.add(titleLabel2, 1, 0);
+        Label titleLabel2 = new Label("Supprimer");
+        titleLabel2.setStyle("-fx-font-weight: bold;");
+        gridPane.add(titleLabel2, 1, 0);
 
-            Label titleLabel3 = new Label("Modifier");
-            titleLabel3.setStyle("-fx-font-weight: bold;");
-            gridPane.add(titleLabel3, 2, 0);
+        Label titleLabel3 = new Label("Modifier");
+        titleLabel3.setStyle("-fx-font-weight: bold;");
+        gridPane.add(titleLabel3, 2, 0);
 
-                Label typeLabel = new Label(typegroupe.getNomtype());
-                gridPane.add(typeLabel, 0, row);
+        Label typeLabel = new Label(typegroupe.getNomtype());
+        gridPane.add(typeLabel, 0, row);
 
-                Button deleteButton = new Button("Delete");
-                deleteButton.setOnAction(event -> deleteTypegroupe(typegroupe));
-                deleteButton.setStyle("-fx-background-color: red;");
-                gridPane.add(deleteButton, 1, row);
+        Button deleteButton = new Button("Delete");
+        deleteButton.setOnAction(event -> deleteTypegroupe(typegroupe));
+        deleteButton.setStyle("-fx-background-color: red;");
+        gridPane.add(deleteButton, 1, row);
 
-                Button updateButton = new Button("Update");
-                updateButton.setOnAction(event -> updateTypegroupe(typegroupe));
-                updateButton.setStyle("-fx-background-color: green;");
-                gridPane.add(updateButton, 2, row);
+        Button updateButton = new Button("Update");
+        updateButton.setOnAction(event -> updateTypegroupe(typegroupe));
+        updateButton.setStyle("-fx-background-color: green;");
+        gridPane.add(updateButton, 2, row);
 
 
 
-        }
+    }
 
 
     @FXML
@@ -226,7 +229,7 @@ public class AffichertypeController implements Initializable {
             Parent modif = loader.load();
             ModifiertypeController controller = loader.getController();
             controller.initData(typegroupe);
-            Stage stage = (Stage) hh.getScene().getWindow();
+            Stage stage = (Stage) gridPane.getScene().getWindow();
             stage.setScene(new Scene(modif));
             Platform.runLater(this::loadResources2);
         } catch (IOException e) {

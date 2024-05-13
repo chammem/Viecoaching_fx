@@ -1,7 +1,9 @@
 package controllers;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import controllers.UtilisateurListItem;
 import entities.Groupe;
-import entities.Typegroupe;
 import entities.Utilisateur;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,21 +17,17 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import services.ServiceGroupe;
-import services.ServiceTypegroupe;
 import services.ServiceUtilisateur;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.time.LocalDate;
-import javafx.scene.layout.GridPane;
-import utils.MyDatabase;
-
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Map;
 
 public class ModifiergroupeController implements Initializable {
 
@@ -58,15 +56,13 @@ public class ModifiergroupeController implements Initializable {
     private ServiceUtilisateur serviceUtilisateur;
     private ServiceGroupe serviceGroupe;
     private Scene scene;
+    private Cloudinary cloudinary;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialisation des services
         utilisateursListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        MyDatabase myDatabase = MyDatabase.getInstance();
-        Connection connection = myDatabase.getConnection();
-        this.serviceUtilisateur = new ServiceUtilisateur(connection);
         serviceGroupe = new ServiceGroupe();
         List<Utilisateur> utilisateurs = new ArrayList<>();
 
@@ -99,6 +95,12 @@ public class ModifiergroupeController implements Initializable {
                 }
             });
         }
+
+        // Initialiser Cloudinary
+        cloudinary = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "dsjnvpodf",
+                "api_key", "746525825315851",
+                "api_secret", "XVhMJcWUwUjOa9DK6N41402p3hk"));
     }
 
     public void initData(Groupe groupe) {
@@ -153,7 +155,6 @@ public class ModifiergroupeController implements Initializable {
         // Mise à jour des informations du groupe
         groupe.setNom(nom);
         groupe.setDescription(description);
-        groupe.setImage(imageView.getImage().getUrl());
 
         // Récupération de la date de création et mise à jour du groupe
         groupe.setDatecreation(java.sql.Date.valueOf(dateCreation));
@@ -165,19 +166,9 @@ public class ModifiergroupeController implements Initializable {
         // Appel du service pour modifier le groupe
         serviceGroupe.modifierg(groupe, utilisateursSelectionnes);
         showAlert("Le groupe a été modifié avec succès.");
+
         // Fermeture de la scène actuelle
         loadAfficheCategorieView();
-
-        // Affichage d'une notification de succès
-    }
-    private void loadAfficheCategorieView() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Affichegr.fxml"));
-            Stage stage = (Stage) nomField.getScene().getWindow(); // Récupérer la fenêtre actuelle
-            stage.setScene(new Scene(root));
-        } catch (IOException e) {
-            System.out.println("Erreur lors du chargement de afficheCategorie.fxml : " + e.getMessage());
-        }
     }
 
     @FXML
@@ -194,6 +185,23 @@ public class ModifiergroupeController implements Initializable {
             // Chargement et affichage de l'image sélectionnée
             Image image = new Image(selectedFile.toURI().toString());
             imageView.setImage(image);
+
+            // Télécharger l'image sélectionnée vers Cloudinary
+            uploadImageToCloudinary(selectedFile);
+        }
+    }
+
+    private void uploadImageToCloudinary(File file) {
+        try {
+            // Uploader l'image vers Cloudinary
+            Map uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
+            String imageUrl = (String) uploadResult.get("url");
+
+            // Mise à jour de l'URL de l'image dans le groupe
+            groupe.setImage(imageUrl);
+        } catch (Exception e) {
+            showAlert("Erreur lors du téléchargement de l'image vers Cloudinary : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -203,5 +211,15 @@ public class ModifiergroupeController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void loadAfficheCategorieView() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Affichegr.fxml"));
+            Stage stage = (Stage) nomField.getScene().getWindow(); // Récupérer la fenêtre actuelle
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de afficheCategorie.fxml : " + e.getMessage());
+        }
     }
 }

@@ -1,42 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.image.ImageView?>
-
 <?import java.net.URL?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.ModifiergroupeController"
-            prefHeight="400.0" prefWidth="600.0" >
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ModifiergroupeController">
 
     <stylesheets>
         <URL value="@styles.css" />
     </stylesheets>
 
     <children>
-        <AnchorPane fx:id="image" prefHeight="623.0" prefWidth="844.0" styleClass="form-container">
+        <AnchorPane fx:id="image" prefHeight="623.0" prefWidth="844.0" style="-fx-background-color: #F7F4D9;" styleClass="form-container">
             <children>
-                <VBox prefHeight="300.0" prefWidth="438.0" spacing="10.0"
-                      AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0"
-                      AnchorPane.topAnchor="20.0" AnchorPane.bottomAnchor="20.0">
+                <VBox prefHeight="300.0" prefWidth="438.0" spacing="10.0" style="-fx-background-color: #F7F4D9;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                     <children>
                         <Label text="Nom :" />
-                        <Label text="Type de groupe :" />
-                        <Label text="Date de création :" />
-                        <Label text="Image :" />
-                        <Label text="Description :" />
 
                         <!-- Champs de saisie pour les informations du groupe -->
-                        <TextField fx:id="nomField" />
-                        <ChoiceBox fx:id="typeGroupeField" prefWidth="200.0" />
-                        <DatePicker fx:id="dateCreationField" />
-                        <TextField fx:id="descriptionField" />
+                        <TextField fx:id="nomField" style="-fx-background-color: EFD0B5;" />
+                        <Label text="Type de groupe :" />
+                        <ChoiceBox fx:id="typeGroupeField" prefWidth="200.0" style="-fx-background-color: EFD0B5;" />
+                        <Label text="Date de création :" />
+                        <DatePicker fx:id="dateCreationField" style="-fx-background-color: EFD0B5;" />
+                        <Label text="Description :" />
+                        <TextField fx:id="descriptionField" prefHeight="30.0" prefWidth="303.0" style="-fx-background-color: EFD0B5;" />
+                        <Label text="Image :" />
 
                         <HBox spacing="10">
                             <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
@@ -46,15 +44,12 @@
 
                         <Label text="Utilisateurs :" />
                         <!-- ListView pour afficher les utilisateurs -->
-                        <ListView fx:id="utilisateursListView" prefWidth="200" />
+                        <ListView fx:id="utilisateursListView" prefHeight="63.0" prefWidth="804.0" style="-fx-background-color: EFD0B5;" />
                     </children>
                 </VBox>
                 <Label styleClass="title" text="Liste des ressources" />
-                <ButtonBar prefHeight="40.0" prefWidth="686.0">
-                    <buttons>
-                        <Button fx:id="btnModifier" mnemonicParsing="false" onAction="#modifierGroupe" text="Modifier" />
-                    </buttons>
-                </ButtonBar>
+                <ButtonBar prefHeight="40.0" prefWidth="686.0" />
+                <Button fx:id="btnModifier" layoutX="392.0" layoutY="591.0" mnemonicParsing="false" onAction="#modifierGroupe" text="Modifier" />
             </children>
         </AnchorPane>
     </children>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -7,16 +8,18 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.groupeController" prefHeight="400.0" prefWidth="600.0" stylesheets="@styles.css">
+<AnchorPane prefHeight="639.0" prefWidth="788.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.groupeController">
 
     <!-- GridPane pour organiser les composants -->
-    <GridPane hgap="10" vgap="10" layoutX="50" layoutY="50" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+    <GridPane hgap="10" layoutX="50" layoutY="50.0" prefWidth="731.0" style="-fx-background-color: #F7F4D9;" vgap="10" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
         <!-- Labels pour les titres -->
-        <Label text="Nom :" />
+        <Label text="Nom de groupe :" />
         <Label text="Type de groupe :" GridPane.rowIndex="1" />
         <Label text="Date de création :" GridPane.rowIndex="2" />
         <Label text="Image :" GridPane.rowIndex="3" />
@@ -24,22 +27,37 @@
         <Label text="Utilisateurs :" GridPane.rowIndex="6" />
 
         <!-- Champs de saisie pour les informations du groupe -->
-        <TextField fx:id="nomField" GridPane.columnIndex="1" />
-        <ChoiceBox fx:id="typeGroupeField" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-        <DatePicker fx:id="dateCreationField" promptText="Sélectionner une date" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <TextField fx:id="nomField" style="-fx-background-color: EFD0B5;" GridPane.columnIndex="1" />
+        <ChoiceBox fx:id="typeGroupeField" prefWidth="200.0" style="-fx-background-color: EFD0B5;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <DatePicker fx:id="dateCreationField" promptText="Sélectionner une date" style="-fx-background-color: EFD0B5;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
         <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-        <TextField fx:id="descriptionField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        <TextField fx:id="descriptionField" style="-fx-background-color: EFD0B5;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
         <!-- Bouton pour insérer une image -->
-        <Button onAction="#selectImage" text="Insérer une image" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+        <Button onAction="#selectImage" text="Insérer une image" GridPane.columnIndex="3" GridPane.rowIndex="3" />
 
         <!-- ListView pour afficher les utilisateurs -->
-        <ListView fx:id="utilisateursListView" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+        <ListView fx:id="utilisateursListView" prefWidth="200" style="-fx-background-color: EFD0B5;" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
         <!-- Boutons pour les actions -->
-        <HBox spacing="10" GridPane.columnSpan="2" GridPane.rowIndex="7">
-            <Button onAction="#ajouter" text="Ajouter" />
-        </HBox>
+        <HBox spacing="10" GridPane.columnSpan="2" GridPane.rowIndex="7" />
+        <Button onAction="#ajouter" text="Ajouter" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+        <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+            <ColumnConstraints />
+            <ColumnConstraints />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+        </rowConstraints>
 
     </GridPane>
 </AnchorPane>
