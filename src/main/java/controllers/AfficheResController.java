@@ -111,11 +111,12 @@ public class AfficheResController implements Initializable {
 
     private void addResourceToGrid(Ressources ressources, int row) throws IOException {
         // Titre
-        Label typeLabel = new Label(ressources.getType_r());
-        gridPane.add(typeLabel, 0, row);
+
 
         Label titleLabel = new Label(ressources.getTitre_r());
-        gridPane.add(titleLabel, 1, row);
+        gridPane.add(titleLabel, 0, row);
+        Label typeLabel = new Label(ressources.getType_r());
+        gridPane.add(typeLabel, 1, row);
 
         Label descriptionLabel = new Label(ressources.getDescription());
         gridPane.add(descriptionLabel, 2, row);
@@ -220,7 +221,7 @@ public class AfficheResController implements Initializable {
         AtomicInteger row = new AtomicInteger(1); // Start from the second row (index 1)
 
         resources.stream()
-                .filter(ressource -> ressource.getType_r().toLowerCase().contains(searchText.toLowerCase()))
+                .filter(ressource -> ressource.getTitre_r().toLowerCase().contains(searchText.toLowerCase()))
                 .forEach(ressource -> {
                     try {
                         addResourceToGrid(ressource, row.getAndIncrement());

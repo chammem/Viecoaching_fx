@@ -120,7 +120,7 @@ public class ServiceRessource implements IService<Ressources>{
         return null; // Retourner null si aucune ressource n'est trouvée
     }
     public Ressources getRessourceByNom(String nom) throws SQLException {
-        String sql = "SELECT * FROM ressources WHERE type_r = ?";
+        String sql = "SELECT * FROM ressources WHERE titre_r = ?";
         Ressources ressource = null;
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
