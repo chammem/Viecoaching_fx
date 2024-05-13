@@ -59,9 +59,9 @@
             <version>4.2.0-9.1.2</version>
         </dependency>
         <dependency>
-            <groupId>com.googlecode</groupId>
-            <artifactId>google-api-translate-java</artifactId>
-            <version>0.92</version>
+            <groupId>com.jfoenix</groupId>
+            <artifactId>jfoenix</artifactId>
+            <version>8.0.7</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>

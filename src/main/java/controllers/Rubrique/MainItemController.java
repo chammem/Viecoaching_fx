@@ -1,4 +1,4 @@
-package controllers.RubriqueAdmin;
+package controllers.Rubrique;
 
 import entities.Commentaire;
 import javafx.event.ActionEvent;
@@ -69,16 +69,7 @@ public class MainItemController implements Initializable {
             lblDislikes.setVisible(false);
         }
         }
-    /*public void btnDelete(ActionEvent actionEvent) {*/
-        /*ServiceCommentaire s =new ServiceCommentaire();
-        s.deleteCommentaire(s.getCommentaireById(Integer.parseInt(lblidcomment.getText())));*/
-        /*ServiceCommentaire s = new ServiceCommentaire();
-        Commentaire commentaire = s.getCommentaireById(Integer.parseInt(lblidcomment.getText()));
-        if (commentaire != null) {
-            s.deleteCommentaire(commentaire);
-        } else {
-            // Handle the case where the commentaire is null
-        }*/
+
 
     private ServiceCommentaire getServiceCommentaire() {
         return new ServiceCommentaire();

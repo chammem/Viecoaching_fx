@@ -7,8 +7,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static tests.Main.userid;
-
 public class ServiceCommentaire{
     static Connection connection;
     public ServiceCommentaire(){
@@ -17,7 +15,7 @@ public class ServiceCommentaire{
     public void ajouterCommentaire(Commentaire c){
 
         try {
-            String requete="INSERT INTO Commentaire(rubrique_id, auteur_id, contenu, dateCréation, likes, dislikes)Values(?,?,?,?,?,?)";
+            String requete="INSERT INTO Commentaire(rubrique_id, auteur_id, contenu, date_creation, likes, dislikes)Values(?,?,?,?,?,?)";
             PreparedStatement pst= MyDatabase.getInstance().getConnection().prepareStatement(requete);
             pst.setInt(1, c.getRubrique_id());
             pst.setInt(2, c.getAuteur_id());
@@ -46,7 +44,7 @@ public class ServiceCommentaire{
 
                 P.setId(rs.getInt(1));
                 P.setContenu(rs.getString("contenu"));
-                P.setDateCréation(rs.getDate("dateCréation"));
+                P.setDateCréation(rs.getDate("date_creation"));
                 P.setLikes(rs.getInt("likes"));
                 P.setDislikes(rs.getInt("dislikes"));
                 mylist.add(P);
@@ -75,7 +73,7 @@ public class ServiceCommentaire{
 
     public void modifierCommentaire(Commentaire c){
         try {
-            String requete =  "UPDATE Commentaire SET rubrique_id = ?, auteur_id = ? , contenu =? , dateCréation = ?, likes = ?, dislikes = ? WHERE id=?";
+            String requete =  "UPDATE Commentaire SET rubrique_id = ?, auteur_id = ? , contenu =? , date_creation = ?, likes = ?, dislikes = ? WHERE id=?";
 
             PreparedStatement pst= MyDatabase.getInstance().getConnection().prepareStatement(requete);
             pst.setInt(1, c.getRubrique_id());
@@ -101,7 +99,7 @@ public class ServiceCommentaire{
             statement.setInt(1, CommentaireId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                Commentaire = new Commentaire(resultSet.getInt("id"), resultSet.getInt("rubrique_id"), resultSet.getInt("auteur_id"), resultSet.getString("contenu"),resultSet.getDate("dateCréation"),resultSet.getInt("likes"),resultSet.getInt("dislikes"));
+                Commentaire = new Commentaire(resultSet.getInt("id"), resultSet.getInt("rubrique_id"), resultSet.getInt("auteur_id"), resultSet.getString("contenu"),resultSet.getDate("date_creation"),resultSet.getInt("likes"),resultSet.getInt("dislikes"));
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -123,7 +121,7 @@ public class ServiceCommentaire{
                 P.setRubrique_id(rs.getInt("rubrique_id"));
                 P.setAuteur_id(rs.getInt("auteur_id"));
                 P.setContenu(rs.getString("contenu"));
-                P.setDateCréation(rs.getDate("dateCréation"));
+                P.setDateCréation(rs.getDate("date_creation"));
                 mylist.add(P);
 
             }
@@ -161,6 +159,8 @@ public class ServiceCommentaire{
             System.out.println(ex.getMessage());
         }
     }
+
+
 }
 
 

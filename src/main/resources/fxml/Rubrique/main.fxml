@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="779.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Rubrique.MainController">
+   <children>
+      <BorderPane prefHeight="550.0" prefWidth="779.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+         <right>
+            <SplitPane dividerPositions="0.49817184643510054" orientation="VERTICAL" prefHeight="528.0" prefWidth="480.0" BorderPane.alignment="CENTER">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="270.0" prefWidth="832.0">
+                     <children>
+                        <Pane layoutX="-1.0" prefHeight="269.0" prefWidth="485.0" style="-fx-background-color: #ffffff; -fx-border-color: rgba(129,170,255,0.1); -fx-border-insets: 1 0 0 0;">
+                           <children>
+                              <Pane layoutX="60.0" layoutY="63.0" />
+                              <HBox layoutX="232.0" layoutY="6.0" prefHeight="31.0" prefWidth="252.0">
+                                 <children>
+                                    <Label prefHeight="17.0" prefWidth="64.0" text="Publier le :" textFill="#090908" />
+                                    <Label fx:id="lblDate" prefHeight="13.0" prefWidth="121.0" text="date publication" textFill="BLACK" />
+                                 </children>
+                              </HBox>
+                              <VBox layoutX="16.0" layoutY="84.0" prefHeight="173.0" prefWidth="452.0">
+                                 <children>
+                                    <Line endX="469.0" startX="127.0" stroke="#6f6d6d" />
+                                    <TextArea fx:id="lblContenu" editable="false" prefHeight="150.0" prefWidth="452.0" style="-fx-background-color: #282828; -fx-background-radius: 5; -fx-border-color: WHITE;" text="Contenu" />
+                                 </children>
+                              </VBox>
+
+                              <VBox layoutX="16.0" layoutY="9.0">
+                                 <children>
+                                    <Label fx:id="lblUser" prefHeight="20.0" prefWidth="121.0" text="User" textFill="BLACK">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label prefHeight="13.0" prefWidth="121.0" text="Auteur" textFill="#090908" />
+                                 </children>
+                              </VBox>
+                              <VBox layoutX="143.0" layoutY="37.0" />
+                              <Label fx:id="lblTitle" layoutX="143.0" layoutY="53.0" prefHeight="20.0" prefWidth="121.0" text="Title" textFill="BLACK">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblidrubrique" layoutX="430.0" layoutY="45.0" text="Label" visible="false" />
+                           </children>
+                        </Pane>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="269.0" prefWidth="674.0">
+                     <children>
+                        <BorderPane layoutY="1.0" prefHeight="269.0" prefWidth="445.0" style="-fx-background-color: #ffffff; -fx-border-color: rgba(129,170,255,0.1); -fx-border-insets: 1 0 0 0;">
+                           <top>
+                              <HBox alignment="CENTER_LEFT" prefHeight="41.0" prefWidth="249.0" spacing="5.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <TextField fx:id="txtCommentaire" prefHeight="26.0" prefWidth="419.0" promptText="Commentaire" style="-fx-background-color: rgba(129,170,255,0.1); -fx-text-fill: #090908;" />
+                                    <Button alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#btnAddComment" prefHeight="20.0" prefWidth="30.0" stylesheets="@../css/styling.css" textFill="BLACK">
+                                       <graphic>
+                                          <ImageView fx:id="btnAdd" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../icons/addw.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Button mnemonicParsing="false" onAction="#btnGetEmojiClicked" text="Button" />
+                                 </children>
+                                 <padding>
+                                    <Insets left="5.0" right="5.0" />
+                                 </padding>
+                              </HBox>
+                           </top>
+                           <left>
+                              <ScrollPane BorderPane.alignment="CENTER">
+                                 <content>
+                                    <VBox fx:id="vItems" prefHeight="320.0" prefWidth="476.0" />
+                                 </content>
+                              </ScrollPane>
+                           </left>
+                        </BorderPane>
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+         </right>
+         <center>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <BorderPane prefHeight="544.0" prefWidth="452.0" style="-fx-background-color: #ffffff; -fx-border-color: rgba(129,170,255,0.1); -fx-border-insets: 1 0 0 0;">
+
+               <center>
+                  <VBox prefHeight="547.0" prefWidth="78.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <ListView fx:id="lvRubriques" prefHeight="567.0" prefWidth="297.0" />
+                     </children></VBox>
+               </center>
+            </BorderPane>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>

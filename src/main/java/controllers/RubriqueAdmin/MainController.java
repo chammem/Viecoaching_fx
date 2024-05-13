@@ -104,6 +104,7 @@ public class MainController implements Initializable {
     void handleButtonClicks(ActionEvent event) {
 
 
+
     }
 
     @Override
@@ -116,72 +117,72 @@ public class MainController implements Initializable {
     public void ShowRubriques(){
         try {
             ServiceRubrique rubriqueService =  new ServiceRubrique();
-            ServiceUtilisateur u = new ServiceUtilisateur();
-            List<Rubrique> rubriques = rubriqueService.listerRubrique();
-            List<AppModel> apps = new ArrayList<>();
-            vRubrique.getChildren().clear();
+        ServiceUtilisateur u = new ServiceUtilisateur();
+        List<Rubrique> rubriques = rubriqueService.listerRubrique();
+        List<AppModel> apps = new ArrayList<>();
+        vRubrique.getChildren().clear();
 
-            for (Rubrique rubrique : rubriques) {
-                Utilisateur user = u.trouverParId(rubrique.getAuteur_id());
-                AppModel app = new AppModel(
-                        String.valueOf(rubrique.getId()) ,
-                        user.getPrenom()+" "+user.getNom(),
-                        rubrique.getTitre(),
-                        rubrique.getDatePublication().toString(),
-                        rubrique.getContenu()
-                );
-                apps.add(app);
-            }
-
-            Node[] nodes = new Node[rubriques.size()];
-
-            for (int i = 0; i < nodes.length; i++) {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(Main.class.getResource("/fxml/RubriqueAdmin/mainitem.fxml"));
-                nodes[i] = loader.load();
-
-                isSelected = new boolean[apps.size()];
-                final int h = i;
-                MainItemController controller = loader.getController();
-                controller.setItemInfo(apps.get(i).getAuteur(), apps.get(i).getTitle(), apps.get(i).getId());
-
-                nodes[i].setOnMouseEntered(evt -> {
-                    if (!isSelected[h]) {
-                        nodes[h].setStyle("-fx-background-color: #899b77");
-                    }
-                });
-
-                nodes[i].setOnMouseExited(evt -> {
-                    if (!isSelected[h]) {
-                        nodes[h].setStyle("-fx-background-color: rgba(129,170,255,0.1)");
-                    }
-                });
-
-                nodes[i].setOnMousePressed(evt -> {
-                    Arrays.fill(isSelected, Boolean.FALSE);
-                    isSelected[h] = true;
-
-                    for (Node n : nodes) {
-                        n.setStyle("-fx-background-color: rgba(129,170,255,0.1)");
-                    }
-
-                    nodes[h].setStyle("-fx-background-color: #899b77");
-                    lblCompanyName.setText(apps.get(h).getAuteur());
-                    ShowCommentaires(Integer.valueOf(apps.get(h).getId()));
-                    lblidrubrique.setText(apps.get(h).getId());
-                    lblTitle.setText(apps.get(h).getTitle());
-                    lblWebsite.setText(apps.get(h).getDate_publication());
-                    lblNotes.setText(apps.get(h).getContenu());
-                    lblNotes.setWrapText(true);
-                });
-
-                vRubrique.getChildren().add(nodes[i]);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        for (Rubrique rubrique : rubriques) {
+            Utilisateur user = u.trouverParId(rubrique.getAuteur_id());
+            AppModel app = new AppModel(
+                    String.valueOf(rubrique.getId()) ,
+                    user.getPrenom()+" "+user.getNom(),
+                    rubrique.getTitre(),
+                    rubrique.getDatePublication().toString(),
+                    rubrique.getContenu()
+            );
+            apps.add(app);
         }
+
+        Node[] nodes = new Node[rubriques.size()];
+
+        for (int i = 0; i < nodes.length; i++) {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(Main.class.getResource("/fxml/RubriqueAdmin/mainitem.fxml"));
+            nodes[i] = loader.load();
+
+            isSelected = new boolean[apps.size()];
+            final int h = i;
+            MainItemController controller = loader.getController();
+            controller.setItemInfo(apps.get(i).getAuteur(), apps.get(i).getTitle(), apps.get(i).getId());
+
+            nodes[i].setOnMouseEntered(evt -> {
+                if (!isSelected[h]) {
+                    nodes[h].setStyle("-fx-background-color: #899b77");
+                }
+            });
+
+            nodes[i].setOnMouseExited(evt -> {
+                if (!isSelected[h]) {
+                    nodes[h].setStyle("-fx-background-color: rgba(129,170,255,0.1)");
+                }
+            });
+
+            nodes[i].setOnMousePressed(evt -> {
+                Arrays.fill(isSelected, Boolean.FALSE);
+                isSelected[h] = true;
+
+                for (Node n : nodes) {
+                    n.setStyle("-fx-background-color: rgba(129,170,255,0.1)");
+                }
+
+                nodes[h].setStyle("-fx-background-color: #899b77");
+                lblCompanyName.setText(apps.get(h).getAuteur());
+                ShowCommentaires(Integer.valueOf(apps.get(h).getId()));
+                lblidrubrique.setText(apps.get(h).getId());
+                lblTitle.setText(apps.get(h).getTitle());
+                lblWebsite.setText(apps.get(h).getDate_publication());
+                lblNotes.setText(apps.get(h).getContenu());
+                lblNotes.setWrapText(true);
+            });
+
+            vRubrique.getChildren().add(nodes[i]);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
     }
    /* public void ShowRubriques() {
         try {
