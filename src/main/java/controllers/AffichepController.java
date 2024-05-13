@@ -6,7 +6,6 @@ import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 import entities.Groupe;
-import entities.Utilisateur;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,14 +23,13 @@ import javafx.scene.layout.VBox;
 import services.ServiceGroupe;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+
 public class AffichepController implements Initializable {
     @FXML
     private GridPane gridPane;
@@ -93,66 +91,81 @@ public class AffichepController implements Initializable {
                     .skip(startIndex)
                     .limit(endIndex - startIndex)
                     .forEach(groupe -> {
-                        // Créer les éléments d'interface utilisateur pour afficher les données du groupe
-                        ImageView imageView = new ImageView(new Image(groupe.getImage()));
-                        imageView.setFitWidth(250);
-                        imageView.setFitHeight(250);
-                        gridPane.add(imageView, 0, row[0]);
+                        try {
+                            String imageUrl = groupe.getImage();
+                            if (imageUrl != null && !imageUrl.isEmpty()) {
+                                File file = new File("C:/Users/LENOVO/Desktop/3A55/Pidev/viecoaching/public/uploads/" + imageUrl);
 
-                        VBox vbox = new VBox(); // Créer une VBox pour le titre, la description et le type de groupe
-                        Label titleLabel = new Label(groupe.getNom());
-                        titleLabel.setStyle("-fx-font-weight: bold");
-                        vbox.getChildren().add(titleLabel);
+                                if (file.exists()) {
+                                    InputStream inputStream = new FileInputStream(file);
+                                    Image image = new Image(inputStream);
+                                    inputStream.close();
 
-                        Label descriptionLabel = new Label(groupe.getDescription());
-                        vbox.getChildren().add(descriptionLabel);
+                                    ImageView imageView = new ImageView(image);
+                                    imageView.setFitWidth(100);
+                                    imageView.setFitHeight(100);
+                                    gridPane.add(imageView, 4, row[0]);
+                                } else if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+                                    URL url = new URL(imageUrl);
+                                    InputStream inputStream = url.openStream();
+                                    Image image = new Image(inputStream);
+                                    inputStream.close();
 
-                        Label typeLabel = new Label("Type de groupe : " + groupe.getTypegroupe_id().getNomtype());
-                        vbox.getChildren().add(typeLabel);
+                                    ImageView imageView = new ImageView(image);
+                                    imageView.setFitWidth(100);
+                                    imageView.setFitHeight(100);
+                                    gridPane.add(imageView, 4, row[0]);
+                                } else {
+                                    System.err.println("Invalid image URL: " + imageUrl);
+                                }
+                            }
 
-                        gridPane.add(vbox, 1, row[0]); // Ajouter la VBox à la deuxième colonne
+                            VBox vbox = new VBox();
+                            Label titleLabel = new Label(groupe.getNom());
+                            titleLabel.setStyle("-fx-font-weight: bold");
+                            vbox.getChildren().add(titleLabel);
 
-                        Button pdfButton = new Button("Generate PDF");
-                        pdfButton.setOnAction(event -> generatePDF(groupe));
-                        pdfButton.setStyle("-fx-background-color: orange");
-                        gridPane.add(pdfButton, 2, row[0]); // Ajouter le bouton à la troisième colonne
+                            Label descriptionLabel = new Label(groupe.getDescription());
+                            vbox.getChildren().add(descriptionLabel);
 
-                        row[0]++;
+                            Label typeLabel = new Label("Type de groupe : " + groupe.getTypegroupe_id().getNomtype());
+                            vbox.getChildren().add(typeLabel);
+
+                            gridPane.add(vbox, 1, row[0]);
+
+                            Button pdfButton = new Button("Generate PDF");
+                            pdfButton.setOnAction(event -> generatePDF(groupe));
+                            pdfButton.setStyle("-fx-background-color: orange");
+                            gridPane.add(pdfButton, 2, row[0]);
+
+                            row[0]++;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     });
 
-            // Désactiver le bouton "Page précédente" si nous sommes sur la première page
             prevPageButton.setDisable(pageIndex == 0);
-            // Désactiver le bouton "Page suivante" si nous sommes sur la dernière page
             nextPageButton.setDisable((pageIndex + 1) * pageSize >= service.countGroupes());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-
-
-
     private void generatePDF(Groupe groupe) {
-        // Créer un nouveau document PDF
         Document document = new Document();
 
         try {
-            // Spécifier le chemin du fichier PDF à créer
-            String userHomeDir = System.getProperty("user.home"); // Obtenir le répertoire de l'utilisateur
-            String filePath = userHomeDir + "/Downloads/Groupe_" + groupe.getId() + ".pdf"; // Chemin complet pour enregistrer le fichier dans le répertoire de téléchargement de l'utilisateur
+            String userHomeDir = System.getProperty("user.home");
+            String filePath = userHomeDir + "/Downloads/Groupe_" + groupe.getId() + ".pdf";
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
 
-            // Ouvrir le document
             document.open();
 
-            // Ajouter le contenu au document
-            // Titre du document avec une police personnalisée et en gras
             com.itextpdf.text.Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
             Paragraph title = new Paragraph(new Chunk("Informations sur le groupe :", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.RED)));
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
 
-            // Informations sur le groupe avec un espacement et une police différente
             Font infoFont = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
             Paragraph info = new Paragraph();
             info.add(new Chunk("Nom du groupe : ", FontFactory.getFont(FontFactory.HELVETICA_BOLD)));
@@ -165,18 +178,15 @@ public class AffichepController implements Initializable {
             info.add(new Chunk(groupe.getDatecreation().toString(), infoFont));
             document.add(info);
 
-            // Ajouter l'image du groupe au document
             if (groupe.getImage() != null && !groupe.getImage().isEmpty()) {
                 try {
                     Image image = new Image(groupe.getImage());
                     document.add((Element) image);
                 } catch (Exception e) {
-                    // Gérer les erreurs lors du chargement de l'image
                     e.printStackTrace();
                 }
             }
 
-            // Ajouter un pied de page avec le numéro de page
             PdfContentByte canvas = writer.getDirectContent();
             Phrase footer = new Phrase("Page " + document.getPageNumber(), infoFont);
             ColumnText.showTextAligned(canvas, Element.ALIGN_CENTER,
@@ -184,22 +194,16 @@ public class AffichepController implements Initializable {
                     (document.right() - document.left()) / 2 + document.leftMargin(),
                     document.bottom() - 10, 0);
 
-            // Fermer le document
             document.close();
 
-            // Afficher un message de succès
             showAlertPDFGenerated();
 
-            // Ouvrir le fichier PDF dans le visualiseur PDF par défaut de l'utilisateur
             openPDFFile(filePath);
 
         } catch (DocumentException | IOException e) {
             e.printStackTrace();
         }
     }
-
-
-
 
     private void openPDFFile(String filePath) {
         try {

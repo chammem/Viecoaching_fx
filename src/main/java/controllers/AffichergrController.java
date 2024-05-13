@@ -25,9 +25,7 @@ import javafx.stage.Stage;
 import services.ServiceGroupe;
 
 import java.awt.Desktop;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -193,13 +191,35 @@ public class AffichergrController implements Initializable {
                         Label datecreationLabel = new Label(groupe.getDatecreation().toString());
                         gridPane.add(datecreationLabel, 3, row[0]);
 
-                        if (groupe.getImage() != null && !groupe.getImage().isEmpty()) {
+                        String imageUrl = groupe.getImage();
+                        if (imageUrl != null && !imageUrl.isEmpty()) {
                             try {
-                                Image image = new Image(groupe.getImage());
-                                ImageView imageView = new ImageView(image);
-                                imageView.setFitWidth(100);
-                                imageView.setFitHeight(100);
-                                gridPane.add(imageView, 4, row[0]);
+                                File file = new File("C:/Users/LENOVO/Desktop/3A55/Pidev/viecoaching/public/uploads/" + imageUrl);
+
+                                if (file.exists()) {
+                                    // Local file path exists, load image from local file
+                                    InputStream inputStream = new FileInputStream(file);
+                                    Image image = new Image(inputStream);
+                                    inputStream.close();
+
+                                    ImageView imageView = new ImageView(image);
+                                    imageView.setFitWidth(100);
+                                    imageView.setFitHeight(100);
+                                    gridPane.add(imageView, 4, row[0]);
+                                } else if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+                                    // Web URL, load image from web
+                                    URL url = new URL(imageUrl);
+                                    InputStream inputStream = url.openStream();
+                                    Image image = new Image(inputStream);
+                                    inputStream.close();
+
+                                    ImageView imageView = new ImageView(image);
+                                    imageView.setFitWidth(100);
+                                    imageView.setFitHeight(100);
+                                    gridPane.add(imageView, 4, row[0]);
+                                } else {
+                                    System.err.println("Invalid image URL: " + imageUrl);
+                                }
                             } catch (Exception e) {
                                 handleImageLoadException(e);
                             }

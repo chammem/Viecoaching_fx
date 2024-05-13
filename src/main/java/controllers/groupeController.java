@@ -161,7 +161,7 @@ public class groupeController implements Initializable {
         }
         private void loadAfficheCategorieVieww() {
                 try {
-                        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Affichegr.fxml"));
+                        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Dashboard.fxml"));
                         Stage stage = (Stage) nomField.getScene().getWindow(); // Récupérer la fenêtre actuelle
                         stage.setScene(new Scene(root));
                 } catch (IOException e) {

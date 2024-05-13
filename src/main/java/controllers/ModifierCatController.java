@@ -61,9 +61,9 @@ public class ModifierCatController implements Initializable {
 
         // Initialisation de Cloudinary avec vos identifiants
         cloudinary = new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", "djtv7pcyp",
-                "api_key", "216986526787688",
-                "api_secret", "93b8-dqk94OppguTtG3BxbUA5cM"));
+              "cloud_name", "dppj3e5cp",
+                "api_key", "647876725794588",
+                "api_secret", "yQBtTPY_dzeUjCcUHQcmHvJevgg"));
 
         ServiceRessource serviceRessources = new ServiceRessource();
         List<Ressources> ressourcesList = null;

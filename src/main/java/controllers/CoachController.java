@@ -39,6 +39,7 @@ public class CoachController implements Initializable {
                 "cloud_name", "dppj3e5cp",
                 "api_key", "647876725794588",
                 "api_secret", "yQBtTPY_dzeUjCcUHQcmHvJevgg"));
+               
 
         // Charger et afficher les coachs
         loadCoaches();

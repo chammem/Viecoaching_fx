@@ -98,9 +98,9 @@ public class ModifiergroupeController implements Initializable {
 
         // Initialiser Cloudinary
         cloudinary = new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", "dsjnvpodf",
-                "api_key", "746525825315851",
-                "api_secret", "XVhMJcWUwUjOa9DK6N41402p3hk"));
+                "cloud_name", "dppj3e5cp",
+                "api_key", "647876725794588",
+                "api_secret", "yQBtTPY_dzeUjCcUHQcmHvJevgg"));
     }
 
     public void initData(Groupe groupe) {
@@ -215,7 +215,7 @@ public class ModifiergroupeController implements Initializable {
 
     private void loadAfficheCategorieView() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Affichegr.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Dashboard.fxml"));
             Stage stage = (Stage) nomField.getScene().getWindow(); // Récupérer la fenêtre actuelle
             stage.setScene(new Scene(root));
         } catch (IOException e) {
