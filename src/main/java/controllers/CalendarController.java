@@ -109,14 +109,7 @@ public class CalendarController implements Initializable {
 // Add event handler to addButton
         addButton.setOnAction(this::addEventToCalendar);
         ReservationService rs = new ReservationService();
-        rs.addreservation(new Reservation(
-                eventTextField.getText(),
 
-                sujetTextField.getText(),
-                descriptionTextField.getText(),
-                colorPicker.getValue().toString(),
-                colorPicker.getValue().toString()
-        ));
         VBox popupContent = new VBox();
         popupContent.getChildren().addAll(nameBox, sujetBox,  descriptionBox, colorBox, addButton);
 
@@ -206,7 +199,15 @@ public class CalendarController implements Initializable {
             // Assuming CalendarActivity constructor takes (name, description, color as string)
             CalendarActivity newActivity = new CalendarActivity(eventTime,label.getText(),1,1);
             activitiesMap.computeIfAbsent(day, k -> new ArrayList<>()).add(newActivity);
+ReservationService rs = new ReservationService();
+rs.addreservation(new Reservation(
+	eventName,
 
+	description,
+	color.toString(),
+	color.toString(),
+	color.toString()
+));
             // Update UI components
             drawCalendar(); // Refresh the calendar to display new event
             popup.hide(); // Close the popup if any

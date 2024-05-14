@@ -4,6 +4,7 @@ package entities;
 import java.sql.Date;
 import java.time.LocalDate;
 
+
 public class Reservation {
 
     int id;
@@ -21,7 +22,16 @@ public class Reservation {
         this.id = id;
     }
 
-    public Reservation(int id, String sujet, Date date, String description, String background_color, String border_color, String text_color) {
+	public Reservation(String sujet, String description, String background_color, String border_color, String text_color) {
+		this.sujet = sujet;
+		this.description = description;
+		this.background_color = background_color;
+		this.border_color = border_color;
+		this.text_color = text_color;
+		this.date = date;
+	}
+
+	public Reservation(int id, String sujet, Date date, String description, String background_color, String border_color, String text_color) {
         this.id = id;
         this.sujet = sujet;
 
@@ -31,8 +41,9 @@ public class Reservation {
         this.text_color = text_color;
     }
 
-    public Reservation(String sujet, String description, String background_color, String border_color, String text_color) {
-        this.sujet = sujet;
+    public Reservation(int id,String sujet, String description, String background_color, String border_color, String text_color) {
+        this.id = id;
+		this.sujet = sujet;
 
         this.description = description;
         this.background_color = background_color;
@@ -99,16 +110,9 @@ public class Reservation {
         this.text_color = text_color;
     }
 
-    @Override
-    public String toString() {
-        return "Reservation{" +
-                "id=" + id +
-                ", sujet='" + sujet + '\'' +
+	@Override
+	public String toString() {
+		return String.format("Reservation {sujet='%s', description='%s'}", sujet, description);
+	}
 
-                ", description='" + description + '\'' +
-                ", background_color='" + background_color + '\'' +
-                ", border_color='" + border_color + '\'' +
-                ", text_color='" + text_color + '\'' +
-                '}';
-    }
 }

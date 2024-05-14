@@ -5,9 +5,9 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -16,12 +16,12 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="744.0" prefWidth="1291.0" style="-fx-background-color: c2c19f;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SeanceController">
+<AnchorPane prefHeight="744.0" prefWidth="1291.0" style="-fx-background-color: c2c19f;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.asma.asma.controllers.SeanceController">
    <children>
       <ListView fx:id="mylist" layoutX="332.0" layoutY="77.0" prefHeight="612.0" prefWidth="947.0" />
       <Text layoutX="453.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" />
       <Text fx:id="itemselcted" layoutX="28.0" layoutY="405.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="250.93675231933594" />
-      <VBox layoutX="14.0" layoutY="72.0" prefHeight="554.0" prefWidth="314.0" spacing="15" stylesheets="@../style/style.css">
+      <VBox layoutX="14.0" layoutY="72.0" prefHeight="554.0" prefWidth="314.0" spacing="15" stylesheets="@../../../style/style.css">
          <styleClass>
             <String fx:value="chosen-fruit-card" />
             <String fx:value="shadow" />
@@ -40,21 +40,15 @@
                         <Font name="Cambria" size="36.0" />
                      </font>
                   </Label>
-                  <ImageView fitHeight="74.0" fitWidth="83.0" layoutX="308.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="qrim" fitHeight="74.0" fitWidth="83.0" layoutX="228.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" />
                   <Label fx:id="fruitNameLable111" layoutY="-15.0" prefHeight="44.0" prefWidth="293.0" textFill="#faeeee">
                      <font>
                         <Font name="Cambria" size="36.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="im1" fitHeight="74.0" fitWidth="162.0" layoutX="108.0" layoutY="-45.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../611239b6ce98693313cfcc8b_zoom-logo.png" />
-                     </image>
-                  </ImageView>
                   <TextField fx:id="title" layoutX="25.0" layoutY="81.0" prefHeight="29.0" prefWidth="244.0" promptText="titre" />
                   <TextField fx:id="lien" layoutX="25.0" layoutY="145.0" prefHeight="29.0" prefWidth="244.0" promptText="lien" />
                   <Spinner fx:id="time" layoutX="25.0" layoutY="274.0" prefHeight="29.0" prefWidth="244.0" />
-                  <TextField fx:id="mdp" layoutX="25.0" layoutY="210.0" prefHeight="29.0" prefWidth="244.0" promptText="mot de passe" />
                   <Label layoutX="24.0" layoutY="55.0" text="Titre :">
                      <font>
                         <Font size="15.0" />
@@ -81,6 +75,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
+                  <PasswordField fx:id="mdp" layoutX="25.0" layoutY="210.0" prefHeight="28.0" prefWidth="244.0" />
                </children>
             </Pane>
             <Pane prefHeight="79.0" prefWidth="314.0">
@@ -100,7 +95,6 @@
       </Label>
       <ImageView fx:id="im3" fitHeight="62.0" fitWidth="112.0" layoutX="1178.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../../3135823.png" />
          </image>
       </ImageView>
       <Label layoutX="388.0" layoutY="27.0" prefHeight="29.0" prefWidth="129.0" text="Gestion Séance" textFill="#878787">
@@ -115,14 +109,14 @@
       </Label>
       <ImageView fx:id="im2" fitHeight="73.0" fitWidth="168.0" layoutX="602.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../../logocoaching.png" />
+
          </image>
       </ImageView>
-      <Button fx:id="ts" layoutX="69.0" layoutY="650.0" mnemonicParsing="false"  prefHeight="25.0" prefWidth="196.0" style="-fx-background-color: #878787;" text="Ajouter type de séance" textFill="#f8f5f5">
+      <Button fx:id="ts" layoutX="69.0" layoutY="650.0" mnemonicParsing="false" onAction="#GoType" prefHeight="25.0" prefWidth="196.0" style="-fx-background-color: #878787;" text="Ajouter type de séance" textFill="#f8f5f5">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-
+      <Button layoutX="84.0" layoutY="689.0" mnemonicParsing="false" onAction="#Quiz" prefHeight="26.0" prefWidth="184.0" style="-fx-background-color: purple;" text="StartQuiz" textFill="#f8f8f8" />
    </children>
 </AnchorPane>

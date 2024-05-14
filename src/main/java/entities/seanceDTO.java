@@ -11,6 +11,7 @@ public class seanceDTO {
     private String motDePasse;
     private int typeSeanceId;
     private String nom_type;
+	private String qr;
 
 
     public seanceDTO(int idseance, String titre, Time duree, String lien, String motDePasse, int typeSeanceId, String nom_type) {
@@ -24,7 +25,18 @@ public class seanceDTO {
 
     }
 
-    public int getIdseance() {
+	public seanceDTO(int idseance, String titre, Time duree, String lien, String motDePasse, int typeSeanceId, String nom_type, String qr) {
+		this.idseance = idseance;
+		this.titre = titre;
+		this.duree = duree;
+		this.lien = lien;
+		this.motDePasse = motDePasse;
+		this.typeSeanceId = typeSeanceId;
+		this.nom_type = nom_type;
+		this.qr = qr;
+	}
+
+	public int getIdseance() {
         return idseance;
     }
 
@@ -80,19 +92,25 @@ public class seanceDTO {
         this.nom_type = nom_type;
     }
 
+	public String getQr() {
+		return qr;
+	}
 
+	public void setQr(String qr) {
+		this.qr = qr;
+	}
 
-    @Override
-    public String toString() {
-        return "seanceDTO{" +
-                "idseance=" + idseance +
-                ", titre='" + titre + '\'' +
-                ", duree=" + duree +
-                ", lien='" + lien + '\'' +
-                ", motDePasse='" + motDePasse + '\'' +
-                ", typeSeanceId=" + typeSeanceId +
-                ", nom_type='" + nom_type + '\'' +
+	@Override
+	public String toString() {
+		return "seanceDTO{" +
 
-                '}';
-    }
+				", titre='" + titre + '\'' +
+				", duree=" + duree +
+				", lien='" + lien + '\'' +
+				", motDePasse='" + motDePasse + '\'' +
+				", typeSeanceId=" + typeSeanceId +
+				", nom_type='" + nom_type + '\'' +
+				", qr='" + qr + '\'' +
+				'}';
+	}
 }
