@@ -9,11 +9,29 @@ public class Seance {
     private String motDePasse;
     private int typeSeanceId;
     private int utilisateurs_id;
-
+private String qr;
     public Seance() {
     }
 
-    public Seance(int idseance) {
+	public Seance(String titre, Time duree, String lien, String motDePasse, int typeSeanceId, int utilisateurs_id, String qr) {
+		this.titre = titre;
+		this.duree = duree;
+		this.lien = lien;
+		this.motDePasse = motDePasse;
+		this.typeSeanceId = typeSeanceId;
+		this.utilisateurs_id = utilisateurs_id;
+		this.qr = qr;
+	}
+
+	public String getQr() {
+		return qr;
+	}
+
+	public void setQr(String qr) {
+		this.qr = qr;
+	}
+
+	public Seance(int idseance) {
         this.idseance = idseance;
     }
 
@@ -37,9 +55,18 @@ public class Seance {
     }
 
 
+	public Seance(int idseance, String titre, Time duree, String lien, String motDePasse, int typeSeanceId, int utilisateurs_id, String qr) {
+		this.idseance = idseance;
+		this.titre = titre;
+		this.duree = duree;
+		this.lien = lien;
+		this.motDePasse = motDePasse;
+		this.typeSeanceId = typeSeanceId;
+		this.utilisateurs_id = utilisateurs_id;
+		this.qr = qr;
+	}
 
-
-    public int getIdseance() {
+	public int getIdseance() {
         return idseance;
     }
 
@@ -97,17 +124,18 @@ public class Seance {
 
 
     @Override
-    public String toString() {
-        return "seance{" +
-                "idseance=" + idseance +
-                ", titre='" + titre + '\'' +
-                ", duree=" + duree +
-                ", lien='" + lien + '\'' +
-                ", motDePasse='" + motDePasse + '\'' +
-                ", typeSeanceId=" + typeSeanceId +
-                ", utilisateursId=" + utilisateurs_id +
-                '}';
-    }
+	public String toString() {
+		return "Seance{" +
+
+				", titre='" + titre + '\'' +
+				", duree=" + duree +
+				", lien='" + lien + '\'' +
+				", motDePasse='" + motDePasse + '\'' +
+				", typeSeanceId=" + typeSeanceId +
+				", utilisateurs_id=" + utilisateurs_id +
+	", qr='" + qr + '\'' +
+				'}';
+	}
 }
 
 
