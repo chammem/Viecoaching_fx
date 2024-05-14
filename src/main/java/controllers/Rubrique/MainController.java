@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 
-public class MainController implements Initializable {
+public class MainController  {/*
 
     @FXML
     private Label lblDate;
@@ -290,7 +290,7 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
     }
-
+*/
 }
 
 

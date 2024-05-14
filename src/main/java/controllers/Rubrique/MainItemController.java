@@ -11,7 +11,7 @@ import services.ServiceCommentaire;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainItemController implements Initializable {
+public class MainItemController  {/*
     public Label lblidcomment;
     Boolean isComment = false;
 
@@ -56,14 +56,14 @@ public class MainItemController implements Initializable {
         if (isComment) {
             // Make delete button visible only if it's a comment
             /*btnDelete.setVisible(true);*/
-            likeButton.setVisible(true);
+        /*    likeButton.setVisible(true);
             dislikeButton.setVisible(true);
             lblLikes.setVisible(true);
             lblDislikes.setVisible(true);
         } else {
             // If it's not a comment, hide the delete button
            /* btnDelete.setVisible(false);*/
-            likeButton.setVisible(false);
+      /*      likeButton.setVisible(false);
             dislikeButton.setVisible(false);
             lblLikes.setVisible(false);
             lblDislikes.setVisible(false);
@@ -108,7 +108,7 @@ public class MainItemController implements Initializable {
         lblLikes.setText(String.valueOf(selectedComment.getLikes()));
         lblDislikes.setText(String.valueOf(selectedComment.getDislikes()));
     }
-
+*/
 }
 
 

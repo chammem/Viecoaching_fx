@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 
-public class AjouterCommentaire implements Initializable {
+public class AjouterCommentaire  {/*
     @FXML
     private ListView<Rubrique> lvRubriques;
 
@@ -143,7 +143,7 @@ public class AjouterCommentaire implements Initializable {
             tbvCommentaire.setItems(commentairesList);
         }
     }
-
+*/
 
     }
 

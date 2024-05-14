@@ -22,8 +22,8 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 
-public class AjouterRubrique implements Initializable {
-        @FXML
+public class AjouterRubrique  {
+    /*    @FXML
         private TextField txtTitle;
 
         @FXML
@@ -180,5 +180,5 @@ public class AjouterRubrique implements Initializable {
         ObservableList<Rubrique> rubriquesList;
         rubriquesList = FXCollections.observableArrayList(rubriqueService.listerRubrique());
         tbvRubrique.setItems(rubriquesList);
-    }
+    }*/
 }
