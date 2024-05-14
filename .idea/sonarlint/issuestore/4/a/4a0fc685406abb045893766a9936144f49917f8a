@@ -1,0 +1,26 @@
+
+J
+java:S3740,"/Provide the parametrized type for this generic.(²êÒÿÿÿÿÿ
+k	java:S1174"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Å¬¯êûÿÿÿÿ
+l	java:S117€"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ïê¦Óúÿÿÿÿ
+g	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(³ê†©
+e
+java:S2095p"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(¾µŒˆ
+e
+java:S2095"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(¾µŒˆ
+j
+java:S2095_"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(úò‰Òúÿÿÿÿ
+j
+java:S2095Q"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(úò‰Òúÿÿÿÿ
+f
+java:S2095„"OUse try-with-resources or close this "PreparedStatement" in a "finally" clause.(¬¯¬Ó
+b
+java:S20950"GUse try-with-resources or close this "Statement" in a "finally" clause.(­çÄ¾ıÿÿÿÿ
+@	java:S106$"+Replace this use of System.out by a logger.(âö×
+E	java:S106'"+Replace this use of System.out by a logger.(ı™øøÿÿÿÿ
+E	java:S106F"+Replace this use of System.out by a logger.(ı™øøÿÿÿÿ
+@	java:S106T"+Replace this use of System.out by a logger.(Øóè©
+@	java:S106b"+Replace this use of System.out by a logger.(ßóö
+E	java:S106z"+Replace this use of System.out by a logger.(‹‹®şüÿÿÿÿ
+E	java:S106|"+Replace this use of System.out by a logger.(ı™øøÿÿÿÿ
+F	java:S106‹"+Replace this use of System.out by a logger.(ı™øøÿÿÿÿ

@@ -1,0 +1,9 @@
+
+k	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(œÍËüÿÿÿÿ
+k	java:S117j"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¢ö—ºûÿÿÿÿ
+l	java:S116"RRename this field "role_id" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ßÊ…¥úÿÿÿÿ
+Y
+java:S1659"CDeclare "prenom" and all following declarations on a separate line.(ÙÉÒŠ
+\	java:S107"BConstructor has 10 parameters, which is greater than 7 authorized.(œÍËüÿÿÿÿ
+c	java:S100f"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(£×¯û
+h	java:S100j"NRename this method name to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¢ö—ºûÿÿÿÿ

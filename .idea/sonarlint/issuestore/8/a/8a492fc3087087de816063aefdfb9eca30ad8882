@@ -1,0 +1,17 @@
+
+g	java:S1122"FDefine and throw a dedicated exception instead of using a generic one.(Ò‚Òéüÿÿÿÿ8êÊÂèñ1
+m	java:S117."QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(â‘òş8ëÊÂèñ1
+{	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(±Ö¼Èûÿÿÿÿ8ìÊÂèñ1
+o	java:S116&"TRename this field "Ã‰tat_Col" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(á±óF8€ËÂèñ1
+Š
+java:S11309"nRemove the declaration of thrown exception 'java.sql.SQLException', as it cannot be thrown from method's body.(·ô 8ìëÃèñ1
+N
+java:S1128"1Remove this unused import 'entities.Utilisateur'.(ş¾Â¹8ğëÃèñ1
+P
+java:S1128	".Remove this unused import 'services.IService'.(¶»Ò…ûÿÿÿÿ8óëÃèñ1
+@
+java:S1128"Remove this duplicated import.(æÃ§ƒüÿÿÿÿ8ˆËÂèñ1
+@
+java:S1128"Remove this duplicated import.(æÃ§ƒüÿÿÿÿ8ôëÃèñ1
+I
+java:S1068&"-Remove this unused "Ã‰tat_Col" private field.(á±óF8ˆËÂèñ1

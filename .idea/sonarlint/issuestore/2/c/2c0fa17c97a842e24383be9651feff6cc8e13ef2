@@ -1,0 +1,16 @@
+
+h	java:S116"NRename this field "URL" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ô´Íÿÿÿÿÿ
+m	java:S116	"SRename this field "USERNAME" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(’Ü½øÿÿÿÿ
+h	java:S116
+"SRename this field "PASSWORD" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(’„í×
+<
+java:S1170"!Make this final field static too.(Ô´Íÿÿÿÿÿ
+<
+java:S1170	"!Make this final field static too.(’Ü½øÿÿÿÿ
+7
+java:S1170
+"!Make this final field static too.(’„í×
+?
+java:S2115")Add password protection to this database.(†±àÜ
+E	java:S106"+Replace this use of System.out by a logger.(­å÷¿üÿÿÿÿ
+E	java:S106"+Replace this use of System.out by a logger.(©şêÜúÿÿÿÿ
